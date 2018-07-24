@@ -67,15 +67,31 @@ const BikeImage = db.define('bikeimage', {
 //CATEGORY KEY -- I.E., 'BRAND', 'USE' -- headers for filter criteria
 //--------------------------------------------------------------
 const CategoryKey = db.define('categorykey', {
-  name: Sequelize.STRING
-  })
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'category key name must not be empty'
+      }
+    }
+  }
+})
 
 //---------------------------------------------------------------
 //CATEGORY VALUES -- I.E., schwinn, trek, offroad, street -- all the subs
 //--------------------------------------------------------------
 const CategoryValue = db.define('categoryvalue', {
-  name: Sequelize.STRING
-  })
+  name: {
+    type: Sequelize.STRING, 
+    allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'category key name must not be empty'
+      }
+    }
+  }
+})
 
 module.exports = { Bike, BikeImage, CategoryKey, CategoryValue }
 
