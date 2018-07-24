@@ -77,7 +77,7 @@ const CategoryValue = db.define('categoryvalue', {
   name: Sequelize.STRING
   })
 
-module.exports = {Bike,BikeImage,CategoryKey,CategoryValue}
+module.exports = { Bike, BikeImage, CategoryKey, CategoryValue }
 
 /**
  * instanceMethods
