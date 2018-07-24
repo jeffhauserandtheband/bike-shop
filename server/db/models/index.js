@@ -14,11 +14,8 @@ BikeImage.belongsTo(Bike)
 CategoryKey.hasMany(CategoryValue);
 CategoryValue.belongsTo(CategoryKey);
 
-Bike.belongsToMany(CategoryValue, {
-  through: "bikeCategoryValue",
-  foreignKey: 'bikeId'
-  })
-CategoryValue.hasMany(Bike);
+Bike.belongsToMany(CategoryValue, {through: 'bikeCategoryValue'})
+CategoryValue.belongsToMany(Bike, {through: 'bikeCategoryValue'})
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
