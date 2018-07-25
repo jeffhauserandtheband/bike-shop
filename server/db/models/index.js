@@ -1,5 +1,6 @@
 const User = require('./user')
 const {Bike,BikeImage,CategoryKey,CategoryValue} = require('./bike')
+const {Cart, CartEntry} = require('./cart')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -8,7 +9,8 @@ const {Bike,BikeImage,CategoryKey,CategoryValue} = require('./bike')
  *    BlogPost.belongsTo(User)
  */
 
-Bike.hasMany(BikeImage);
+//BIKE SPECIFIC SECTION
+Bike.hasMany(BikeImage)
 BikeImage.belongsTo(Bike)
 
 CategoryKey.hasMany(CategoryValue);
@@ -17,6 +19,14 @@ CategoryValue.belongsTo(CategoryKey);
 Bike.belongsToMany(CategoryValue, {through: 'bikeCategoryValue'})
 CategoryValue.belongsToMany(Bike, {through: 'bikeCategoryValue'})
 
+//CART SPECIFIC SECTION
+Cart.hasMany(CartEntry)
+CartEntry.belongsTo(Cart)
+
+CartEntry.belongsTo(Bike)
+
+Cart.belongsTo(User)
+
 /**
  * We'll export all of our models here, so that any time a module needs a model,
  * we can just require it from 'db/models'
@@ -24,5 +34,5 @@ CategoryValue.belongsToMany(Bike, {through: 'bikeCategoryValue'})
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-  User,Bike,BikeImage,CategoryKey,CategoryValue
+  User,Bike,BikeImage,CategoryKey,CategoryValue,Cart,CartEntry
 }
