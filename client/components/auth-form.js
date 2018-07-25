@@ -1,36 +1,55 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import {TextField, Button, Paper, Grid} from '@material-ui/core'
+import {withStyles} from '@material-ui/core/styles'
 
-/**
- * COMPONENT
- */
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    width: 300,
+    justifyContent: "center"
+  },
+  grid: {
+    flexGrow: 1
+  },
+  form: {
+    paddingLeft: 50,
+  },
+  google: {
+    paddingLeft: 80,
+  }
+})
+
 const AuthForm = props => {
-  const {name, displayName, handleSubmit, error} = props
+  const {name, displayName, handleSubmit, error, classes} = props
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
-    </div>
+    <Grid className={classes.grid} container spacing={24}>
+      <Grid item xs />
+      <Grid item xs>
+        <Paper className={classes.root} elevation={1}>
+        <a href="/auth/google" className={classes.google}>{displayName} with Google</a>
+          <form onSubmit={handleSubmit} name={name} className={classes.form} >
+            <TextField htmlFor="email" id="email" label="Email" />
+            <TextField
+              htmlFor="password"
+              id="password"
+              label="Password"
+              type="password"
+            />
+            <div>
+              <Button type="submit" color="primary">{displayName}</Button>
+            </div>
+            {error && error.response && <div> {error.response.data} </div>}
+          </form>
+        </Paper>
+      </Grid>
+      <Grid item xs />
+    </Grid>
   )
 }
 
@@ -69,9 +88,10 @@ const mapDispatch = dispatch => {
   }
 }
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm)
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
-
+export const Login = connect(mapLogin, mapDispatch)(
+  withStyles(styles)(AuthForm)
+)
+export const Signup = connect(mapSignup, mapDispatch)(withStyles(styles)(AuthForm))
 /**
  * PROP TYPES
  */
