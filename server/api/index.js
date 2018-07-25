@@ -1,6 +1,7 @@
 const router = require('express').Router()
 module.exports = router
 
+// -----> /api/......
 router.use('/users', require('./users'))
 router.use('/bikes', require('./bikes'))
 

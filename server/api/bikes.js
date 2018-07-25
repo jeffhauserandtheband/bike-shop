@@ -15,10 +15,20 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+// GET /api/bikes/categories -- get all of the categories for the SearchFilter
+router.get('/categories', async (req, res, next) => {
+  try {
+    const categories = await CategoryKey.findAll({include: [{model: CategoryValue }]})
+    res.json(categories)
+  } catch (err) {
+    next(err)
+  }
+})
+
 //GET /api/bikes/:id -- get a single bike -- satisfy requests from clicking on item in an order/cart
 router.get('/:id', async (req, res, next) => {
   try {
-    const bike=await Bike.findById(req.params.id,
+    const bike = await Bike.findById(req.params.id,
       {include: [{model: BikeImage},{model: CategoryValue}]})
 
     res.json(bike)
@@ -91,4 +101,3 @@ router.post('/:bikeId/categoryvalue/:categoryValueId',async (req,res,next) => {
   next(err)
   }
 })
-
