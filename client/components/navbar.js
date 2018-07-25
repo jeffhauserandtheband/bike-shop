@@ -11,7 +11,7 @@ import {
   Button,
   IconButton
 } from '@material-ui/core'
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const styles = {
   root: {
@@ -67,7 +67,7 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
           className={classes.button}
           aria-label="Add to shopping cart"
         >
-          <AddShoppingCartIcon />
+          <ShoppingCartIcon />
         </IconButton>
       </Toolbar>
     </AppBar>
