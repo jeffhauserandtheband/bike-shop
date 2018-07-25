@@ -5,7 +5,8 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_BIKES = 'GET_BIKES'
-const REMOVE_USER = 'REMOVE_USER'
+// const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
+// const REMOVE_USER = 'REMOVE_USER'
 
 /**
  * INITIAL STATE
