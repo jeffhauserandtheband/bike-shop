@@ -5,21 +5,22 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_BIKES = 'GET_BIKES'
-// const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
+const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
 // const REMOVE_USER = 'REMOVE_USER'
 
 /**
  * INITIAL STATE
  */
 const initialState = {
-    bikes: []
+    bikes: [],
+    singleBike: []
 }
 
 /**
  * ACTION CREATORS
  */
 const getBikes = bikes => ({type: GET_BIKES, bikes})
-
+const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
 
 /**
  * THUNK CREATORS
@@ -38,6 +39,23 @@ const getBikes = bikes => ({type: GET_BIKES, bikes})
          dispatch(getBikes(res.data))
          history.push('/bikes')
      } catch (err) {
+         console.error(err)
+     }
+ }
+
+ export const fetchOneBike = (id) => async dispatch => {
+     let res
+     try {
+         res = await axios.get(`/api/bikes/${id}`)
+     } catch(err) {
+         //more pending error handling
+         return dispatch(getOneBike({error: err.message}))
+     }
+
+     try {
+         dispatch(getOneBike(res.data))
+         history.push(`/bikes/${id}`)
+     } catch(err) {
          console.error(err)
      }
  }
@@ -67,9 +85,8 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case GET_BIKES:
         return {...state, bikes: action.bikes}
-    //   return action.bikes
-    // case REMOVE_USER:
-    //   return defaultUser
+    case GET_SINGLE_BIKE:
+        return {...state, singleBike: action.bike}
     default:
       return state
   }
