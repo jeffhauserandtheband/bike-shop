@@ -22,7 +22,7 @@ const style = {
         if (this.props.bikes.length === 0) {
             return (
                 <Grid container>
-                    There are no bikes yet 
+                    Loading..
                 </Grid>
             )
         }
