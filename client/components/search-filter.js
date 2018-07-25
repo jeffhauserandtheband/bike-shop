@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {fetchCategories} from '../store/filter'
+import { connect } from 'react-redux'
+import { fetchCategories } from '../store/filter'
 
 class SearchFilter extends React.Component {
 
@@ -12,23 +12,24 @@ class SearchFilter extends React.Component {
   async componentDidMount() {
     // console.log('we are in the search component', this.props);
     await this.props.fetchCategories()
+
+    console.log(this.props.categories)
+
     await this.setState({
-      categories: this.props.categories
+      categories: this.props.categories.categories
     })
   }
 
   render() {
     // console.log('these are the props', this.props);
 
-      let categories = this.state.categories.categories
+      let categories = this.state.categories
 
-      console.log('outside if block state', categories.length)
-
+      console.log('outside if block state', categories)
 
         return (
           <div>
             <h1>This is a filter bar</h1>
-
             {
               // add categories
               categories.map(category => {
@@ -37,7 +38,7 @@ class SearchFilter extends React.Component {
                   <div key={category.id}>
                     <h3>{category.name}</h3>
 
-                    {/* <form>
+                    <form>
                       {
                         // add category values
                         category.categoryvalues.map(val => {
@@ -49,7 +50,8 @@ class SearchFilter extends React.Component {
                           )
                         })
                       }
-                    </form> */}
+
+                    </form>
                   </div>
                 )
               })

@@ -39,6 +39,8 @@ export default function(state = initialState, action) {
   }
 }
 
+// gotCategories()
+
 
 export {
   fetchCategories
