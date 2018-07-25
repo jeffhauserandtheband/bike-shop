@@ -41,6 +41,15 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
             >
               Bike-Shop
             </Typography>
+            <Typography
+              component={Link}
+              to="/bikes"
+              variant="title"
+              color="inherit"
+              className={classes.flex}
+            >
+              Bikes
+            </Typography>
             <Button href="#" color="inherit" onClick={handleClick}>
               Logout
             </Button>
