@@ -1,5 +1,9 @@
 const router = require('express').Router()
+const isAdmin = require('../middleware/isAdmin') // middleware to check if user is an admin
 module.exports = router
+
+// This is currently not configured to allow an axios request to hit this route
+// router.use(isAdmin)
 
 // -----> /api/......
 router.use('/users', require('./users'))

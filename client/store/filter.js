@@ -7,6 +7,7 @@ const GOT_CATEGORIES = 'GOT_CATEGORIES'
 // INITIAL STATE
 const initialState = {
   categories: [],
+  filteredBikes: [],
 }
 
 // ACTION CREATORS

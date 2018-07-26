@@ -10,7 +10,6 @@ import bikes from './bikes'
 const reducer = combineReducers({user, bikes, categories})
 
 
-
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

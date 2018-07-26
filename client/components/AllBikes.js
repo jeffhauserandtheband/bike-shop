@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import {fetchBikes} from '../store'
 import {Link} from 'react-router-dom'
 
+import {SearchFilter} from './index'
+
 const style = {
     Paper: {
         padding: 10,
@@ -18,7 +20,7 @@ const style = {
     }
 
     render() {
-        
+
         if (this.props.bikes.length === 0) {
             return (
                 <Grid container>
@@ -28,31 +30,35 @@ const style = {
         }
 
         return(
+          <div>
+            <SearchFilter />
             <Grid container>
-            {this.props.bikes.map(elem => {
-                    return (
-                            <Grid item sm={2} key={elem.id}>
-                                <Link to={`/bikes/${elem.id}`}>
-                                <Paper style={style.Paper}>
-                                    
-                                    <img src={elem.bikeimages[0] && elem.bikeimages[0].imageUrl}/>
-                                    {elem.name}
+              {this.props.bikes.map(elem => {
+                console.log('this is an elem', elem);
+                return (
+                  <Grid item sm={2} key={elem.id}>
+                    <Link to={`/bikes/${elem.id}`}>
+                      <Paper style={style.Paper}>
 
-                                </Paper>
-                                </Link>
-                            </Grid>
-                    )
-                }
-            )}
+                        <img src={elem.bikeimages[0] && elem.bikeimages[0].imageUrl}/>
+                        <h3>{elem.name}</h3>
+                        {/* <h5>{elem.brand}</h5> */}
+
+                      </Paper>
+                    </Link>
+                  </Grid>
+                )
+              })}
             </Grid>
+          </div>
         )
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {fetchBikes: () => {
-        dispatch(fetchBikes())
-    }}
+    return {
+      fetchBikes: () => dispatch(fetchBikes())
+    }
 }
 
 const mapStateToProps = (state) => {

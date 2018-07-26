@@ -28,7 +28,7 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             {/* This is a temporary route to test the search filter */}
-            <Route path="/searchfilter" component={SearchFilter} />
+            <Route exact path="/searchfilter" component={SearchFilter} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
