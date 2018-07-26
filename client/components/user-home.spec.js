@@ -8,8 +8,6 @@ import sinon from 'sinon' // for test mocking
 import {UserHome} from './user-home'
 
 
-
-
 const adapter = new Adapter()
 enzyme.configure({adapter})
 
