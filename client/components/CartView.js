@@ -10,9 +10,11 @@ import {
   TableFooter,
   Paper,
   Typography,
-  Button
+  Button,
+  IconButton
 } from '@material-ui/core'
 import {Link} from 'react-router-dom'
+import {Add, Remove} from '@material-ui/icons/'
 
 const styles = theme => ({
   root: {
@@ -101,7 +103,22 @@ class CartView extends Component {
                  <Link to={`/bikes/${item.id}`} >{item.model}</Link>
                  <Button>Delete</Button> 
                   </TableCell>
-                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{item.quantity}
+                  <IconButton
+                  color="inherit"
+                  className={classes.button}
+                  
+                >
+                  <Add/>
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  className={classes.button}
+                  
+                >
+                  <Remove />
+                </IconButton>
+                  </TableCell>
                   <TableCell>${item.price}</TableCell>         
                 </TableRow>
               )
