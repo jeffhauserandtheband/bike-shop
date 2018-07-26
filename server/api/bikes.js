@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 //GET /api/bikes/:id -- get a single bike -- satisfy requests from clicking on item in an order/cart
 router.get('/:id', async (req, res, next) => {
   try {
-    const bike=await Bike.findById(req.params.id,
+    const bike = await Bike.findById(req.params.id,
       {include: [{model: BikeImage},{model: CategoryValue}]})
 
     res.json(bike)

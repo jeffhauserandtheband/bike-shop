@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {TextField} from '@material-ui/core'
+import {postReview} from '../store'
 
 class ReviewForm extends Component {
     constructor() {
@@ -12,17 +13,21 @@ class ReviewForm extends Component {
 
     render() {
         return(
-            <form> 
+            <form onSubmit={this.props.handleSubmit}> 
                 <label> Leave a Review: </label>
                 <TextField fullWidth={true} defaultValue={this.state.reviewInput}/>
+                <button type='submit'> Submit </button>
             </form>
         )
     }
 }
 
-const mapDispatchToProps = () => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        
+        handleSubmit: (evt, revInput) => {
+            evt.preventDefault()
+            dispatch(postReview(revInput))
+        }
     }
 }
 

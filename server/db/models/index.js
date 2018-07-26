@@ -1,6 +1,7 @@
 const User = require('./user')
 const {Bike,BikeImage,CategoryKey,CategoryValue} = require('./bike')
 const {Cart, CartEntry} = require('./cart')
+const {Review} = require('./review')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -34,5 +35,5 @@ Cart.belongsTo(User)
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-  User,Bike,BikeImage,CategoryKey,CategoryValue,Cart,CartEntry
+  User,Bike,BikeImage,CategoryKey,CategoryValue,Cart,CartEntry,Review
 }
