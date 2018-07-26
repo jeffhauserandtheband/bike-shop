@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import {fetchOneBike} from '../store'
-import { Grid, Paper } from '@material-ui/core'
+import { Grid, Paper, Button } from '@material-ui/core'
 // import { Link } from 'react-router-dom'
 
 const style = {
@@ -36,7 +36,7 @@ class SingleBike extends Component {
                                     
                     <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
                     {name}
-
+                    <Button>Add to cart</Button>
                     </Paper>            
                 </Grid>
             </Grid>
