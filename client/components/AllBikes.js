@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {fetchBikes} from '../store'
 import {Link} from 'react-router-dom'
 import SearchFilter from './SearchFilter'
+import { filterBikes } from '../store/bikes'
 
 const style = {
   Paper: {
@@ -20,7 +21,8 @@ class AllBikes extends Component {
   }
 
   async componentDidMount() {
-    await this.props.fetchBikes()
+    // await this.props.fetchBikes()
+    await this.props.filterBikes()
   }
 
   render() {
@@ -51,18 +53,15 @@ class AllBikes extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchBikes: () => {
-      dispatch(fetchBikes())
-    },
-    // fetch a filtered list of bikes?
-  }
-}
+const mapDispatchToProps = dispatch => ({
+    fetchBikes: () => dispatch(fetchBikes()),
+    filterBikes: () => dispatch(filterBikes()), // fetch a filtered list of bikes?
+})
 
 const mapStateToProps = state => {
   return {
     bikes: state.bikes.bikes,
+    filteredBikes: state.bikes.filteredBikes,
     // add filtered bikes array here
   }
 }

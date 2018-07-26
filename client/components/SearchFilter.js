@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {fetchCategories} from '../store/filter'
 import SearchDropDown from './SearchDropDown'
+import { filterBikes } from '../store/bikes'
 
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
@@ -76,7 +77,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchCategories: () => dispatch(fetchCategories())
+  fetchCategories: () => dispatch(fetchCategories()),
+  filterBikes: () => dispatch(filterBikes()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(

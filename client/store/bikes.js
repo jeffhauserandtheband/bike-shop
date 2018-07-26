@@ -65,10 +65,9 @@ export const fetchOneBike = id => async dispatch => {
 
 // filter some bikes
 export const filterBikes = (bikes, value) => {
-
   return dispatch => {
-
     let filteredBikes = []
+    if (!value) return bikes // if we don't pass in a value, we aren't filtering against anything
     bikes.forEach(bike => {
       bike.categoryvalues.forEach(category => {
         if(category.name === value) {

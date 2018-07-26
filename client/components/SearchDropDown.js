@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { filterBikes } from '../store/bikes'
 
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
@@ -77,9 +76,5 @@ class SearchDropDown extends React.Component {
     )
   }
 }
-
-const mapDispatchToProps = dispatch => ({
-  filterBikes: () =>
-})
 
 export default connect(null, null)( withStyles(styles)(SearchDropDown))
