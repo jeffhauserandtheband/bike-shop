@@ -51,15 +51,16 @@ const createApp = () => {
   // compression middleware
   app.use(compression())
 
-
   // session middleware with passport
-  app.use(session({
-    secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: 'auto' }, // sets up cookie to work with development or production
-  }))
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || 'my best friend is Cody',
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {secure: 'auto'} // sets up cookie to work with development or production
+    })
+  )
 
   app.use(passport.initialize())
   app.use(passport.session())

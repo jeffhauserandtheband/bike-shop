@@ -1,5 +1,5 @@
 const User = require('./user')
-const {Bike,BikeImage,CategoryKey,CategoryValue} = require('./bike')
+const {Bike, BikeImage, CategoryKey, CategoryValue} = require('./bike')
 const {Cart, CartEntry} = require('./cart')
 
 /**
@@ -13,8 +13,8 @@ const {Cart, CartEntry} = require('./cart')
 Bike.hasMany(BikeImage)
 BikeImage.belongsTo(Bike)
 
-CategoryKey.hasMany(CategoryValue);
-CategoryValue.belongsTo(CategoryKey);
+CategoryKey.hasMany(CategoryValue)
+CategoryValue.belongsTo(CategoryKey)
 
 Bike.belongsToMany(CategoryValue, {through: 'bikeCategoryValue'})
 CategoryValue.belongsToMany(Bike, {through: 'bikeCategoryValue'})
@@ -34,5 +34,11 @@ Cart.belongsTo(User)
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-  User,Bike,BikeImage,CategoryKey,CategoryValue,Cart,CartEntry
+  User,
+  Bike,
+  BikeImage,
+  CategoryKey,
+  CategoryValue,
+  Cart,
+  CartEntry
 }

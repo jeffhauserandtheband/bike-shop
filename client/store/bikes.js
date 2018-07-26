@@ -12,8 +12,9 @@ const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
  * INITIAL STATE
  */
 const initialState = {
-    bikes: [],
-    singleBike: []
+  bikes: [],
+  singleBike: [],
+  filteredBikes: [],
 }
 
 /**
@@ -21,44 +22,49 @@ const initialState = {
  */
 const getBikes = bikes => ({type: GET_BIKES, bikes})
 const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
+// const filterBikes = bikes => ({type: FILTER_BIKES, bikes})
 
 /**
  * THUNK CREATORS
  */
 
- export const fetchBikes = () => async dispatch => {
-     let res
-     try {
-         res = await axios.get('/api/bikes')
-     } catch (err) {
-         //pending error handling
-         return dispatch(getBikes({error: err.message}))
-     }
+export const fetchBikes = () => async dispatch => {
+  let res
+  try {
+    res = await axios.get('/api/bikes')
+  } catch (err) {
+    //pending error handling
+    return dispatch(getBikes({error: err.message}))
+  }
 
-     try {
-         dispatch(getBikes(res.data))
-         history.push('/bikes')
-     } catch (err) {
-         console.error(err)
-     }
- }
+  try {
+    dispatch(getBikes(res.data))
+    history.push('/bikes')
+  } catch (err) {
+    console.error(err)
+  }
+}
 
- export const fetchOneBike = (id) => async dispatch => {
-     let res
-     try {
-         res = await axios.get(`/api/bikes/${id}`)
-     } catch(err) {
-         //more pending error handling
-         return dispatch(getOneBike({error: err.message}))
-     }
+export const fetchOneBike = id => async dispatch => {
+  let res
+  try {
+    res = await axios.get(`/api/bikes/${id}`)
+  } catch (err) {
+    //more pending error handling
+    return dispatch(getOneBike({error: err.message}))
+  }
 
-     try {
-         dispatch(getOneBike(res.data))
-         history.push(`/bikes/${id}`)
-     } catch(err) {
-         console.error(err)
-     }
- }
+  try {
+    dispatch(getOneBike(res.data))
+    history.push(`/bikes/${id}`)
+  } catch (err) {
+    console.error(err)
+  }
+}
+// 
+// export const filterBikes = bikesArr => {
+//
+// }
 
 // export const auth = (email, password, method) => async dispatch => {
 //   let res
@@ -76,17 +82,15 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
 //   }
 // }
 
-
-
 /**
  * REDUCER
  */
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_BIKES:
-        return {...state, bikes: action.bikes}
+      return {...state, bikes: action.bikes}
     case GET_SINGLE_BIKE:
-        return {...state, singleBike: action.bike}
+      return {...state, singleBike: action.bike}
     default:
       return state
   }

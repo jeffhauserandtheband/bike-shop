@@ -11,7 +11,7 @@ import {
   Button,
   IconButton
 } from '@material-ui/core'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 
 const styles = {
   root: {

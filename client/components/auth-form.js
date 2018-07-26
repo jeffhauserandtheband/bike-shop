@@ -11,16 +11,16 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
     width: 300,
-    justifyContent: "center"
+    justifyContent: 'center'
   },
   grid: {
     flexGrow: 1
   },
   form: {
-    paddingLeft: 50,
+    paddingLeft: 50
   },
   google: {
-    paddingLeft: 80,
+    paddingLeft: 80
   }
 })
 
@@ -32,8 +32,10 @@ const AuthForm = props => {
       <Grid item xs />
       <Grid item xs>
         <Paper className={classes.root} elevation={1}>
-        <a href="/auth/google" className={classes.google}>{displayName} with Google</a>
-          <form onSubmit={handleSubmit} name={name} className={classes.form} >
+          <a href="/auth/google" className={classes.google}>
+            {displayName} with Google
+          </a>
+          <form onSubmit={handleSubmit} name={name} className={classes.form}>
             <TextField htmlFor="email" id="email" label="Email" />
             <TextField
               htmlFor="password"
@@ -42,7 +44,9 @@ const AuthForm = props => {
               type="password"
             />
             <div>
-              <Button type="submit" color="primary">{displayName}</Button>
+              <Button type="submit" color="primary">
+                {displayName}
+              </Button>
             </div>
             {error && error.response && <div> {error.response.data} </div>}
           </form>
@@ -91,7 +95,9 @@ const mapDispatch = dispatch => {
 export const Login = connect(mapLogin, mapDispatch)(
   withStyles(styles)(AuthForm)
 )
-export const Signup = connect(mapSignup, mapDispatch)(withStyles(styles)(AuthForm))
+export const Signup = connect(mapSignup, mapDispatch)(
+  withStyles(styles)(AuthForm)
+)
 /**
  * PROP TYPES
  */

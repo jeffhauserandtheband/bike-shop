@@ -1,26 +1,45 @@
 'use strict'
 
 const db = require('../server/db')
-const { User } = require('../server/db/models')
-const { Bike, BikeImage, CategoryKey, CategoryValue } = require('../server/db/models/bike')
-
+const {User} = require('../server/db/models')
+const {
+  Bike,
+  BikeImage,
+  CategoryKey,
+  CategoryValue
+} = require('../server/db/models/bike')
 
 // library to generate fake data
 const faker = require('faker')
 
-
 // Some bike brands
-const bikeBrands = ['Schwinn', 'Trek', 'All City', 'Giant', 'Specialized', 'Bianchi', 'Cannondale', 'Merida']
+const bikeBrands = [
+  'Schwinn',
+  'Trek',
+  'All City',
+  'Giant',
+  'Specialized',
+  'Bianchi',
+  'Cannondale',
+  'Merida'
+]
 // some colors
 const bikeColors = ['red', 'blue', 'green', 'turquoise', 'black', 'white']
 // Some use cases
-const useCaseList = ['road', 'mountain', 'off road', 'cycle cross', 'racing', 'touring', 'commuter']
+const useCaseList = [
+  'road',
+  'mountain',
+  'off road',
+  'cycle cross',
+  'racing',
+  'touring',
+  'commuter'
+]
 
 // random num helper for inventory and to grab a brand name
 function getRandomInt(max) {
   return Math.floor(Math.random() * max)
 }
-
 
 async function seed() {
   await db.sync({force: true})
@@ -34,14 +53,13 @@ async function seed() {
 
   try {
     // set up the CategoryKey's
-    const brand = await CategoryKey.create({ name: 'brand' })  // id: 1
-    const color = await CategoryKey.create({ name: 'color' })  // id: 2
-    const useCase = await CategoryKey.create({ name: 'use-case' })   // id: 3
-
+    const brand = await CategoryKey.create({name: 'brand'}) // id: 1
+    const color = await CategoryKey.create({name: 'color'}) // id: 2
+    const useCase = await CategoryKey.create({name: 'use-case'}) // id: 3
 
     // link brands to categoryValue
     const brands = []
-    for (let i=0; i<bikeBrands.length; i++) {
+    for (let i = 0; i < bikeBrands.length; i++) {
       const {dataValues} = await CategoryValue.create({
         name: bikeBrands[i],
         categorykeyId: brand.id
@@ -52,8 +70,8 @@ async function seed() {
 
     // link colors to categoryValue
     const colors = []
-    for (let i=0; i<bikeColors.length; i++) {
-      const { dataValues } = await CategoryValue.create({
+    for (let i = 0; i < bikeColors.length; i++) {
+      const {dataValues} = await CategoryValue.create({
         name: bikeColors[i],
         categorykeyId: color.id
       })
@@ -62,8 +80,8 @@ async function seed() {
 
     // link use cases to categoryValue
     const useCases = []
-    for (let i=0; i<useCaseList.length; i++) {
-      const { dataValues } = await CategoryValue.create({
+    for (let i = 0; i < useCaseList.length; i++) {
+      const {dataValues} = await CategoryValue.create({
         name: useCaseList[i],
         categorykeyId: useCase.id
       })
@@ -75,26 +93,32 @@ async function seed() {
     // console.log('magic methods for useCase: ', Object.keys( useCase.__proto__))
 
     // add some bikes
-    for (let i=0; i<51; i++) {
+    for (let i = 0; i < 51; i++) {
       const bike = await Bike.create({
         name: faker.commerce.productName(),
         description: faker.lorem.paragraph(),
         price: faker.commerce.price(),
         inventory: getRandomInt(200),
-        availability: 'available', // enum: 'available', 'discontinued'
+        availability: 'available' // enum: 'available', 'discontinued'
       })
 
       // add a brand
-      const addedBrand = await bike.addCategoryvalue(brands[getRandomInt(brands.length-1)].id)
-      const addedColors = await bike.addCategoryvalue(colors[getRandomInt(colors.length-1)].id)
-      const addedUseCases = await bike.addCategoryvalue(useCases[getRandomInt(useCases.length-1)].id)
-
+      const addedBrand = await bike.addCategoryvalue(
+        brands[getRandomInt(brands.length - 1)].id
+      )
+      const addedColors = await bike.addCategoryvalue(
+        colors[getRandomInt(colors.length - 1)].id
+      )
+      const addedUseCases = await bike.addCategoryvalue(
+        useCases[getRandomInt(useCases.length - 1)].id
+      )
 
       // create some images for the bike
-      for (let j=0; j<getRandomInt(7); j++) {
+      for (let j = 0; j < getRandomInt(7); j++) {
         await BikeImage.create({
           bikeId: bike.id,
-          imageUrl: "http://learndotresources.s3.amazonaws.com/workshop/55e5c92fe859dc0300619bc8/sloth.jpg",
+          imageUrl:
+            'http://learndotresources.s3.amazonaws.com/workshop/55e5c92fe859dc0300619bc8/sloth.jpg'
         })
       }
     }
