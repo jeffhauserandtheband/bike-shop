@@ -47,7 +47,6 @@ class SearchFilter extends React.Component {
 
     return (
       <div>
-        {/* <h1>Filter Your Search</h1> */}
         <Card className={classes.card}>
           <CardHeader
             avatar={
@@ -59,8 +58,6 @@ class SearchFilter extends React.Component {
           />
           {// add categories
           categories.map(category => {
-            // in here I want to render a SearchDropDown for each category
-            // pase
             return (
               <SearchDropDown key={category.id} category={category}/>
             )
