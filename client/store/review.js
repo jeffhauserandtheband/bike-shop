@@ -18,20 +18,24 @@ const createReview = review => ({type: CREATE_REVIEW, review})
 //THUNK CREATOR 
 
 export const postReview = (revInput) => async dispatch => {
-    console.log('woop',revInput)
+    console.log('woop', revInput)
     let res
     try {
-        res = await axios.post('/api/review', revInput)
+        res = await axios.post('/api/review/', revInput)
+        console.log('res.data',res)
+        dispatch(createReview(res.data))
+        // history.push('/review')
     } catch (err) {
         return dispatch(createReview({error: err.message}))
     }
 
-    try {
-        dispatch(createReview(res.data))
-        history.push('/review')
-    } catch (err) {
-        console.error(err)
-    }
+    // try {
+    //     console.log('poo',res.data)
+        
+        
+    // } catch (err) {
+    //     console.error(err)
+    // }
 }
 
 //REDUCER

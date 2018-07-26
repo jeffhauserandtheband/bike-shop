@@ -1,32 +1,53 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {TextField} from '@material-ui/core'
 import {postReview} from '../store'
+import{ TextField } from '@material-ui/core'
 
 class ReviewForm extends Component {
     constructor() {
         super();
         this.state = {
-            reviewInput: ''
+            comments: '',
+            rating: ''
         }
+    }
+
+    handleChange = (evt) => {
+        this.setState({
+            [evt.target.name]: evt.target.value
+        })
     }
 
     render() {
         return(
-            <form onSubmit={this.props.handleSubmit}> 
-                <label> Leave a Review: </label>
-                <TextField fullWidth={true} defaultValue={this.state.reviewInput}/>
-                <button type='submit'> Submit </button>
-            </form>
+            <div>
+                    <form onSubmit={this.props.handleSubmit}>
+                    <label> Leave a Review: </label>
+                    <TextField 
+                    name='comments' 
+                    value={this.state.comments} 
+                    onChange={this.handleChange} 
+                    onSubmit={this.props.handleSubmit} 
+                    multiline={true}
+                    rows={5}
+                    />
+
+                    <label> Rating: </label>
+                    <input name='rating' value={this.state.rating} onChange={this.handleChange} />
+                    <button type='submit'> Submit </button>
+                    </form>
+            </div>
         )
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleSubmit: (evt, revInput) => {
+        handleSubmit: (evt) => {
             evt.preventDefault()
-            dispatch(postReview(revInput))
+            const comments = evt.target.comments.value
+            const rating = evt.target.rating.value
+            dispatch(postReview({comments,rating}))
         }
     }
 }

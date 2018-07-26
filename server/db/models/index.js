@@ -28,6 +28,14 @@ CartEntry.belongsTo(Bike)
 
 Cart.belongsTo(User)
 
+//REVIEW SPECIFIC SECT
+
+Review.belongsTo(Bike)
+Review.belongsTo(User)
+
+Bike.hasMany(Review)
+User.hasMany(Review)
+
 /**
  * We'll export all of our models here, so that any time a module needs a model,
  * we can just require it from 'db/models'
