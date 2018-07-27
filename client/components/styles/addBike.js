@@ -1,13 +1,13 @@
 // Styles for the add bike form
 
-
+import React from 'react'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
 
-export const styles = theme => ({
+const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -21,3 +21,5 @@ export const styles = theme => ({
     width: 200,
   },
 })
+
+export default styles

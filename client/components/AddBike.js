@@ -3,12 +3,28 @@ import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import postBike from '../store/bikes'
-import styles from './styles/addBike'
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+// import styles from './styles/addBike'
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
+})
+
 
 class AddBike extends React.Component {
   state = {
@@ -24,17 +40,23 @@ class AddBike extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log('I am rendering dammmit!');
     return (
-      <form className={classes.container} noValidate autoComplete="off">
-        <TextField
-          id="name"
-          label="Name"
-          className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
-          margin="normal"
-        />
-      </form>
+      <div>
+        <h1>Add a bike</h1>
+        <form className={classes.container} noValidate autoComplete="off">
+          <TextField
+            id="name"
+            label="Name"
+            className={classes.textField}
+            value={this.state.name}
+            onChange={this.handleChange('name')}
+            margin="normal"
+          />
+        </form>
+      </div>
+
+
     )
   }
 }
