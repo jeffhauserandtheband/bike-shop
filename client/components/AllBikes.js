@@ -14,6 +14,15 @@ import {connect} from 'react-redux'
 import {fetchBikes} from '../store'
 import {Link} from 'react-router-dom'
 
+import {SearchFilter} from './index'
+
+const style = {
+    Paper: {
+        padding: 10,
+        marginTop:10,
+        marginBottom:10
+    }
+}
 const styles = theme => ({
   root: {
     flexGrow: 1
@@ -43,6 +52,7 @@ class AllBikes extends Component {
 
     return (
       <div className={classes.root}>
+        <SearchFilter />
         <Grid container>
           {this.props.bikes.map(elem => {
             return (

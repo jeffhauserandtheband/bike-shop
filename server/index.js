@@ -58,7 +58,7 @@ const createApp = () => {
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: 'auto' }, // sets up cookie to work with development or production
+    cookie: { secure: 'auto' }, // sets up cookie to work with development or production environment
   }))
 
   app.use(passport.initialize())
