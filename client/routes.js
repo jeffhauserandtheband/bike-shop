@@ -2,7 +2,16 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, SearchFilter, AllBikes, SingleBike} from './components'
+import {
+  Login,
+  Signup,
+  UserHome,
+  AllBikes,
+  SingleBike,
+  CartView,
+  ReviewForm,
+  SearchFilter
+} from './components'
 import {me} from './store'
 
 /**
@@ -23,12 +32,14 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         <Route exact path="/bikes" component={AllBikes} />
         <Route exact path="/bikes/:id" component={SingleBike} />
+        <Route path="/cart" component={CartView} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             {/* This is a temporary route to test the search filter */}
             <Route exact path="/searchfilter" component={SearchFilter} />
+            <Route path="/reviewform" component={ReviewForm} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

@@ -6,8 +6,9 @@ import user from './user'
 
 import categories from './filter'
 import bikes from './bikes'
+import review from './review'
 
-const reducer = combineReducers({user, bikes, categories})
+const reducer = combineReducers({user, bikes, categories, review})
 
 
 const middleware = composeWithDevTools(
@@ -18,3 +19,4 @@ const store = createStore(reducer, middleware)
 export default store
 export * from './user'
 export * from './bikes'
+export * from './review'
