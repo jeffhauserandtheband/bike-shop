@@ -9,7 +9,8 @@ import {
   AllBikes,
   SingleBike,
   CartView,
-  ReviewForm
+  ReviewForm,
+  OrderHistory
 } from './components'
 import {me} from './store'
 
@@ -37,6 +38,7 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/reviewform" component={ReviewForm} />
+            <Route path="/myaccount/order-history/:userId" component={OrderHistory}/>
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

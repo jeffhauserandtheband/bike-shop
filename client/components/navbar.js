@@ -45,7 +45,7 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
             <Button component={Link} to="/bikes" color="inherit">
               Shop-Bikes
             </Button>
-            <Button color="inherit">My Account</Button>
+            <Button component={Link} to="/myaccount/order-history" color="inherit">My Account</Button>
             <Button href="#" color="inherit" onClick={handleClick}>
               Logout
             </Button>
