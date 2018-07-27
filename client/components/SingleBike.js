@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchOneBike} from '../store'
-import {Grid, Paper} from '@material-ui/core'
+import { Grid, Paper, Button } from '@material-ui/core'
 // import { Link } from 'react-router-dom'
 
 const style = {
@@ -21,8 +21,29 @@ class SingleBike extends Component {
   render() {
     const {name} = this.props.singleBike
 
-    if (this.props.singleBike.length === 0) {
-      return <Grid container>Loading..</Grid>
+    render() {
+        const {name} = this.props.singleBike
+
+        if (this.props.singleBike.length === 0) {
+            return (
+                <Grid container>
+                    Loading..
+                </Grid>
+            )
+        }
+
+        return(
+            <Grid container>
+                <Grid item sm={2} key={this.props.singleBike.id}>
+                    <Paper style={style.Paper}>
+
+                    <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
+                    {name}
+                    <Button>Add to cart</Button>
+                    </Paper>
+                </Grid>
+            </Grid>
+        )
     }
 
     return (

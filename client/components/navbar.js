@@ -41,6 +41,11 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
             >
               Bike-Shop
             </Typography>
+
+            <Button component={Link} to="/bikes" color="inherit">
+              Shop-Bikes
+            </Button>
+            <Button color="inherit">My Account</Button>
             <Button href="#" color="inherit" onClick={handleClick}>
               Logout
             </Button>
@@ -48,12 +53,17 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
         ) : (
           <Fragment>
             <Typography
+              component={Link}
+              to="/home"
               variant="title"
               color="inherit"
               className={classes.flex}
             >
               Bike-Shop
             </Typography>
+            <Button component={Link} to="/bikes" color="inherit">
+              Shop-Bikes
+            </Button>
             <Button component={Link} to="/login" color="inherit">
               Login
             </Button>
@@ -66,6 +76,8 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
           color="inherit"
           className={classes.button}
           aria-label="Add to shopping cart"
+          component={Link}
+          to="/cart"
         >
           <ShoppingCartIcon />
         </IconButton>
