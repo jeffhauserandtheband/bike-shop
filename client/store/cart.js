@@ -12,7 +12,7 @@ const DELETE_CART = 'DELETE_CART'
  * INITIAL STATE
  */
 const initialState = {
-    id: 0,
+    cartId: 0, //real cart has id>=1, matching db key
     subtotal: 0.00,
     quantity: 0,
     cartEntries: []
@@ -31,7 +31,7 @@ const deleteCart = cart => ({type: DELETE_CART, cart})
  export const incrementCart = (cartId,bikeId) => async dispatch => {
     let res
     try {
-        res = await axios.post(`/api/cart/${cartId}/${bikeId}`)
+        res = await axios.post(`/api/carts/${cartId}/${bikeId}`)
     } catch (err) {
         //pending error handling
         return dispatch(updateCart({error: err.message}))

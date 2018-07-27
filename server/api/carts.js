@@ -145,7 +145,7 @@ console.log('about to get full cart')
     feCart.cartEntries.push(feCartEntry)
   }
   console.log(feCart)
-  res.json('')
+  res.json(feCart)
 
 })
 

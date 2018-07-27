@@ -11,7 +11,7 @@ import {
   Typography
 } from '@material-ui/core'
 import {connect} from 'react-redux'
-import {fetchBikes} from '../store'
+import {fetchBikes,incrementCart} from '../store'
 import {Link} from 'react-router-dom'
 
 import {SearchFilter} from './index'
@@ -39,8 +39,22 @@ const styles = theme => ({
 })
 
 class AllBikes extends Component {
+  constructor() {
+    super()
+    this.handleClickAddToCart = this.handleClickAddToCart.bind(this)
+  }
+
   componentDidMount() {
     this.props.fetchBikes()
+  }
+
+  handleClickAddToCart(bikeId) {
+    let cartId=0;
+    if (this.props.cart.cartId) {
+      cartId=this.props.cart.cartId
+    }
+    this.props.incrementCart(cartId,bikeId)
+
   }
 
   render() {
@@ -72,7 +86,7 @@ class AllBikes extends Component {
                   </CardContent>
 
                   <CardActions>
-                    <Button size="small" color="primary">
+                    <Button onClick={(e) => this.handleClickAddToCart(elem.id)}size="small" color="primary">
                       Add to cart
                     </Button>
                   </CardActions>
@@ -92,14 +106,16 @@ AllBikes.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     fetchBikes: () => {
-      dispatch(fetchBikes())
-    }
+      dispatch(fetchBikes())},
+    incrementCart: (cartId,bikeId) => {
+      dispatch(incrementCart(cartId,bikeId))}
   }
 }
 
 const mapStateToProps = state => {
   return {
-    bikes: state.bikes.bikes
+    bikes: state.bikes.bikes,
+    cart: state.cart
   }
 }
 
