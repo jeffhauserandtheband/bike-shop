@@ -74,6 +74,16 @@ function getRandomInt(max) {
 }
 
 async function seed() {
+  // await db.sync({force: true})
+  // console.log('db synced!')
+
+  // const users = await Promise.all([
+  //   // make some users
+  //   User.create({email: 'cody@email.com', password: '123'}),
+  //   User.create({email: 'greg@email.com', password: '123'}),
+  //   User.create({email: 'matt@gmail.com', password: 'test', userType: 'admin'})
+  // ])
+
   try {
     await db.sync({force: true})
     console.log('db synced!')
@@ -81,7 +91,8 @@ async function seed() {
     const users = await Promise.all([
       // make some users
       User.create({email: 'cody@email.com', password: '123'}),
-      User.create({email: 'murphy@email.com', password: '123'})
+      User.create({email: 'murphy@email.com', password: '123'}),
+      User.create({email: 'matt@gmail.com', password: 'test', userType: 'admin'})
     ])
     // set up the CategoryKey's
     const brand = await CategoryKey.create({name: 'brand'}) // id: 1

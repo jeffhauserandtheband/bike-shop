@@ -12,3 +12,4 @@ export {default as CartView} from './CartView'
 export {default as OrderHistory} from './OrderHistory'
 
 export {Login, Signup} from './auth-form'
+export {default as SearchFilter} from './SearchFilter'
