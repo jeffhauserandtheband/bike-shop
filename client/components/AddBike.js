@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-// import styles from './styles/addBike'
 
 const styles = theme => ({
   container: {
@@ -31,10 +30,13 @@ class AddBike extends React.Component {
     name: '',
   }
 
-  handleChange = event => {
+  handleChange = name => event => {
     // form control
+    // this.setState({
+    //   [event.target.name]: event.target.value
+    // })
     this.setState({
-      [event.target.name]: event.target.value
+      [name]: event.target.value
     })
   }
 
@@ -45,6 +47,7 @@ class AddBike extends React.Component {
       <div>
         <h1>Add a bike</h1>
         <form className={classes.container} noValidate autoComplete="off">
+        {/* <form  noValidate autoComplete="off"> */}
           <TextField
             id="name"
             label="Name"
@@ -55,8 +58,6 @@ class AddBike extends React.Component {
           />
         </form>
       </div>
-
-
     )
   }
 }
@@ -65,5 +66,8 @@ const mapDispatchToProps = dispatch => ({
   postBike: bikeData => dispatch(postBike(bikeData))
 })
 
+AddBike.propTypes = {
+  classes: PropTypes.object.isRequired,
+}
 
-export default connect(null, mapDispatchToProps)(AddBike)
+export default connect(null, mapDispatchToProps)( withStyles(styles)(AddBike) )
