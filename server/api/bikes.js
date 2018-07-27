@@ -54,6 +54,7 @@ router.post('/categorykey',async (req,res,next) => {
 //NOTE - no PUT method for bikes<->images, only create or delete of images/associations
 router.post('/:id/image',async (req,res,next) => {
   try {
+    console.log('I hit the post and this is the req',req.body);
     const reqImage = req.body;
     req.body.bikeId = req.params.id;
     const newImage = await BikeImage.create(req.body);

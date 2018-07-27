@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GET_BIKES = 'GET_BIKES'
 const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
+const ADD_BIKE = 'ADD_BIKE'
 // const REMOVE_USER = 'REMOVE_USER'
 
 /**
@@ -59,6 +60,23 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
          console.error(err)
      }
  }
+
+ export const postBike = (bikeData) => {
+   return async dispatch => {
+     try {
+       await axios.post({
+         method: 'post',
+         url: '/api/bikes',
+         data: bikeData, // make sure this is being passed in properly to line up with db names
+       })
+       dispatch(getBikes())
+     }
+     catch (err) {
+       console.log(err)
+     }
+   }
+ }
+
 
 // export const auth = (email, password, method) => async dispatch => {
 //   let res
