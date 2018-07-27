@@ -115,6 +115,7 @@ console.log('about to get full cart')
   //now start building an object to send to front end
   const feCart={}
   feCart.subtotal=0.00;
+  feCart.quantity=0; //total number of items in cart
   feCart.cartId = cart.id;
   feCart.cartEntries=[]
   console.log('about to loop over cartentries')
@@ -133,6 +134,7 @@ console.log('about to get full cart')
     feCartEntry.bikeId=bike.id;
     feCartEntry.name=bike.name;
     feCartEntry.quantity=cartEntry.quantity;
+    feCart.quantity=feCart.quantity+cartEntry.quantity;
     feCartEntry.price=bike.price;
     feCart.subtotal=feCart.subtotal+(bike.price*cartEntry.quantity);
 
