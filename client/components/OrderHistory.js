@@ -9,7 +9,7 @@ import {
   TableRow,
   Paper,
   Typography,
-  Button,
+  Button
 } from '@material-ui/core'
 import {Link} from 'react-router-dom'
 import {fetchUserOrders} from '../store'
@@ -34,10 +34,10 @@ const styles = theme => ({
   header: {
     width: 150
   },
- head: {
+  head: {
     backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
+    color: theme.palette.common.white
+  }
 })
 
 class OrderHistory extends Component {
@@ -50,70 +50,75 @@ class OrderHistory extends Component {
 
     console.log('hello', this.props.orders)
 
-    return (
+    return this.props.orders.length ? (
       <div>
-        {this.props.orders.length &&
-          this.props.orders.map(order => {
-            return (
-              <Paper className={classes.root} key={order.id}>
-                <Table className={classes.table} key={order.id}>
-                  <TableHead >
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="body2">Order Placed</Typography>{' '}
-                        <Typography variant="body1">${order.date}</Typography>
-                      </TableCell>
+        {this.props.orders.map(order => {
+          return (
+            <Paper className={classes.root} key={order.id}>
+              <Table className={classes.table} key={order.id}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      <Typography variant="body2">Order Placed</Typography>{' '}
+                      <Typography variant="body1">${order.date}</Typography>
+                    </TableCell>
 
-                      <TableCell className={classes.header}>
-                        <Typography variant="body2">Order Total</Typography>
-                        <div>
-                          <Typography variant="body1">
-                            ${order.orderCost}
-                          </Typography>
-                        </div>
-                      </TableCell>
+                    <TableCell className={classes.header}>
+                      <Typography variant="body2">Order Total</Typography>
+                      <div>
+                        <Typography variant="body1">
+                          ${order.orderCost}
+                        </Typography>
+                      </div>
+                    </TableCell>
 
-                      <TableCell className={classes.header}>
-                        <Typography variant="body2">Order Status</Typography>
-                        <div>
-                          <Typography variant="body1">{order.state}</Typography>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {order.bikes.map(bike => {
-                      return (
-                        <TableRow key={bike.id}>
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className={classes.picCell}
-                          >
-                            <Link to={`/bikes/${bike.id}`}>
-                              <img
-                                className={classes.picCell}
-                                src="/bicycle-1296859_1280.png"
-                              />
-                            </Link>
-                          </TableCell>
-                          <TableCell>
-                            <Link to={`/bikes/${bike.id}`}>{bike.name}</Link>
-                            <div>${bike.orderEntries.price}</div>
-                            <div>Quantity {bike.orderEntries.quantity}</div>
-                          </TableCell>
-                          <TableCell>
-                            <Button>Write a review</Button>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </Paper>
-            )
-          })}
+                    <TableCell className={classes.header}>
+                      <Typography variant="body2">Order Status</Typography>
+                      <div>
+                        <Typography variant="body1">{order.state}</Typography>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {order.bikes.map(bike => {
+                    return (
+                      <TableRow key={bike.id}>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          className={classes.picCell}
+                        >
+                          <Link to={`/bikes/${bike.id}`}>
+                            <img
+                              className={classes.picCell}
+                              src="/bicycle-1296859_1280.png"
+                            />
+                          </Link>
+                        </TableCell>
+                        <TableCell>
+                          <Link to={`/bikes/${bike.id}`}>{bike.name}</Link>
+                          <div>${bike.orderEntries.price}</div>
+                          <div>Quantity {bike.orderEntries.quantity}</div>
+                        </TableCell>
+                        <TableCell>
+                          <Button>Write a review</Button>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </Paper>
+          )
+        })}
       </div>
+    ) : (
+      <Paper>
+        <Typography variant="display1" align="center">
+          No past orders.
+        </Typography>
+      </Paper>
     )
   }
 }
