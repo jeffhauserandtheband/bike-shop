@@ -28,17 +28,18 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
  */
 
  export const fetchBikes = () => async dispatch => {
+   console.log('inside of fetchBikes');
      let res
      try {
          res = await axios.get('/api/bikes')
      } catch (err) {
          //pending error handling
-         return dispatch(getBikes({error: err.message}))
+         // return dispatch(getBikes({error: err.message}))
      }
 
      try {
          dispatch(getBikes(res.data))
-         history.push('/bikes')
+         // history.push('/bikes')
      } catch (err) {
          console.error(err)
      }
@@ -62,18 +63,33 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
  }
 
  export const postBike = (bikeData) => {
+   console.log('postBike Thunk bikeData', bikeData)
    return async dispatch => {
-     try {
-       await axios.post({
-         method: 'post',
-         url: '/api/bikes',
-         data: bikeData, // make sure this is being passed in properly to line up with db names
-       })
-       dispatch(getBikes())
-     }
-     catch (err) {
-       console.log(err)
-     }
+     // try {
+     //   await axios({
+     //     method: 'post',
+     //     url: '/api/bikes',
+     //     data: bikeData, // make sure this is being passed in properly to line up with db names
+     //   })
+     //   dispatch(fetchBikes())
+     // }
+     // catch (err) {
+     //   console.log(err)
+     // }
+     // try {
+     //   await axios.post('/api/bikes', {
+     //     name: this.state.name,
+     //     description: this.state.description,
+     //     price: this.state.price,
+     //     inventory: this.state.inventory,
+     //     availability: this.state.availability,
+     //   })
+     //   // dispatch(fetchBikes())
+     //   console.log('bike submitted!');
+     // }
+     // catch (err) {
+     //   console.log(err)
+     // }
    }
  }
 
@@ -93,8 +109,6 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
 //     console.error(dispatchOrHistoryErr)
 //   }
 // }
-
-
 
 /**
  * REDUCER

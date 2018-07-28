@@ -34,6 +34,7 @@ router.post('/',async (req,res,next) => {
   console.log(req.body)
   try {
     const newBike = await Bike.create(req.body);
+    console.log('Your new bike!', newBike);
     res.status(201).json(newBike)
   } catch (err) {
     next(err)
