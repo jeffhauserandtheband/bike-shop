@@ -91,7 +91,7 @@ router.post('/:cartId/:bikeId', async (req, res, next) => {
       cartEntry.quantity=cartEntry.quantity+1
       await CartEntry.update(
         {quantity:cartEntry.quantity},
-        { where: { id: cart.id } }
+        { where: { cartId: cart.id, bikeId: bike.id } }
       )
     } catch (err) {
     next(err)
@@ -100,13 +100,11 @@ router.post('/:cartId/:bikeId', async (req, res, next) => {
   }
 
   /*create a complete cart for the front end to use -- will have some extra info that kinda looks like an order*/
-console.log('about to get full cart')
   //join cart with cart entries
   try {
     cart = await Cart.findById(cart.id,
       {include: [{model:CartEntry}]}
     );
-    console.log(cart)
   } catch (err) {
     next(err)
     return
@@ -118,7 +116,6 @@ console.log('about to get full cart')
   feCart.quantity=0; //total number of items in cart
   feCart.cartId = cart.id;
   feCart.cartEntries=[]
-  console.log('about to loop over cartentries')
   for (let cartEntry of cart.cartentries) {
     let bike
     try {
@@ -128,7 +125,6 @@ console.log('about to get full cart')
       next(err)
       return
     }
-    console.log(bike);
 
     const feCartEntry={}
     feCartEntry.bikeId=bike.id;
@@ -139,7 +135,7 @@ console.log('about to get full cart')
     feCart.subtotal=feCart.subtotal+(bike.price*cartEntry.quantity);
 
     if (bike.bikeimages && bike.bikeimages.length>0) {
-      feCart.image = bike.bikeimages[0].imageUrl
+      feCartEntry.image = bike.bikeimages[0].imageUrl
     }
 
     feCart.cartEntries.push(feCartEntry)
