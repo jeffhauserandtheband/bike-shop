@@ -10,6 +10,7 @@ import {
   SingleBike,
   CartView,
   ReviewForm,
+  OrderHistory,
   SearchFilter
 } from './components'
 import {me} from './store'
@@ -40,6 +41,7 @@ class Routes extends Component {
             {/* This is a temporary route to test the search filter */}
             <Route exact path="/searchfilter" component={SearchFilter} />
             <Route path="/reviewform" component={ReviewForm} />
+            <Route path="/myaccount/order-history" component={OrderHistory}/>
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
