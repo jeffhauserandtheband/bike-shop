@@ -99,52 +99,104 @@ router.post('/:cartId/:bikeId', async (req, res, next) => {
     }
   }
 
-  /*create a complete cart for the front end to use -- will have some extra info that kinda looks like an order*/
-  //join cart with cart entries
+  //generate simple cart for front end use
+  let feCart
   try {
-    cart = await Cart.findById(cart.id,
-      {include: [{model:CartEntry}]}
+    feCart = await _generateFrontEndCart(cart.id)
+  } catch (err) {
+    next (err)
+  }
+
+  console.log(feCart)
+  res.json(feCart)
+
+})
+
+//DELETE /api/carts/:cartid/:bikeid
+//if cart has entry for bikeid, decrement it
+//if cart quantity goes to 0, delete the cart entry
+//
+//output: {id, subtotal, cartentries:[{bikeid,name,price,quantity,image}]}
+router.delete('/:cartId/:bikeId', async (req, res, next) => {
+  //cart must exist, go get it
+  let cart
+  try {
+    cart = await Cart.findById(+req.params.cartId);
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //go find bike before attempting to work with cart entry
+  let bike;
+  try {
+    bike = await Bike.findById(+req.params.bikeId);
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //now have cart with id.  see if entry with bikeId exists
+  let needNewEntry=false;
+  let cartEntry={}
+  try {
+    const cartEntries = await CartEntry.findAll({
+      where:
+        {cartId:cart.id,
+         bikeId:bike.id}
+    })
+    if (cartEntries.length===0) {
+      throw new Error('cart entry not found')
+    } else if (cartEntries.length>1) {
+      throw new Error('more than one cartentries with same cartId/bikeId')
+    }
+    cartEntry=cartEntries[0] //just get the one cart entry out
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //TODO: use sequelize transaction to increment inventory and update/delete cart entry
+  //decrement inventory
+  bike.inventory = bike.inventory+1;
+  try {
+    await Bike.update(
+      {inventory: bike.inventory},
+      {where: { id: bike.id }}
     );
   } catch (err) {
     next(err)
     return
   }
 
-  //now start building an object to send to front end
-  const feCart={}
-  feCart.subtotal=0.00;
-  feCart.quantity=0; //total number of items in cart
-  feCart.cartId = cart.id;
-  feCart.cartEntries=[]
-  for (let cartEntry of cart.cartentries) {
-    let bike
-    try {
-      bike = await Bike.findById(cartEntry.bikeId,
-        { include: [{model:BikeImage}]})
-    } catch(err) {
-      next(err)
-      return
-    }
+  try {
+    cartEntry.quantity=cartEntry.quantity-1
 
-    const feCartEntry={}
-    feCartEntry.bikeId=bike.id;
-    feCartEntry.name=bike.name;
-    feCartEntry.quantity=cartEntry.quantity;
-    feCart.quantity=feCart.quantity+cartEntry.quantity;
-    feCartEntry.price=bike.price;
-    feCart.subtotal=feCart.subtotal+(bike.price*cartEntry.quantity);
-
-    if (bike.bikeimages && bike.bikeimages.length>0) {
-      feCartEntry.image = bike.bikeimages[0].imageUrl
-    }
-
-    feCart.cartEntries.push(feCartEntry)
+    //either delete the cart entry or update it
+    if (cartEntry.quantity===0) {
+      await CartEntry.destroy({ where: {cartId: cart.id, bikeId:bike.id}})
+    } else {
+      await CartEntry.update(
+        {quantity:cartEntry.quantity},
+        { where: { cartId: cart.id, bikeId: bike.id } }
+    )}
+  } catch (err) {
+  next(err)
+  return
   }
+
+  //generate simple cart for front end use
+  let feCart
+  try {
+    feCart = await _generateFrontEndCart(cart.id)
+  } catch (err) {
+    next (err)
+  }
+
   console.log(feCart)
   res.json(feCart)
 
 })
-
 
 //POST /api/carts/ -- for now assume nothing there and start writing it,
 //will have to clean up later
@@ -178,3 +230,50 @@ router.get('/:id', async (req,res,next) => {
     next(err)
   }
 })
+
+//UTILITY FUNCTIONS
+//
+
+//GENERATE CART FOR FRONT END USE
+//INPUT - cart id
+//OUTPUT - object than can be passed up to front end as json
+//CALLER needs to do try/catch on this for db err
+async function _generateFrontEndCart(cartId)  {
+
+  const feCart={}
+  feCart.subtotal=0.00;
+  feCart.quantity=0; //total number of items in cart
+  feCart.cartId = cartId;
+  feCart.cartEntries=[]
+
+  //if a new cart was needed by caller and had
+  //problems getting bike, just return empty cart
+  if (cartId===0) {
+    return feCart;
+  }
+
+  const cart = await Cart.findById(cartId,
+    {include: [{model:CartEntry}]}
+  );
+
+  for (let cartEntry of cart.cartentries) {
+    let bike
+    bike = await Bike.findById(cartEntry.bikeId,
+      { include: [{model:BikeImage}]})
+
+    const feCartEntry={}
+    feCartEntry.bikeId=bike.id;
+    feCartEntry.name=bike.name;
+    feCartEntry.quantity=cartEntry.quantity;
+    feCart.quantity=feCart.quantity+cartEntry.quantity;
+    feCartEntry.price=bike.price;
+    feCart.subtotal=feCart.subtotal+(bike.price*cartEntry.quantity);
+
+    if (bike.bikeimages && bike.bikeimages.length>0) {
+      feCartEntry.image = bike.bikeimages[0].imageUrl
+    }
+
+    feCart.cartEntries.push(feCartEntry)
+  }
+  return feCart;
+}

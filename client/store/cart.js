@@ -44,6 +44,18 @@ const deleteCart = cart => ({type: DELETE_CART, cart})
  }
 
  export const decrementCart = (cartId,bikeId) => async dispatch => {
+    let res
+    try {
+        res = await axios.delete(`/api/carts/${cartId}/${bikeId}`)
+    } catch (err) {
+        //pending error handling
+        return dispatch(updateCart({error: err.message}))
+    }
+    try {
+        dispatch(updateCart(res.data));
+    } catch (err) {
+        console.log(err)
+    }
 
  }
 
