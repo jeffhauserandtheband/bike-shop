@@ -105,6 +105,83 @@ router.post('/:cartId/:bikeId', async (req, res, next) => {
     feCart = await _generateFrontEndCart(cart.id)
   } catch (err) {
     next (err)
+    return
+  }
+
+  res.json(feCart)
+})
+
+//DELETE /api/carts/:cartid/:bikeid/all
+//delete cart entry for this bikeid
+//THIS ROUTE IS ADDED BEFORE THE DELETE FOR
+//A SINGLE DECREMENT
+//
+//output: {id, subtotal, cartentries:[{bikeid,name,price,quantity,image}]}
+router.delete('/:cartId/:bikeId/all', async (req, res, next) => {
+  //cart must exist, go get it
+  let cart
+  try {
+    cart = await Cart.findById(+req.params.cartId);
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //go find bike before attempting to work with cart entry
+  let bike;
+  try {
+    bike = await Bike.findById(+req.params.bikeId);
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //now have cart with id.  see if entry with bikeId exists
+  let cartEntry={}
+  try {
+    const cartEntries = await CartEntry.findAll({
+      where:
+        {cartId:cart.id,
+         bikeId:bike.id}
+    })
+    if (cartEntries.length===0) {
+      throw new Error('cart entry not found')
+    } else if (cartEntries.length>1) {
+      throw new Error('more than one cartentries with same cartId/bikeId')
+    }
+    cartEntry=cartEntries[0] //just get the one cart entry out
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //TODO: use sequelize transaction to increment inventory and update/delete cart entry
+  //decrement inventory
+  bike.inventory = bike.inventory+cartEntry.quantity;
+  try {
+    await Bike.update(
+      {inventory: bike.inventory},
+      {where: { id: bike.id }}
+    );
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  try {
+    await CartEntry.destroy({ where: {cartId: cart.id, bikeId:bike.id}})
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //generate simple cart for front end use
+  let feCart
+  try {
+    feCart = await _generateFrontEndCart(cart.id)
+  } catch (err) {
+    next (err)
+    return
   }
 
   console.log(feCart)
@@ -137,7 +214,6 @@ router.delete('/:cartId/:bikeId', async (req, res, next) => {
   }
 
   //now have cart with id.  see if entry with bikeId exists
-  let needNewEntry=false;
   let cartEntry={}
   try {
     const cartEntries = await CartEntry.findAll({
@@ -181,8 +257,8 @@ router.delete('/:cartId/:bikeId', async (req, res, next) => {
         { where: { cartId: cart.id, bikeId: bike.id } }
     )}
   } catch (err) {
-  next(err)
-  return
+    next(err)
+    return
   }
 
   //generate simple cart for front end use
@@ -191,6 +267,7 @@ router.delete('/:cartId/:bikeId', async (req, res, next) => {
     feCart = await _generateFrontEndCart(cart.id)
   } catch (err) {
     next (err)
+    return
   }
 
   console.log(feCart)
@@ -253,7 +330,11 @@ async function _generateFrontEndCart(cartId)  {
   }
 
   const cart = await Cart.findById(cartId,
-    {include: [{model:CartEntry}]}
+    {include: [{model:CartEntry}],
+    order: [
+      [ CartEntry, 'bikeId' ]
+      ]
+    }
   );
 
   for (let cartEntry of cart.cartentries) {
