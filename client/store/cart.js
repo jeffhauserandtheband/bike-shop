@@ -28,6 +28,21 @@ const deleteCart = cart => ({type: DELETE_CART, cart})
  * THUNK CREATORS
  */
 
+export const deleteCartEntry = (cartId,bikeId) => async dispatch => {
+    let res
+    try {
+        res = await axios.delete(`/api/carts/${cartId}/${bikeId}/all`)
+    } catch (err) {
+        //pending error handling
+        return dispatch(updateCart({error: err.message}))
+    }
+    try {
+        dispatch(updateCart(res.data));
+    } catch (err) {
+        console.log(err)
+    }
+ }
+
  export const incrementCart = (cartId,bikeId) => async dispatch => {
     let res
     try {
