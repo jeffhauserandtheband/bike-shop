@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
-import postBike from '../store/bikes'
+import fetchBikes from '../store/bikes'
 
 class AddBike extends React.Component {
   state = {
@@ -11,17 +11,17 @@ class AddBike extends React.Component {
       price: '',
       inventory: '',
       availability: '',
+      imageUrl: '',
+      bikeId: null,
+      images: [],
+      bikes: [],
   }
 
   componentDidMount() {
-    // console.log('component did mount props dawg',this.props);
-    // this.props.postBike({
-    //   name: 'test this thing',
-    //   description: 'a coooooolll bike',
-    //   price: 200,
-    //   inventory: 21,
-    //   availability: 'available',
-    // })
+    // get all bikes for image select element
+    // const bikes = this.props.fetchBikes()
+    console.log(this.props.bikes)
+
   }
 
   handleChange = event => {
@@ -30,17 +30,14 @@ class AddBike extends React.Component {
     })
   }
 
+  addImageToState = event => {
+    // this function will be used to push uploaded images to state
+    // so that they can be pushed to some sort of filesystem or something
+  }
+
   // Submit bike handler
   bikeSubmit = async event => {
     event.preventDefault()
-    console.log('the bike submit handler')
-    // this.props.postBike({
-    //   name: this.state.name,
-    //   description: this.state.description,
-    //   price: this.state.price,
-    //   inventory: this.state.inventory,
-    //   availability: this.state.availability,
-    // })
     try {
       await axios.post('/api/bikes', {
         name: this.state.name,
@@ -53,6 +50,18 @@ class AddBike extends React.Component {
       console.log('bike submitted!');
     }
     catch (err) {
+      console.log(err)
+    }
+  }
+
+  imageSubmit = async event => {
+    event.preventDefault()
+    try {
+      axios.post(`/api/bikes/:id/image`, {
+        imageUrl: this.state.imageUrl,
+        bikeId: this.state.bikeId,
+      })
+    } catch (err) {
       console.log(err)
     }
   }
@@ -98,9 +107,17 @@ class AddBike extends React.Component {
             <input type='text' name='name' value={this.state.name} onChange={this.handleChange} />
           </div>
 
-            <input type="file" name="imageUpload" value="imageUpload" id="imageUpload" multiple />
-            <label for="imageUpload">Select an image to upload</label>
-            {/* <input type="image" src="/wp-content/uploads/sendform.png" alt="Submit" width="100"> */}
+          <div className="input-wrapper">
+            <label htmlFor='name' >ImageUrl:</label>
+            <input type='text' name='name' value={this.state.imageUrl} onChange={this.handleChange} />
+          </div>
+
+            {/* The below two lines are for eventual image upload capabilies */}
+            {/* <input type="file" name="imageUpload" value="imageUpload" id="imageUpload" multiple onChange={this.addImageToState} />
+            <label htmlFor="imageUpload">Select an image to upload</label> */}
+
+
+
             <div className="add-form-button-wrapper">
               <button type='submit'>Submit</button>
             </div>
@@ -113,8 +130,13 @@ class AddBike extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  postBike: bikeData => dispatch(postBike(bikeData))
+const mapStateToProps = state => f({
+  bikes: state.bikes
 })
 
-export default connect(null, mapDispatchToProps)(AddBike)
+const mapDispatchToProps = dispatch => ({
+  // fetchBikes: () => dispatch(fetchBikes()),
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddBike)

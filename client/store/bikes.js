@@ -27,22 +27,16 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
  * THUNK CREATORS
  */
 
- export const fetchBikes = () => async dispatch => {
-   console.log('inside of fetchBikes');
+ export const fetchBikes = () => {
+   return async dispatch => {
      let res
      try {
          res = await axios.get('/api/bikes')
+         await dispatch(getBikes(res.data))
      } catch (err) {
-         //pending error handling
-         // return dispatch(getBikes({error: err.message}))
+       console.log(err)
      }
-
-     try {
-         dispatch(getBikes(res.data))
-         // history.push('/bikes')
-     } catch (err) {
-         console.error(err)
-     }
+   }
  }
 
  export const fetchOneBike = (id) => async dispatch => {
