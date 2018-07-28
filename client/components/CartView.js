@@ -14,7 +14,7 @@ import {
   IconButton
 } from '@material-ui/core'
 import {connect} from 'react-redux'
-import {fetchBikes,incrementCart} from '../store'
+import {incrementCart,decrementCart} from '../store'
 import {Link} from 'react-router-dom'
 import {Add, Remove} from '@material-ui/icons/'
 
@@ -53,19 +53,19 @@ class CartView extends Component {
   }
 
   handleClickIncrementCart(bikeId) {
-    cartId=this.props.cart.cartId
+    const cartId=this.props.cart.cartId
     this.props.incrementCart(cartId,bikeId)
   }
 
   handleClickDecrementCart(bikeId) {
-    cartId=this.props.cart.cartId
+    const cartId=this.props.cart.cartId
     this.props.decrementCart(cartId,bikeId)
   }
 
   render() {
-    if (! this.props.cart.cartId) { return (<div>no cart available</div>)}
+    // if (! this.props.cart.cartId) { return (<div>no cart available</div>)}
 
-    if (this.props.cart.cartId ===0) {return (<div>cart id is 0 -- error</div>)}
+    // if (this.props.cart.cartId ===0) {return (<div>cart id is 0 -- error</div>)}
 
     const {classes,cart} = this.props
 
@@ -92,17 +92,17 @@ class CartView extends Component {
                   </TableCell>
                   <TableCell >
                  <Link to={`/bikes/${cartEntry.bikeId}`} >{cartEntry.name}</Link>
-                 <Button>Delete</Button>
+                 <Button   >Delete</Button>
                   </TableCell>
                   <TableCell>{cartEntry.quantity}
-                  <IconButton
+                  <IconButton onClick={(e) => this.handleClickIncrementCart(cartEntry.bikeId)}
                   color="inherit"
                   className={classes.button}
 
                 >
                   <Add/>
                 </IconButton>
-                <IconButton
+                <IconButton onClick={(e) => this.handleClickDecrementCart(cartEntry.bikeId)}
                   color="inherit"
                   className={classes.button}
 
@@ -144,7 +144,7 @@ const mapDispatchToProps = dispatch => {
     incrementCart: (cartId,bikeId) => {
       dispatch(incrementCart(cartId,bikeId))},
     decrementCart: (cartId,bikeId) => {
-      diapatch(derementCart(cartId,bikeId))}
+      dispatch(decrementCart(cartId,bikeId))}
     }
   }
 
