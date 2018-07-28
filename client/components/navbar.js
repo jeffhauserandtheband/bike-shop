@@ -25,7 +25,7 @@ const styles = {
   }
 }
 
-const Navbar = ({handleClick, isLoggedIn, classes}) => (
+const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
   <div className={classes.root}>
     <AppBar position="static">
       <Toolbar>
@@ -41,11 +41,21 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
             >
               Bike-Shop
             </Typography>
-
+            {isAdmin && (
+              <Button component={Link} to="/admin" color="inherit">
+                admin-panel
+              </Button>
+            )}
             <Button component={Link} to="/bikes" color="inherit">
               Shop-Bikes
             </Button>
-            <Button component={Link} to="/myaccount/order-history" color="inherit">My Account</Button>
+            <Button
+              component={Link}
+              to="/myaccount/order-history"
+              color="inherit"
+            >
+              My Account
+            </Button>
             <Button href="#" color="inherit" onClick={handleClick}>
               Logout
             </Button>
@@ -91,7 +101,8 @@ const Navbar = ({handleClick, isLoggedIn, classes}) => (
  */
 const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    isAdmin: state.user.userType === 'admin'
   }
 }
 
@@ -111,5 +122,6 @@ export default connect(mapState, mapDispatch)(withStyles(styles)(Navbar))
 Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired
 }
