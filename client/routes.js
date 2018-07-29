@@ -11,8 +11,10 @@ import {
   CartView,
   ReviewForm,
   OrderHistory,
-  SearchFilter
+  SearchFilter,
+  AdminPanel,
 } from './components'
+
 import {me} from './store'
 
 /**
@@ -41,7 +43,9 @@ class Routes extends Component {
             {/* This is a temporary route to test the search filter */}
             <Route exact path="/searchfilter" component={SearchFilter} />
             <Route path="/reviewform" component={ReviewForm} />
-            <Route path="/myaccount/order-history" component={OrderHistory}/>
+            <Route path="/myaccount/order-history" component={OrderHistory} />
+            {/*just to make sure components are there need to make sure only admin can see*/}
+            <Route exact path="/admin" component={AdminPanel} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
