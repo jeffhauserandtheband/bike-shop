@@ -1,9 +1,12 @@
+
 import React, {Component, Fragment} from 'react'
+
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../../store'
 import {withStyles} from '@material-ui/core/styles'
+
 import {
   Paper,
   Typography,
@@ -70,6 +73,7 @@ class Users extends Component {
     )
   }
 }
+
 /**
  * CONTAINER
  */

@@ -1,12 +1,15 @@
 import React, {Component, Fragment} from 'react'
+
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import Users from './Users'
 import Orders from './Orders'
 import Categories from './Categories'
+
 import Products from './Products'
 import {fetchUsers} from '../../store'
+
 
 import {Typography, AppBar, Tabs, Tab, Paper} from '@material-ui/core'
 function TabContainer(props) {
@@ -32,6 +35,7 @@ class AdminPage extends Component {
   state = {
     value: 0
   }
+
   componentDidMount() {
     this.props.getAdminData()
   }
@@ -41,14 +45,17 @@ class AdminPage extends Component {
   }
 
   render() {
+
     const {classes, users} = this.props
-    console.log('admin paner', users)
     const {value} = this.state
+
     return (
       <Fragment>
         <AppBar position="static" className={classes.root}>
           <Tabs value={value} onChange={this.handleChange}>
+
             <Tab label="Products" />
+            <Tab color="primary" label="Products" />
             <Tab label="Categories" />
             <Tab label="Users" />
             <Tab label="Orders" />
@@ -56,6 +63,7 @@ class AdminPage extends Component {
         </AppBar>
         {value === 0 && (
           <TabContainer>
+
             <Products />
           </TabContainer>
         )}
@@ -66,6 +74,7 @@ class AdminPage extends Component {
         )}
         {value === 2 && (
           <TabContainer>
+
             <Users users={users} />
           </TabContainer>
         )}
@@ -98,3 +107,4 @@ const mapDispatch = dispatch => {
 }
 
 export default connect(mapState, mapDispatch)(withStyles(styles)(AdminPage))
+
