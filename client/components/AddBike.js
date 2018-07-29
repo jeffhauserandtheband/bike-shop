@@ -15,11 +15,12 @@ class AddBike extends React.Component {
       selectedBikeId: null,
       images: [],
       bikes: [],
+      bikeAddedMsg: '', // TODO: Add message based on api response
+      imageAddedMsg: '', // TODO: Add message based on api response
   }
 
   async componentDidMount() {
     await this.props.fetchBikes()
-    console.log('my props.bikes', this.props.bikes)
     await this.setState({
       bikes: this.props.bikes
     })
@@ -31,10 +32,6 @@ class AddBike extends React.Component {
     })
   }
 
-  handleSelectChange = event => {
-    console.log('event.target', event.target)
-  }
-
   addImageToState = event => {
     // this function will be used to push uploaded images to state
     // so that they can be pushed to some sort of filesystem or something
@@ -44,7 +41,7 @@ class AddBike extends React.Component {
   bikeSubmit = async event => {
     event.preventDefault()
     try {
-      await axios.post('/api/bikes', {
+      const res = await axios.post('/api/bikes', {
         name: this.state.name,
         description: this.state.description,
         price: this.state.price,
@@ -52,10 +49,21 @@ class AddBike extends React.Component {
         availability: this.state.availability,
       })
       // dispatch(fetchBikes())
-      console.log('bike submitted!');
+      console.log('bike submitted!', res);
+      if (res.status === 201) {
+        this.setState({
+          bikeAddedMsg: 'Bike successfully added!'
+        })
+      } else { // TODO: is it redundant to have this here AND in a catch block?
+        this.setState({
+          bikeAddedMsg: 'Error adding the bike!'
+        })
+      }
     }
     catch (err) {
-      console.log(err)
+      this.setState({
+        bikeAddedMsg: 'bike not added: ' + err
+      })
     }
   }
 
@@ -76,6 +84,11 @@ class AddBike extends React.Component {
       <div>
         <h1>Add a bike</h1>
         <form onSubmit={this.bikeSubmit}>
+
+            {this.state.bikeAddedMsg.length > 0 &&
+                <label htmlFor="bikeAddedMsg">{this.state.bikeAddedMsg}</label>
+            }
+
           <div className="input-wrapper">
             <label htmlFor='name' >Name:</label>
             <input type='text' name='name' value={this.state.name} onChange={this.handleChange} />
@@ -108,11 +121,6 @@ class AddBike extends React.Component {
         <form onSubmit={this.imageSubmit}>
 
           <div className="input-wrapper">
-            <label htmlFor='name' >Name:</label>
-            <input type='text' name='name' value={this.state.name} onChange={this.handleChange} />
-          </div>
-
-          <div className="input-wrapper">
             <label htmlFor='imageUrl' >ImageUrl:</label>
             <input type='text' name='imageUrl' value={this.state.imageUrl} onChange={this.handleChange} />
           </div>
@@ -135,15 +143,10 @@ class AddBike extends React.Component {
                 })}
               </select>
             </div>
-
-
             <div className="add-form-button-wrapper">
               <button type='submit'>Submit</button>
             </div>
-
-
         </form>
-
       </div>
     )
   }

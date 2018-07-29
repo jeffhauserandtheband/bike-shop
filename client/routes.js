@@ -11,6 +11,9 @@ import {
   CartView,
   ReviewForm,
   AddBike,
+  SearchFilter,
+  OrderHistory,
+  AdminPanel,
 } from './components'
 
 import {me} from './store'

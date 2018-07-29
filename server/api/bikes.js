@@ -41,10 +41,8 @@ router.get('/:id', async (req, res, next) => {
 
 //POST /api/bikes -- put in a new bike -- no pictures or categories yet
 router.post('/',async (req,res,next) => {
-  console.log(req.body)
   try {
     const newBike = await Bike.create(req.body);
-    console.log('Your new bike!', newBike);
     res.status(201).json(newBike)
   } catch (err) {
     next(err)
@@ -65,10 +63,9 @@ router.post('/categorykey',async (req,res,next) => {
 //NOTE - no PUT method for bikes<->images, only create or delete of images/associations
 router.post('/:id/image',async (req,res,next) => {
   try {
-    console.log('I hit the post and this is the req',req.body);
     const reqImage = req.body;
     req.body.bikeId = req.params.id;
-    const newImage = await BikeImage.create(req.body);
+    const newImage = await BikeImage.create(reqImage);
     res.status(201).json(newImage);
   } catch (err) {
     next(err)
