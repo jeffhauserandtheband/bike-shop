@@ -4,38 +4,43 @@ import history from '../history'
 //ACTION TYPES
 
 const CREATE_REVIEW = 'CREATE_REVIEW'
+const GET_REVIEW = 'GET_REVIEW'
 
 //INITIAL STATE
 
 const initialState = {
-    review: []
+    review: [],
+    gReview: []
 }
 
 //ACTION CREATORS 
 
 const createReview = review => ({type: CREATE_REVIEW, review})
+const getReview = greview => ({type: GET_REVIEW, greview})
 
 //THUNK CREATOR 
 
 export const postReview = (revInput) => async dispatch => {
-    console.log('woop', revInput)
     let res
     try {
         res = await axios.post('/api/review/', revInput)
-        console.log('res.data',res)
         dispatch(createReview(res.data))
         // history.push('/review')
     } catch (err) {
         return dispatch(createReview({error: err.message}))
     }
+}
 
-    // try {
-    //     console.log('poo',res.data)
-        
-        
-    // } catch (err) {
-    //     console.error(err)
-    // }
+export const fetchReview = (id) => async dispatch => {   
+    let res
+    try {
+        console.log('id',id)
+        res = await axios.get(`/api/bikes/${id}/review`)
+        console.log('res',res.data)
+        dispatch(getReview(res.data))
+    } catch(err) {
+        return dispatch(getReview({error: err.message}))
+    }
 }
 
 //REDUCER
@@ -45,6 +50,9 @@ export default function(state = initialState,action) {
 
         case CREATE_REVIEW:
             return {...state, review: action.review}
+
+        case GET_REVIEW:
+            return {...state, greview: action.greview}
 
         default:
             return state
