@@ -129,7 +129,7 @@ OrderHistory.propTypes = {
 
 const mapState = state => {
   return {
-    orders: state.orders.orders,
+    orders: state.orders,
     user: state.user
   }
 }

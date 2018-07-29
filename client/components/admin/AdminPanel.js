@@ -1,10 +1,12 @@
 import React, {Component, Fragment} from 'react'
+import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import Users from './Users'
 import Orders from './Orders'
 import Categories from './Categories'
-import Prodcuts from './Products'
+import Products from './Products'
+import {fetchUsers} from '../../store'
 
 import {Typography, AppBar, Tabs, Tab, Paper} from '@material-ui/core'
 function TabContainer(props) {
@@ -30,20 +32,23 @@ class AdminPage extends Component {
   state = {
     value: 0
   }
+  componentDidMount() {
+    this.props.getAdminData()
+  }
 
   handleChange = (event, value) => {
     this.setState({value})
   }
 
   render() {
-    const {classes} = this.props
+    const {classes, users} = this.props
+    console.log('admin paner', users)
     const {value} = this.state
-
     return (
       <Fragment>
         <AppBar position="static" className={classes.root}>
           <Tabs value={value} onChange={this.handleChange}>
-            <Tab color="primary" label="Products" />
+            <Tab label="Products" />
             <Tab label="Categories" />
             <Tab label="Users" />
             <Tab label="Orders" />
@@ -51,7 +56,7 @@ class AdminPage extends Component {
         </AppBar>
         {value === 0 && (
           <TabContainer>
-            <Prodcuts />
+            <Products />
           </TabContainer>
         )}
         {value === 1 && (
@@ -61,7 +66,7 @@ class AdminPage extends Component {
         )}
         {value === 2 && (
           <TabContainer>
-            <Users />
+            <Users users={users} />
           </TabContainer>
         )}
         {value === 3 && (
@@ -78,4 +83,18 @@ AdminPage.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(AdminPage)
+const mapState = state => {
+  return {
+    users: state.admin.users
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    getAdminData() {
+      dispatch(fetchUsers())
+    }
+  }
+}
+
+export default connect(mapState, mapDispatch)(withStyles(styles)(AdminPage))

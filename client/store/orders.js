@@ -42,9 +42,9 @@ export const fetchUserOrders = userId => {
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_ORDERS:
-      return {...state, orders: action.orders}
+      return action.orders
     case GET_SINGLE_ORDER:
-      return {...state, singleOrder: action.order}
+      return action.order
     default:
       return state
   }

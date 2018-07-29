@@ -8,12 +8,18 @@ import categories from './filter'
 import bikes from './bikes'
 import review from './review'
 import orders from './orders'
-
-
+import admin from './admin'
 import cart from './cart'
 
-const reducer = combineReducers({user, bikes, categories, review, cart, orders})
-
+const reducer = combineReducers({
+  user,
+  bikes,
+  categories,
+  review,
+  cart,
+  orders,
+  admin,
+})
 
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -26,3 +32,4 @@ export * from './bikes'
 export * from './review'
 export * from './orders'
 export * from './cart'
+export * from './admin'
