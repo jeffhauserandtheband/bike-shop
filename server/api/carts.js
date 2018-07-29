@@ -55,7 +55,14 @@ router.post('/:cartId/:bikeId', async (req, res, next) => {
   }
 
   if (bike.inventory<1) {
-    res.status(400).json('') //TODO- add message about no inventory
+    let feCart
+    try {
+      feCart = await _generateFrontEndCart(cart.id,`no more stock for bike ${bike.name}`)
+    } catch (err) {
+      next (err)
+      return
+    }
+    res.json(feCart)
     return
   }
 
@@ -297,11 +304,10 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-//GET /api/carts/:id - get a single cart by id joined with its entries
-router.get('/:id', async (req,res,next) => {
+//GET /api/carts/:cartId - get a single cart by id joined with its entries
+router.get('/:cartId', async (req,res,next) => {
   try {
-    const cart = await Cart.findById(req.params.id,
-      {include: [{model: CartEntry}]})
+    const cart = await _generateFrontEndCart(req.params.id)
     res.json(cart)
   } catch (err) {
     next(err)
@@ -315,13 +321,16 @@ router.get('/:id', async (req,res,next) => {
 //INPUT - cart id
 //OUTPUT - object than can be passed up to front end as json
 //CALLER needs to do try/catch on this for db err
-async function _generateFrontEndCart(cartId)  {
+async function _generateFrontEndCart(cartId,msg)  {
 
   const feCart={}
-  feCart.subtotal=0.00;
+  let subtotal=0; //cart will get this filled in later
   feCart.quantity=0; //total number of items in cart
   feCart.cartId = cartId;
   feCart.cartEntries=[]
+  if (msg) {
+    feCart.msg=msg
+  }
 
   //if a new cart was needed by caller and had
   //problems getting bike, just return empty cart
@@ -348,7 +357,7 @@ async function _generateFrontEndCart(cartId)  {
     feCartEntry.quantity=cartEntry.quantity;
     feCart.quantity=feCart.quantity+cartEntry.quantity;
     feCartEntry.price=bike.price;
-    feCart.subtotal=feCart.subtotal+(bike.price*cartEntry.quantity);
+    subtotal=subtotal+((Math.round(bike.price*100)*cartEntry.quantity));
 
     if (bike.bikeimages && bike.bikeimages.length>0) {
       feCartEntry.image = bike.bikeimages[0].imageUrl
@@ -356,5 +365,13 @@ async function _generateFrontEndCart(cartId)  {
 
     feCart.cartEntries.push(feCartEntry)
   }
+
+  if (subtotal>0) {
+    const subtotalStr = String(subtotal)
+    feCart.subtotal = subtotalStr.slice(0,-2)+'.'+subtotalStr.slice(-2)
+  } else {
+    feCart.subtotal = '0.00'
+  }
+
   return feCart;
 }
