@@ -16,7 +16,7 @@ class AddBike extends React.Component {
       images: [],
       bikes: [],
       bikeAddedMsg: '', // TODO: Add message based on api response
-      imageAddedMsg: '', // TODO: Add message based on api response
+      imgAddedMsg: '', // TODO: Add message based on api response
   }
 
   async componentDidMount() {
@@ -49,20 +49,19 @@ class AddBike extends React.Component {
         availability: this.state.availability,
       })
       // dispatch(fetchBikes())
-      console.log('bike submitted!', res);
       if (res.status === 201) {
         this.setState({
           bikeAddedMsg: 'Bike successfully added!'
         })
       } else { // TODO: is it redundant to have this here AND in a catch block?
         this.setState({
-          bikeAddedMsg: 'Error adding the bike!'
+          bikeAddedMsg: 'Error adding the bike!' + res.status
         })
       }
     }
     catch (err) {
       this.setState({
-        bikeAddedMsg: 'bike not added: ' + err
+        bikeAddedMsg: 'Error adding the bike: ' + err
       })
     }
   }
@@ -70,12 +69,23 @@ class AddBike extends React.Component {
   imageSubmit = async event => {
     event.preventDefault()
     try {
-      await axios.post(`/api/bikes/${this.state.selectedBikeId}/image`, {
+      const res = await axios.post(`/api/bikes/${this.state.selectedBikeId}/image`, {
         imageUrl: this.state.imageUrl,
         bikeId: this.state.bikeId,
       })
+      if (res.status === 201) {
+        this.setState({
+          imgAddedMsg: 'Image successfully added!'
+        })
+      } else { // TODO: is it redundant to have this here AND in a catch block?
+        this.setState({
+          imgAddedMsg: 'Error adding the image!' + res.status
+        })
+      }
     } catch (err) {
-      console.log(err)
+      this.setState({
+        imgAddedMsg: 'Error adding the image: ' + err
+      })
     }
   }
 
@@ -85,8 +95,9 @@ class AddBike extends React.Component {
         <h1>Add a bike</h1>
         <form onSubmit={this.bikeSubmit}>
 
-            {this.state.bikeAddedMsg.length > 0 &&
-                <label htmlFor="bikeAddedMsg">{this.state.bikeAddedMsg}</label>
+            {
+              this.state.bikeAddedMsg.length > 0 &&
+              <label htmlFor="bikeAddedMsg">{this.state.bikeAddedMsg}</label>
             }
 
           <div className="input-wrapper">
@@ -119,6 +130,11 @@ class AddBike extends React.Component {
         </form>
 
         <form onSubmit={this.imageSubmit}>
+
+          {
+            this.state.imgAddedMsg.length > 0 &&
+            <label htmlFor="imgAddedMsg">{this.state.imgAddedMsg}</label>
+          }
 
           <div className="input-wrapper">
             <label htmlFor='imageUrl' >ImageUrl:</label>
