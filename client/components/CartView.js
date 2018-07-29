@@ -13,6 +13,8 @@ import {
   Button,
   IconButton
 } from '@material-ui/core'
+import {connect} from 'react-redux'
+import {incrementCart,decrementCart,deleteCartEntry} from '../store'
 import {Link} from 'react-router-dom'
 import {Add, Remove} from '@material-ui/icons/'
 
@@ -38,46 +40,41 @@ const styles = theme => ({
 })
 
 class CartView extends Component {
-  state = {
-    items: [
-      {
-        bikeId: 1,
-        cartId: 1,
-        model: 'All-City',
-        price: 200.0,
-        subtotal: 200.0,
-        createdAt: '2018-07-25T20:44:30.825Z',
-        id: 1,
-        quantity: 1,
-        updatedAt: '2018-07-25T20:44:30.825Z'
-      },
-      {
-        bikeId: 1,
-        cartId: 1,
-        model: 'All-City',
-        price: 200.0,
-        subtotal: 200.0,
-        quantity: 1,
-        createdAt: '2018-07-25T20:44:30.825Z',
-        id: 5,
-        
-        updatedAt: '2018-07-25T20:44:30.825Z'
-      },
-      {
-        bikeId: 1,
-        cartId: 1,
-        model: 'All-City',
-        price: 200.0,
-        subtotal: 200.0,
-        createdAt: '2018-07-25T20:44:30.825Z',
-        id: 6,
-        quantity: 1,
-        updatedAt: '2018-07-25T20:44:30.825Z'
-      }
-    ]
+  constructor() {
+    super()
+    this.handleClickIncrementCart = this.handleClickIncrementCart.bind(this)
+    this.handleClickDecrementCart = this.handleClickDecrementCart.bind(this)
+    this.handleClickDeleteCartEntry = this.handleClickDeleteCartEntry.bind(this)
+
+    this.mounted=false
   }
+
+  componentDidMount() {
+
+  }
+
+  handleClickIncrementCart(bikeId) {
+    const cartId=this.props.cart.cartId
+    this.props.incrementCart(cartId,bikeId)
+  }
+
+  handleClickDecrementCart(bikeId) {
+    const cartId=this.props.cart.cartId
+    this.props.decrementCart(cartId,bikeId)
+  }
+
+  handleClickDeleteCartEntry(bikeId) {
+    //delete an entire cart entry
+    const cartId=this.props.cart.cartId
+    this.props.deleteCartEntry(cartId,bikeId)
+  }
+
   render() {
-    const {classes} = this.props
+    // if (! this.props.cart.cartId) { return (<div>no cart available</div>)}
+
+    // if (this.props.cart.cartId ===0) {return (<div>cart id is 0 -- error</div>)}
+
+    const {classes,cart} = this.props
 
     return (
       <Paper className={classes.root}>
@@ -88,38 +85,39 @@ class CartView extends Component {
               <TableCell/>
               <TableCell>Quantity</TableCell>
               <TableCell>Price</TableCell>
-              
-            
+
+
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.items.map(item => {
+            {cart.cartEntries.map(cartEntry => {
               return (
-                <TableRow key={item.id}>
+                <TableRow key={cartEntry.bikeId}>
                   <TableCell component="th" scope="row" className={classes.picCell}>
-                    <img src="/bicycle-1296859_1280.png" />
+                    {/* <img src="/bicycle-1296859_1280.png" /> */}
+                    <img src={cartEntry.image} />
                   </TableCell>
                   <TableCell >
-                 <Link to={`/bikes/${item.id}`} >{item.model}</Link>
-                 <Button>Delete</Button> 
+                 <Link to={`/bikes/${cartEntry.bikeId}`} >{cartEntry.name}</Link>
+                 <Button onClick={(e) => this.handleClickDeleteCartEntry(cartEntry.bikeId)}>Delete</Button>
                   </TableCell>
-                  <TableCell>{item.quantity}
-                  <IconButton
+                  <TableCell>{cartEntry.quantity}
+                  <IconButton onClick={(e) => this.handleClickIncrementCart(cartEntry.bikeId)}
                   color="inherit"
                   className={classes.button}
-                  
+
                 >
                   <Add/>
                 </IconButton>
-                <IconButton
+                <IconButton onClick={(e) => this.handleClickDecrementCart(cartEntry.bikeId)}
                   color="inherit"
                   className={classes.button}
-                  
+
                 >
                   <Remove />
                 </IconButton>
                   </TableCell>
-                  <TableCell>${item.price}</TableCell>         
+                  <TableCell>${cartEntry.price}</TableCell>
                 </TableRow>
               )
             })}
@@ -129,14 +127,14 @@ class CartView extends Component {
           <TableCell/>
           <TableCell/>
           <TableCell>
-            <Typography>Subtotal $600</Typography>
-            <Button>Checkout</Button> 
+            <Typography>Subtotal ${cart.subtotal}</Typography>
+            <Button>Checkout</Button>
           </TableCell>
         </TableFooter>
         </Table>
         {!this.state && (
           <Typography variant="display1" align="center">
-            0 items in your cart
+            {cart.quantity} items in your cart
           </Typography>
         )}
       </Paper>
@@ -148,4 +146,21 @@ CartView.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(CartView)
+const mapDispatchToProps = dispatch => {
+  return {
+    incrementCart: (cartId,bikeId) => {
+      dispatch(incrementCart(cartId,bikeId))},
+    decrementCart: (cartId,bikeId) => {
+      dispatch(decrementCart(cartId,bikeId))},
+    deleteCartEntry: (cartId,bikeId) => {
+      dispatch(deleteCartEntry(cartId,bikeId))}
+    }
+  }
+
+const mapStateToProps = state => {
+  return {
+    cart: state.cart
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CartView))
