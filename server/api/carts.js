@@ -57,7 +57,7 @@ router.post('/:cartId/:bikeId', async (req, res, next) => {
   if (bike.inventory<1) {
     let feCart
     try {
-      feCart = await _generateFrontEndCart(cart.id,`no more stock for bike ${bike.name}`)
+      feCart = await _generateFrontEndCart(cart.id,`no more stock available for: ${bike.name}\nplease contact customer service for further assistance with this product\n`)
     } catch (err) {
       next (err)
       return
