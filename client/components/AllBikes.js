@@ -44,8 +44,17 @@ class AllBikes extends Component {
     this.handleClickAddToCart = this.handleClickAddToCart.bind(this)
   }
 
-  componentDidMount() {
+  state = {
+    filteredBikes: [],
+  }
+
+  async componentDidMount() {
     this.props.fetchBikes()
+    await this.setState({
+      filteredBikes: this.props.filteredBikes
+    })
+    console.log('component did mount props, ', this.props)
+    console.log('component did mount state, ', this.state)
   }
 
   handleClickAddToCart(bikeId) {
@@ -60,6 +69,8 @@ class AllBikes extends Component {
   render() {
     const {classes} = this.props
 
+    console.log('inside render - props', this.props.filteredBikes);
+
     if (this.props.bikes.length === 0) {
       return <Grid container>Loading..</Grid>
     }
@@ -68,7 +79,7 @@ class AllBikes extends Component {
       <div className={classes.root}>
         <SearchFilter />
         <Grid container>
-          {this.props.bikes.map(elem => {
+          {this.props.filteredBikes.map(elem => {
             return (
               <Grid spacing={24} key={elem.id}>
                 <Card className={classes.card}>
@@ -115,6 +126,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     bikes: state.bikes.bikes,
+    filteredBikes: state.bikes.filteredBikes,
     cart: state.cart
   }
 }

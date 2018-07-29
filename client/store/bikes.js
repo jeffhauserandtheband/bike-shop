@@ -7,6 +7,8 @@ import history from '../history'
 const GET_BIKES = 'GET_BIKES'
 const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
 const ADD_BIKE = 'ADD_BIKE'
+const ADD_FILTER = 'ADD_FILTER'
+const FILTER_BIKES = 'FILTER_BIKES'
 // const REMOVE_USER = 'REMOVE_USER'
 
 /**
@@ -14,7 +16,9 @@ const ADD_BIKE = 'ADD_BIKE'
  */
 const initialState = {
     bikes: [],
-    singleBike: []
+    filteredBikes: [],
+    selectedCategoryVals: [],
+    singleBike: [],
 }
 
 /**
@@ -22,6 +26,8 @@ const initialState = {
  */
 const getBikes = bikes => ({type: GET_BIKES, bikes})
 const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
+const addFilter = categoryVal => ({type: ADD_FILTER, categoryVal})
+const filterBikes = () => ({type: FILTER_BIKES})
 
 /**
  * THUNK CREATORS
@@ -56,8 +62,15 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
      }
  }
 
+ export const filter = categoryVal => {
+   return async dispatch => {
+     // console.log('inside filter thunk - categoryVal:', categoryVal);
+     await dispatch(addFilter(categoryVal))
+     await dispatch(filterBikes())
+   }
+ }
+
  export const postBike = (bikeData) => {
-   console.log('postBike Thunk bikeData', bikeData)
    return async dispatch => {
      // try {
      //   await axios({
@@ -108,9 +121,29 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
  * REDUCER
  */
 export default function(state = initialState, action) {
+  let newFilteredBikes = []
   switch (action.type) {
     case GET_BIKES:
-        return {...state, bikes: action.bikes}
+        return {...state, bikes: action.bikes, filteredBikes: action.bikes}
+    case ADD_FILTER:
+        if (!state.selectedCategoryVals.includes(action.categoryVal)) { // add the category val if it doesn't exist
+          return {...state, selectedCategoryVals: [...state.selectedCategoryVals, action.categoryVal]}
+        } else { // remove categoryVal if it exists
+          return {...state, selectedCategoryVals: [...state.selectedCategoryVals.filter(val => val !== action.categoryVal)]}
+        }
+    case FILTER_BIKES:
+        state.bikes.forEach(bike => {
+          bike.categoryvalues.forEach(catVal => {
+            console.log(state.selectedCategoryVals, catVal.id);
+            console.log(state.selectedCategoryVals.includes(catVal.id))
+            // if (state.selectedCategoryVals.includes(catVal.id)) {
+            //   newFilteredBikes.push(bike)
+            //   return // we don't want to add the bike more than once
+            // }
+          })
+        })
+        console.log('inside of filter Bikes reducre - newFilteredBikes', newFilteredBikes);
+        return {...state, filteredBikes: newFilteredBikes}
     case GET_SINGLE_BIKE:
         return {...state, singleBike: action.bike}
     default:
