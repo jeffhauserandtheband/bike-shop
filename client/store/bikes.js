@@ -122,28 +122,32 @@ const filterBikes = () => ({type: FILTER_BIKES})
  */
 export default function(state = initialState, action) {
   let newFilteredBikes = []
+  let categoryVal
   switch (action.type) {
     case GET_BIKES:
         return {...state, bikes: action.bikes, filteredBikes: action.bikes}
     case ADD_FILTER:
-        if (!state.selectedCategoryVals.includes(action.categoryVal)) { // add the category val if it doesn't exist
-          return {...state, selectedCategoryVals: [...state.selectedCategoryVals, action.categoryVal]}
+        categoryVal = parseInt(action.categoryVal) // we want this as a number not string
+        if (!state.selectedCategoryVals.includes(categoryVal)) { // add the category val if it doesn't exist
+          return {...state, selectedCategoryVals: [...state.selectedCategoryVals, categoryVal]}
         } else { // remove categoryVal if it exists
-          return {...state, selectedCategoryVals: [...state.selectedCategoryVals.filter(val => val !== action.categoryVal)]}
+          return {...state, selectedCategoryVals: [...state.selectedCategoryVals.filter(val => val !== categoryVal)]}
         }
     case FILTER_BIKES:
-        state.bikes.forEach(bike => {
-          bike.categoryvalues.forEach(catVal => {
-            console.log(state.selectedCategoryVals, catVal.id);
-            console.log(state.selectedCategoryVals.includes(catVal.id))
-            // if (state.selectedCategoryVals.includes(catVal.id)) {
-            //   newFilteredBikes.push(bike)
-            //   return // we don't want to add the bike more than once
-            // }
+        // if we have no selectedCategoryVals
+        if (state.selectedCategoryVals.length <= 0) {
+          return {...state, filteredBikes: [...state.bikes]}
+        } else {
+          [...state.bikes].forEach(bike => {
+            bike.categoryvalues.forEach(catVal => {
+              if (state.selectedCategoryVals.includes(catVal.id)) {
+                newFilteredBikes.push(bike)
+                return // we don't want to add the bike more than once
+              }
+            })
           })
-        })
-        console.log('inside of filter Bikes reducre - newFilteredBikes', newFilteredBikes);
-        return {...state, filteredBikes: newFilteredBikes}
+          return {...state, filteredBikes: newFilteredBikes}
+        }
     case GET_SINGLE_BIKE:
         return {...state, singleBike: action.bike}
     default:
