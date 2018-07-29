@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
-import {fetchOneBike} from '../store'
+import {fetchOneBike, fetchReview} from '../store'
 import { Grid, Paper, Button } from '@material-ui/core'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const style = {
     Paper: {
@@ -16,10 +16,12 @@ class SingleBike extends Component {
     componentDidMount() {
         const id = this.props.match.params.id
         this.props.fetchOneBike(id);
+        this.props.fetchReview(id)
     }
 
     render() {
         const {name} = this.props.singleBike
+        const id = this.props.match.params.id
 
         if (this.props.singleBike.length === 0) {
             return (
@@ -37,6 +39,11 @@ class SingleBike extends Component {
                     <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
                     {name}
                     <Button>Add to cart</Button>
+
+                    <Link to='/reviewform'>
+                        <Button> Add Review </Button>
+                    </Link>
+
                     </Paper>            
                 </Grid>
             </Grid>
@@ -54,7 +61,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchOneBike: (id) => {
             dispatch(fetchOneBike(id)) 
-        }
+        },
+        fetchReview: (id) => {
+            console.log('poo')
+            dispatch(fetchReview(id))
+        } 
     }
 }
 
