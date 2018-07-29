@@ -2,6 +2,8 @@ const router = require('express').Router()
 const {Bike,BikeImage,CategoryKey,CategoryValue} = require('../db/models')
 module.exports = router
 
+const axios = require('axios')
+
 //TODO:  ensure all POSTs are RESTful? find unique constraints outside of sequelize's auto pk?
 
 //GET /api/bikes -- just get basic bike info  -- send everything up and let front end filter out what they want
@@ -41,7 +43,7 @@ router.get('/:id', async (req, res, next) => {
 router.post('/',async (req,res,next) => {
   try {
     const newBike = await Bike.create(req.body);
-    res.json(newBike)
+    res.status(201).json(newBike)
   } catch (err) {
     next(err)
   }
@@ -63,7 +65,7 @@ router.post('/:id/image',async (req,res,next) => {
   try {
     const reqImage = req.body;
     req.body.bikeId = req.params.id;
-    const newImage = await BikeImage.create(req.body);
+    const newImage = await BikeImage.create(reqImage);
     res.status(201).json(newImage);
   } catch (err) {
     next(err)

@@ -59,7 +59,7 @@ const Bike = db.define('bike', {
 const BikeImage = db.define('bikeimage', {
   imageUrl: {
     type: Sequelize.STRING,
-    defaultValue: 'http://learndotresources.s3.amazonaws.com/workshop/55e5c92fe859dc0300619bc8/sloth.jpg'
+    defaultValue: 'http://learndotresources.s3.amazonaws.com/workshop/55e5c92fe859dc0300619bc8/sloth.jpg',
   }
 })
 
@@ -83,7 +83,7 @@ const CategoryKey = db.define('categorykey', {
 //--------------------------------------------------------------
 const CategoryValue = db.define('categoryvalue', {
   name: {
-    type: Sequelize.STRING, 
+    type: Sequelize.STRING,
     allowNull: false,
     validate: {
       notEmpty: {

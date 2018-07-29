@@ -9,6 +9,8 @@ export {default as AllBikes} from './AllBikes'
 export {default as SingleBike} from './SingleBike'
 export {default as ReviewForm} from './ReviewForm'
 export {default as CartView} from './CartView'
+
+export {default as AddBike} from './AddBike'
 export {default as OrderHistory} from './OrderHistory'
 export {default as AdminPanel} from './admin/AdminPanel'
 

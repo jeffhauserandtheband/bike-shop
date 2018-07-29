@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GET_BIKES = 'GET_BIKES'
 const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
+const ADD_BIKE = 'ADD_BIKE'
 // const REMOVE_USER = 'REMOVE_USER'
 
 /**
@@ -26,21 +27,16 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
  * THUNK CREATORS
  */
 
- export const fetchBikes = () => async dispatch => {
+ export const fetchBikes = () => {
+   return async dispatch => {
      let res
      try {
          res = await axios.get('/api/bikes')
+         await dispatch(getBikes(res.data))
      } catch (err) {
-         //pending error handling
-         return dispatch(getBikes({error: err.message}))
+       console.log(err)
      }
-
-     try {
-         dispatch(getBikes(res.data))
-         history.push('/bikes')
-     } catch (err) {
-         console.error(err)
-     }
+   }
  }
 
  export const fetchOneBike = (id) => async dispatch => {
@@ -60,6 +56,38 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
      }
  }
 
+ export const postBike = (bikeData) => {
+   console.log('postBike Thunk bikeData', bikeData)
+   return async dispatch => {
+     // try {
+     //   await axios({
+     //     method: 'post',
+     //     url: '/api/bikes',
+     //     data: bikeData, // make sure this is being passed in properly to line up with db names
+     //   })
+     //   dispatch(fetchBikes())
+     // }
+     // catch (err) {
+     //   console.log(err)
+     // }
+     // try {
+     //   await axios.post('/api/bikes', {
+     //     name: this.state.name,
+     //     description: this.state.description,
+     //     price: this.state.price,
+     //     inventory: this.state.inventory,
+     //     availability: this.state.availability,
+     //   })
+     //   // dispatch(fetchBikes())
+     //   console.log('bike submitted!');
+     // }
+     // catch (err) {
+     //   console.log(err)
+     // }
+   }
+ }
+
+
 // export const auth = (email, password, method) => async dispatch => {
 //   let res
 //   try {
@@ -75,8 +103,6 @@ const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
 //     console.error(dispatchOrHistoryErr)
 //   }
 // }
-
-
 
 /**
  * REDUCER

@@ -10,8 +10,9 @@ import {
   SingleBike,
   CartView,
   ReviewForm,
-  OrderHistory,
+  AddBike,
   SearchFilter,
+  OrderHistory,
   AdminPanel,
 } from './components'
 
@@ -43,6 +44,7 @@ class Routes extends Component {
             {/* This is a temporary route to test the search filter */}
             <Route exact path="/searchfilter" component={SearchFilter} />
             <Route path="/reviewform" component={ReviewForm} />
+            <Route path="/admin/bikes/add" component={AddBike} />
             <Route path="/myaccount/order-history" component={OrderHistory} />
             {/*just to make sure components are there need to make sure only admin can see*/}
             <Route exact path="/admin" component={AdminPanel} />
