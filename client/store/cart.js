@@ -51,6 +51,11 @@ export const deleteCartEntry = (cartId,bikeId) => async dispatch => {
         //pending error handling
         return dispatch(updateCart({error: err.message}))
     }
+    if (res.data.msg) {
+        //need an alert
+        alert(res.data.msg+"\nclick ok to continue")
+        delete res.data.msg
+    }
     try {
         dispatch(updateCart(res.data));
     } catch (err) {
