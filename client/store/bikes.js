@@ -9,6 +9,7 @@ const GET_SINGLE_BIKE = 'GET_SINGLE_BIKE'
 const ADD_BIKE = 'ADD_BIKE'
 const ADD_FILTER = 'ADD_FILTER'
 const FILTER_BIKES = 'FILTER_BIKES'
+// const UPDATE_BIKE = 'UPDATE_BIKE'
 // const REMOVE_USER = 'REMOVE_USER'
 
 /**
@@ -18,7 +19,7 @@ const initialState = {
     bikes: [],
     filteredBikes: [],
     selectedCategoryVals: [],
-    singleBike: [],
+    singleBike: {},
 }
 
 /**
@@ -28,6 +29,7 @@ const getBikes = bikes => ({type: GET_BIKES, bikes})
 const getOneBike = bike => ({type: GET_SINGLE_BIKE, bike})
 const addFilter = categoryVal => ({type: ADD_FILTER, categoryVal})
 const filterBikes = () => ({type: FILTER_BIKES})
+// const bikeUpdated = () => ({type: UPDATE_BIKE})
 
 /**
  * THUNK CREATORS
@@ -45,6 +47,17 @@ const filterBikes = () => ({type: FILTER_BIKES})
    }
  }
 
+ export const fetchBike = bikeId => {
+   return async dispatch => {
+     try {
+       const { data } = await axios.get(`/api/bikes/${bikeId}`)
+       await dispatch(getOneBike(data))
+     } catch (err) {
+       console.log(err)
+     }
+   }
+ }
+
  export const fetchOneBike = (id) => async dispatch => {
      let res
      try {
@@ -53,7 +66,6 @@ const filterBikes = () => ({type: FILTER_BIKES})
          //more pending error handling
          return dispatch(getOneBike({error: err.message}))
      }
-
      try {
          dispatch(getOneBike(res.data))
          history.push(`/bikes/${id}`)
@@ -67,6 +79,21 @@ const filterBikes = () => ({type: FILTER_BIKES})
      // console.log('inside filter thunk - categoryVal:', categoryVal);
      await dispatch(addFilter(categoryVal))
      await dispatch(filterBikes())
+   }
+ }
+
+ export const updateBike = (bikeId, bikeData) => {
+   return async dispatch => {
+     try {
+       await axios({
+         method: 'put',
+         url: `/api/bikes/${bikeId}`,
+         data: bikeData
+       })
+       await dispatch(getBikes())
+     } catch (err) {
+       console.log(err)
+     }
    }
  }
 

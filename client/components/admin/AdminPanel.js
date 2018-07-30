@@ -6,9 +6,8 @@ import {withStyles} from '@material-ui/core/styles'
 import Users from './Users'
 import Orders from './Orders'
 import Categories from './Categories'
-
 import Products from './Products'
-import {fetchUsers} from '../../store'
+import {fetchUsers, fetchOrders} from '../../store'
 
 
 import {Typography, AppBar, Tabs, Tab, Paper} from '@material-ui/core'
@@ -46,16 +45,14 @@ class AdminPage extends Component {
 
   render() {
 
-    const {classes, users} = this.props
+    const {classes, users, orders} = this.props
     const {value} = this.state
-
     return (
       <Fragment>
         <AppBar position="static" className={classes.root}>
           <Tabs value={value} onChange={this.handleChange}>
 
             <Tab label="Products" />
-            <Tab color="primary" label="Products" />
             <Tab label="Categories" />
             <Tab label="Users" />
             <Tab label="Orders" />
@@ -80,7 +77,7 @@ class AdminPage extends Component {
         )}
         {value === 3 && (
           <TabContainer>
-            <Orders />
+            <Orders orders={orders}  />
           </TabContainer>
         )}
       </Fragment>
@@ -94,7 +91,8 @@ AdminPage.propTypes = {
 
 const mapState = state => {
   return {
-    users: state.admin.users
+    users: state.admin.users,
+    orders: state.admin.orders,
   }
 }
 
@@ -102,6 +100,7 @@ const mapDispatch = dispatch => {
   return {
     getAdminData() {
       dispatch(fetchUsers())
+      dispatch(fetchOrders())
     }
   }
 }
