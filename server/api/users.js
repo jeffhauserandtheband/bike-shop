@@ -15,3 +15,18 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+// delete user  neeeds admin middleware
+router.delete('/:userid', async (req, res, next) => {
+  try {
+    await User.destroy({
+      where: {
+        id:  req.params.userid
+      },
+    });
+    res.sendStatus(202);
+  } catch (error) {
+    console.error('Didnt delete user', error);
+    next(error);
+  }
+});

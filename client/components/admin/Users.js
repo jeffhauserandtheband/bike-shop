@@ -38,7 +38,7 @@ const styles = theme => ({
 class Users extends Component {
   state = {}
   render() {
-    const {users, classes} = this.props
+    const {users, classes, deleteUser} = this.props
     return (
       <div className={classes.center}>
         <Paper className={classes.root}>
@@ -61,7 +61,7 @@ class Users extends Component {
                     <TableCell>{user.userType}</TableCell>
                     <TableCell>Last seen</TableCell>
                     <TableCell>
-                      <Button>Delete</Button>
+                      <Button onClick={() => deleteUser(user.id)}>Delete</Button>
                     </TableCell>
                   </TableRow>
                 )
