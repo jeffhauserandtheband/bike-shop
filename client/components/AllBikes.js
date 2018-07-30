@@ -16,25 +16,32 @@ import {Link} from 'react-router-dom'
 
 import {SearchFilter} from './index'
 
-const style = {
-    Paper: {
-        padding: 10,
-        marginTop:10,
-        marginBottom:10
-    }
-}
 const styles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    display: 'flex',
+    paddingTop: 10
   },
   card: {
-    width: 300,
-    padding: theme.spacing.unit * 2
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column'
   },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-    width: 250,
+  pic: {
+    width: 300,
+    height: 200
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  action: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
 })
 
@@ -67,7 +74,7 @@ class AllBikes extends Component {
   }
 
   render() {
-    const {classes} = this.props
+    const {classes, bikes} = this.props
 
     console.log('inside render - props', this.props.filteredBikes);
 
@@ -78,38 +85,65 @@ class AllBikes extends Component {
     return (
       <div className={classes.root}>
         <SearchFilter />
-        <Grid container>
-          {this.props.filteredBikes.map(elem => {
-            return (
-              <Grid spacing={24} key={elem.id}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    component={Link}
-                    to={`/bikes/${elem.id}`}
-                    className={classes.media}
-                    image={elem.bikeimages[0] && elem.bikeimages[0].imageUrl}
-                    title={elem.name}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="subheading" component="h3">
-                      <Link to={`/bikes/${elem.id}`}>{elem.name.substring()}</Link>
-                    </Typography>
-                  </CardContent>
-
-                  <CardActions>
-                    <Button onClick={(e) => this.handleClickAddToCart(elem.id)}size="small" color="primary">
-                      Add to cart
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            )
-          })}
-        </Grid>
+        <Grid container spacing={24}>
+        {bikes.map(elem => (
+          <Grid key={elem.id} item md>
+            <Card className={classes.card}>
+              <CardContent>
+                <div className={classes.container}>
+                  <div>
+                    <Link to={`/bikes/${elem.id}`}>
+                      <img className={classes.pic} src="bike.jpeg" />
+                    </Link>
+                  </div>
+                  <div className={classes.action}>
+                    <div>
+                      <Typography
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"
+                      >
+                        <Link to={`/bikes/${elem.id}`}>
+                          {elem.name.substring()}
+                        </Link>
+                      </Typography>
+                    </div>
+                    <div className={classes.action}>
+                      <Typography
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"
+                      >
+                        {`Price $${elem.price}`}
+                      </Typography>
+                    </div>
+                    <div className={classes.action}>
+                      <Typography
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"
+                      >
+                        Rating
+                      </Typography>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+              <CardActions className={classes.action}>
+                <Button size="small" variant="contained" color="primary" onClick={(e) => this.handleClickAddToCart(elem.id)}>
+                  ADD TO CART
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
       </div>
     )
   }
 }
+
+//onClick={(e) => this.handleClickAddToCart(elem.id)}
 AllBikes.propTypes = {
   classes: PropTypes.object.isRequired
 }

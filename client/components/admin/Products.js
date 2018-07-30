@@ -2,32 +2,117 @@ import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {logout} from '../../store'
 import {withStyles} from '@material-ui/core/styles'
-import {Paper, Typography} from '@material-ui/core'
-//import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import {
+  Typography,
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  Button
+} from '@material-ui/core'
+import BikeCard from '../BikeCard'
 
-const styles = {
+const styles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    display: 'flex',
+    paddingTop: 10
+  },
+  card: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column'
+  },
+  pic: {
+    width: 300,
+    height: 200
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  action: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
-}
+})
+//Buttons need links to add/edit page
+const Products = ({bikes, classes}) => (
+  <Fragment>
+    <Button variant="contained" color="secondary">
+      Add Product
+    </Button>
 
-const Products = props => (
-  <div className={props.classes.root}>
-    <Typography variant="headline">Products</Typography>
-  </div>
+    <div className={classes.root}>
+      <Grid container spacing={24}>
+        {bikes.map(elem => (
+          <Grid key={elem.id} item md>
+            <Card className={classes.card}>
+              <CardContent>
+                <div className={classes.container}>
+                  <div>
+                    <Link to={`/bikes/${elem.id}`}>
+                      <img className={classes.pic} src="bike.jpeg" />
+                    </Link>
+                  </div>
+                  <div className={classes.action}>
+                    <div>
+                      <Typography
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"
+                      >
+                        <Link to={`/bikes/${elem.id}`}>
+                          {elem.name.substring()}
+                        </Link>
+                      </Typography>
+                    </div>
+                    <div className={classes.action}>
+                      <Typography
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"
+                      >
+                        {`Price $${elem.price}`}
+                      </Typography>
+                    </div>
+                    <div className={classes.action}>
+                      <Typography
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"
+                      >
+                        Rating
+                      </Typography>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+              <CardActions className={classes.action}>
+                <Button size="small" color="secondary">
+                  Edit
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  </Fragment>
 )
 
 /**
  * CONTAINER
  */
 
-const mapState = state => {}
 
-const mapDispatch = dispatch => {}
 
-export default connect(mapState, mapDispatch)(withStyles(styles)(Products))
+export default withStyles(styles)(Products)
 
 /**
  * PROP TYPES
