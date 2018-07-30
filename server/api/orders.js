@@ -2,6 +2,8 @@ const router = require('express').Router()
 const {Order, OrderEntries, Bike} = require('../db/models')
 module.exports = router
 
+//NOTE - ORDER POST IS DONE IN carts FILE
+
 //user get orders
 router.get('/:userId', async (req, res, next) => {
   try {

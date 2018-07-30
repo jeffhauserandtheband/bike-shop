@@ -1,5 +1,6 @@
 import axios from 'axios'
 import history from '../history'
+import {deleteCart} from './cart'
 
 /**
  * ACTION TYPES
@@ -25,6 +26,22 @@ const getUserOrders = orders => ({type: GET_ORDERS, orders})
 /**
  * THUNK CREATORS
  */
+export const saveOrder = cartId => {
+  return async dispatch => {
+    try {
+      const {order} = await axios.post('/api/carts/'+cartId+'/createorder',{shippingEmail:'emailaddy@email.com'})
+      //need to go somewhere
+
+      //successful order means clear lso cartid
+      dispatch(deleteCart())
+    } catch (err) {
+      console.log('Error creating order:',error)
+    }
+  }
+
+}
+
+
 export const fetchUserOrders = userId => {
   return async dispatch => {
     try {

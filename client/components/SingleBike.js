@@ -64,11 +64,13 @@ class SingleBike extends Component {
         avgRating = avgRating / review.length
         }
 
+
         return (
             <Grid container spacing={24}>
                 <Grid item md key={this.props.singleBike.id}>         
                     <Paper style={style.Paper}>          
                     <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
+
                     <Typography 
                         gutterBottom
                         variant="subheading"
