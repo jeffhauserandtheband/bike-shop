@@ -1,8 +1,145 @@
 /* eslint-disable max-statements */
 /* eslint-disable complexity */
 const router = require('express').Router()
-const {Cart,CartEntry,Bike,BikeImage} = require('../db/models')
+const {Cart,CartEntry,Bike,BikeImage,Order,OrderEntries} = require('../db/models')
 module.exports = router
+
+//POST /api/carts/:cartId/createorder
+//convert cartid to order object and clear cart
+//
+//front end will have captured all necessary info to
+//include with order like name/shipping/etc.
+//
+//front end will have also completed payment verification
+//
+//TODO: record credit card info with order for refunds
+router.post('/:cartId/createorder', async (req, res, next) => {
+  let cartId = +req.params.cartId
+  if (cartId<=0) {
+    const err = new Error('invalid cartid');
+    next(err)
+    return;
+  }
+  let cart;
+  try {
+    cart = await Cart.findById(cartId, {
+      include: [{model: CartEntry}]
+    });
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  if (cart.cartentries.length<=0) {
+    const err = new Error('empty cart');
+    next(err);
+    return;
+  }
+
+  //need at least an email for the order
+  if (! (req.body.shippingEmail)) {
+    const err = new Error('need email for order')
+    next(err)
+    return
+  }
+
+  //TODO - wrap order creation in a transaction
+  //TODO - create enum to correspond to order state in sequelize model
+  console.log(req.body)
+
+  const newOrder = {}
+  newOrder.state='created'
+  newOrder.shippingEmail = req.body.shippingEmail
+
+  if (req.body.shippingName) {
+    newOrder.shippingName=req.body.shippingName
+  }
+
+  if (req.body.shippingAddress) {
+    newOrder.shippingAddress=req.body.shippingAddress
+  }
+
+  if (req.body.shippingCity) {
+    newOrder.shippingCity=req.body.shippingCity
+  }
+
+  if (req.body.shippingState) {
+    newOrder.shippingState=req.body.shippingState
+  }
+
+  if (req.body.shippingZip) {
+    newOrder.shippingZip=req.body.shippingZip
+  }
+
+  //create the order row in db now so we can at least
+  //get the order id to link the orderEntries
+
+  let order;
+  try {
+    order = await Order.create(newOrder)
+  } catch (err) {
+    next(err)
+    return
+  }
+
+  //now create the entries, get total and then finally
+  //update order afterwards
+  let subtotal=0
+  for (let cartEntry of cart.cartentries) {
+
+    //get bike so we can get price
+    let bike
+    try {
+      bike = await Bike.findById(cartEntry.bikeId)
+    } catch (err) {
+      next(err)
+      return
+    }
+
+    const newOrderEntry={}
+    newOrderEntry.orderId=order.id
+    newOrderEntry.bikeId=bike.id;
+    newOrderEntry.quantity=cartEntry.quantity;
+    let orderPrice=Math.round(bike.price*100);
+    newOrderEntry.price=orderPrice;
+    subtotal=subtotal+(orderPrice*cartEntry.quantity);
+
+    try {
+      await OrderEntries.create(newOrderEntry)
+      await cartEntry.destroy()
+    } catch (err) {
+      next(err)
+      return
+    }
+  }
+
+  //orderCost got implemented as integer, so go with it
+  try {
+    await order.update({orderCost:subtotal})
+  } catch (err) {
+    //TODO - expect transaction to handle rollback of
+    //created order entries
+    next(err)
+    return
+  }
+
+  //now blow away the cart
+  try {
+    await cart.destroy()
+  }
+  catch (err) {
+    next(err)
+  }
+
+  //now get the whole order and send back to front end
+  try {
+    order = await Order.findById(order.id,{include: [{all: true}]})
+    res.json(order)
+  } catch (err) {
+    next(err)
+  }
+
+})
 
 
 //POST /api/carts/:cartid/:bikeid
