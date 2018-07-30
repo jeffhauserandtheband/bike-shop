@@ -5,9 +5,6 @@ const Order = db.define('order', {
   state: {
     type: Sequelize.ENUM('created', 'processing', 'cancelled', 'completed')
   },
-  date: {
-    type: Sequelize.DATE
-  },
   shippingEmail: {
     type: Sequelize.STRING,
     allowNull: false
@@ -27,6 +24,8 @@ const Order = db.define('order', {
   shippingZip: {
     type: Sequelize.STRING
   },
+  //NOTE - BIKE PRICES ARE DECIMAL(10,2) SO MAKE
+  //SURE TO CONVERT AS APPROPRIATE
   orderCost: {
     type: Sequelize.INTEGER
   }

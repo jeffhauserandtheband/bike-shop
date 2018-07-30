@@ -44,7 +44,6 @@ const orders = [
   {
     userId: 1,
     state: 'completed',
-    date: new Date(),
     shippingEmail: 'cody@email.com',
     shippingName: 'cody jones',
     shippingAddress: '123 Meadow Lane',
@@ -56,7 +55,6 @@ const orders = [
   {
     userId: 2,
     state: 'processing',
-    date: new Date(),
     shippingEmail: 'murphy@email.com',
     shippingName: 'murphy jones',
     shippingAddress: '125453 Butter Lane',
