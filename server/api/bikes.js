@@ -39,6 +39,31 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.post('/:id', async (req, res, next) => {
+  try {
+    const bike = await Bike.findById(req.params.id,
+      {include: [{model: BikeImage},{model: CategoryValue}]})
+
+    res.json(bike)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// POST /api/bikes/:id update a bike
+router.put('/:id', async (req, res, next) => {
+  try {
+    const bike = await Bike.update(req.body, {
+      where: {id: req.params.id},
+      returning: true,
+      plain: true,
+    })
+    res.status(201).json(bike)
+  } catch (err) {
+    next(err)
+  }
+})
+
 //POST /api/bikes -- put in a new bike -- no pictures or categories yet
 router.post('/',async (req,res,next) => {
   try {

@@ -11,6 +11,7 @@ import {
   CartView,
   ReviewForm,
   AddBike,
+  UpdateBike,
   SearchFilter,
   OrderHistory,
   AdminPanel,
@@ -43,8 +44,9 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             {/* This is a temporary route to test the search filter */}
             <Route exact path="/searchfilter" component={SearchFilter} />
-            <Route path="/reviewform" component={ReviewForm} />
-            <Route path="/admin/bikes/add" component={AddBike} />
+            <Route path="/bikes/:id/reviewform" component={ReviewForm} />
+            <Route path="/admin/bikes/update/:id" component={UpdateBike} />
+            <Route exact path="/admin/bikes/add" component={AddBike} />
             <Route path="/myaccount/order-history" component={OrderHistory} />
             {/*just to make sure components are there need to make sure only admin can see*/}
             <Route exact path="/admin" component={AdminPanel} />

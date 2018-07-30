@@ -19,9 +19,13 @@ class ReviewForm extends Component {
     }
 
     render() {
+        const bikeId = this.props.match.params.id
         return(
             <div>
-                    <form onSubmit={this.props.handleSubmit}>
+                    <form onSubmit={(evt) => {
+                        evt.preventDefault()
+                        this.props.handleSubmit(evt,bikeId)
+                    }}>
                     <label> Leave a Review: </label>
                     <TextField 
                     name='comments' 
@@ -43,11 +47,10 @@ class ReviewForm extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleSubmit: (evt) => {
-            evt.preventDefault()
+        handleSubmit: (evt, bikeId) => {
             const comments = evt.target.comments.value
             const rating = evt.target.rating.value
-            dispatch(postReview({comments,rating}))
+            dispatch(postReview({comments,rating,bikeId}))
         }
     }
 }

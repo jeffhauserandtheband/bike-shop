@@ -13,6 +13,7 @@ export {default as OrderCard} from './OrderCard'
 export {default as BikeCard} from './BikeCard'
 
 export {default as AddBike} from './AddBike'
+export {default as UpdateBike} from './UpdateBike'
 export {default as OrderHistory} from './OrderHistory'
 export {default as AdminPanel} from './admin/AdminPanel'
 
