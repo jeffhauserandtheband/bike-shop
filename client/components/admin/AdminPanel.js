@@ -7,7 +7,7 @@ import Users from './Users'
 import Orders from './Orders'
 import Categories from './Categories'
 import Products from './Products'
-import {fetchUsers, fetchOrders} from '../../store'
+import {fetchUsers, fetchOrders, fetchBikes} from '../../store'
 
 
 import {Typography, AppBar, Tabs, Tab, Paper} from '@material-ui/core'
@@ -45,7 +45,7 @@ class AdminPage extends Component {
 
   render() {
 
-    const {classes, users, orders} = this.props
+    const {classes, users, orders, bikes} = this.props
     const {value} = this.state
     return (
       <Fragment>
@@ -61,7 +61,7 @@ class AdminPage extends Component {
         {value === 0 && (
           <TabContainer>
 
-            <Products />
+            <Products bikes={bikes} />
           </TabContainer>
         )}
         {value === 1 && (
@@ -93,6 +93,7 @@ const mapState = state => {
   return {
     users: state.admin.users,
     orders: state.admin.orders,
+    bikes: state.bikes.bikes
   }
 }
 
@@ -101,6 +102,7 @@ const mapDispatch = dispatch => {
     getAdminData() {
       dispatch(fetchUsers())
       dispatch(fetchOrders())
+      dispatch(fetchBikes())
     }
   }
 }
