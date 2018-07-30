@@ -11,6 +11,7 @@ export {default as ReviewForm} from './ReviewForm'
 export {default as CartView} from './CartView'
 
 export {default as AddBike} from './AddBike'
+export {default as UpdateBike} from './UpdateBike'
 export {default as OrderHistory} from './OrderHistory'
 export {default as AdminPanel} from './admin/AdminPanel'
 

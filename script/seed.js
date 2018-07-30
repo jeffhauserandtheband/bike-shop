@@ -179,7 +179,7 @@ async function seed() {
     const orderEntries = await OrderEntries.findAll()
     await Promise.all(
       orderEntries.map(orderEntry => {
-        console.log('word',orderEntry)
+        // console.log('word',orderEntry)
         return OrderEntries.update(
           {price: 99, quantity: 5},
           {where: {bikeId: orderEntry.bikeId, orderId:orderEntry.orderId}}

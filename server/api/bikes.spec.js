@@ -48,7 +48,6 @@ describe('Bike routes', () => {
         .send(newBike)
         .expect(201)
       // add an image to that bike
-      console.log('my bike res',  bikeRes.body);
       const res = await request(app).post(`/api/bikes/${bikeRes.body.id}/image`)
         .send({
           imageUrl: imgUrl,
@@ -56,10 +55,31 @@ describe('Bike routes', () => {
         })
         .expect(201)
         const createdImage = await BikeImage.findById(res.body.id)
-        console.log('my image that I just queried', createdImage)
       //   expect(createdImage.imageUrl).to.be.equal(imgUrl)
     })
+  }) // end describe('/api/bikes')
 
-
-  }) // end describe('/api/users')
+  describe('/api/bikes/:id', () => {
+    it('PUT updates an existing bike', async () => {
+      // create a new bike
+      const res = await request(app).post('/api/bikes')
+        .send({
+          name: 'My cool new bike!',
+          description: 'A very very cool bike!!!!!!!',
+          price: 200.00,
+          inventory: 20,
+          availability: 'available',
+        })
+        .expect(201)
+        // update the bike
+        const update = await request(app).put(`/api/bikes/${res.body.id}`)
+          .send({
+              name: 'A cooler, more updated name'
+          })
+          .expect(201)
+        // find the newly updated bike
+        const {dataValues} = await Bike.findById(res.body.id)
+        expect(update.body[1].name).to.be.equal(dataValues.name)
+    })
+  }) // end describe('/api/bikes/:id')
 }) // end describe('User routes')
