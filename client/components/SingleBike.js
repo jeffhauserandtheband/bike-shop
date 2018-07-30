@@ -1,6 +1,10 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
-import {fetchOneBike, fetchReview} from '../store'
+import {
+    fetchOneBike, 
+    fetchReview,
+    incrementCart
+} from '../store'
 import { 
     Grid, 
     Paper, 
@@ -24,10 +28,18 @@ class SingleBike extends Component {
         this.props.fetchReview(id)
     }
 
+    handleClickAddToCart(bikeId) {
+        let cartId=0;
+        if (this.props.cart.cartId) {
+          cartId=this.props.cart.cartId
+        }
+        this.props.incrementCart(cartId,bikeId)
+    
+      }
+
     render() {
-        const {name} = this.props.singleBike
+        const {name, description, price, inventory} = this.props.singleBike
         const review = this.props.review
-        console.log(review)
         const id = this.props.match.params.id
         if (this.props.singleBike.length === 0 || review === undefined) {
             return (
@@ -37,14 +49,24 @@ class SingleBike extends Component {
             )
         }
 
+
         return review.length ? (
             <Grid container>
                 <Grid item sm={2} key={this.props.singleBike.id}>         
                     <Paper style={style.Paper}>
                                     
                     <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
+                    <label> Bike Name: </label>
                     {name}
-                    <Button>Add to cart</Button>
+                    <label> Description: </label>
+                    {description}
+                    <label> Price: </label>
+                    {price}
+                    <label> Inventory: </label>
+                    {inventory}
+                    <Button onClick={(e) => this.handleClickAddToCart(id)}size="small" color="primary">
+                        Add to cart
+                    </Button>
 
                     <Link to={`/bikes/${id}/reviewform`}>
                         <Button> Add Review </Button>
@@ -70,7 +92,9 @@ class SingleBike extends Component {
                                     
                     <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
                     {name}
-                    <Button>Add to cart</Button>
+                    <Button onClick={(e) => this.handleClickAddToCart(id)}size="small" color="primary">
+                        Add to cart
+                    </Button>
 
                     <Link to={`/bikes/${id}/reviewform`}>
                         <Button> Add Review </Button>
@@ -92,7 +116,8 @@ class SingleBike extends Component {
 const mapStateToProps = (state) => {
     return {
             singleBike: state.bikes.singleBike,
-            review: state.review.greview
+            review: state.review.greview,
+            cart: state.cart
     }
 }
 
@@ -103,7 +128,10 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchReview: (id) => {
             dispatch(fetchReview(id))
-        } 
+        },
+        incrementCart: (cartId,bikeId) => {
+            dispatch(incrementCart(cartId,bikeId))}
+
     }
 }
 
