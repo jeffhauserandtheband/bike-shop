@@ -15,6 +15,7 @@ import {fetchBikes,incrementCart} from '../store'
 import {Link} from 'react-router-dom'
 
 import {SearchFilter} from './index'
+import {SearchBar} from './index'
 
 const style = {
     Paper: {

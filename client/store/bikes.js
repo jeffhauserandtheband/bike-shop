@@ -82,6 +82,13 @@ const filterBikes = () => ({type: FILTER_BIKES})
    }
  }
 
+ export const search = query => {
+   return async dispatch => {
+     const filteredBikes = axios.get(`/api/bikes/query?search=${query}`)
+     console.log(filterBikes)
+   }
+ }
+
  export const updateBike = (bikeId, bikeData) => {
    return async dispatch => {
      try {

@@ -82,4 +82,39 @@ describe('Bike routes', () => {
         expect(update.body[1].name).to.be.equal(dataValues.name)
     })
   }) // end describe('/api/bikes/:id')
+
+  describe('/api/bikes/query', () => {
+
+    beforeEach(async () => {
+      // create a new bike
+      const res = await request(app).post('/api/bikes')
+        .send({
+          name: 'My cool new bike!',
+          description: 'A very very cool bike!!!!!!!',
+          price: 200.00,
+          inventory: 20,
+          availability: 'available',
+        })
+        .expect(201)
+        const res2 = await request(app).post('/api/bikes')
+          .send({
+            name: 'Your cooler newer bike!',
+            description: 'A very very cool bike!!!!!!!',
+            price: 200.00,
+            inventory: 20,
+            availability: 'available',
+          })
+          .expect(201)
+    })
+
+    it('filters results', async () => {
+      // find the bikes in the db
+      const bikes = await Bike.findAll()
+      // get the first one
+      const bike = bikes[0].dataValues
+      // make our api search query call
+      const search = await request(app).get('/api/bikes/query?search=My')
+      expect(bike.name).to.be.equal(search.body[0].name)
+    })
+  }) // end describe('/api/bikes/filter')
 }) // end describe('User routes')

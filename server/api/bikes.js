@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {Bike,BikeImage,CategoryKey,CategoryValue} = require('../db/models')
+const Sequelize = require('sequelize')
 module.exports = router
 
 const axios = require('axios')
@@ -10,6 +11,7 @@ const axios = require('axios')
 //separate routes will enable retrieving categorykey/values for filter sidebar
 router.get('/', async (req, res, next) => {
   try {
+    console.log('query strings! ----------------', req.query.search)
     const bikes = await Bike.findAll({include: [{model: BikeImage},{model:CategoryValue}]})
     res.json(bikes)
   } catch (err) {
@@ -22,6 +24,22 @@ router.get('/categories', async (req, res, next) => {
   try {
     const categories = await CategoryKey.findAll({include: [{model: CategoryValue }]})
     res.json(categories)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// Search API route /api/bikes/query
+router.get('/query', async (req, res, next) => {
+  try {
+    console.log('query strings! ----------------', req.query)
+    const dataValues = await Bike.findAll({
+      where: {
+        name: {[Sequelize.Op.iLike]: `%${req.query.search}%`}
+      }
+    })
+    console.log('test', dataValues)
+    res.status(200).json(dataValues)
   } catch (err) {
     next(err)
   }
