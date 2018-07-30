@@ -23,7 +23,8 @@ const styles = theme => ({
   },
   summary: {
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
     width: '100%'
   },
   column: {
