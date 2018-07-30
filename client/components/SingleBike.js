@@ -1,7 +1,12 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import {fetchOneBike, fetchReview} from '../store'
-import { Grid, Paper, Button } from '@material-ui/core'
+import { 
+    Grid, 
+    Paper, 
+    Button,
+    Typography 
+} from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 const style = {
@@ -32,7 +37,7 @@ class SingleBike extends Component {
             )
         }
 
-        return(
+        return review.length ? (
             <Grid container>
                 <Grid item sm={2} key={this.props.singleBike.id}>         
                     <Paper style={style.Paper}>
@@ -57,6 +62,29 @@ class SingleBike extends Component {
                         })}             
                 </Grid>
             </Grid>
+        ) : (
+            <div>
+            <Grid container>
+                <Grid item sm={2} key={this.props.singleBike.id}>         
+                    <Paper style={style.Paper}>
+                                    
+                    <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
+                    {name}
+                    <Button>Add to cart</Button>
+
+                    <Link to={`/bikes/${id}/reviewform`}>
+                        <Button> Add Review </Button>
+                    </Link>
+                    </Paper>
+                </Grid>
+            </Grid>
+
+            <Paper>
+                <Typography variant="display1" align="center">
+                    No past reviews
+                </Typography>
+            </Paper>
+            </div>
         )
     }
 }
