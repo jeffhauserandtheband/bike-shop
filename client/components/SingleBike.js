@@ -9,7 +9,10 @@ import {
     Grid, 
     Paper, 
     Button,
-    Typography 
+    Typography,
+    Card,
+    CardActions,
+    CardMedia 
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
@@ -41,7 +44,9 @@ class SingleBike extends Component {
         const {name, description, price, inventory} = this.props.singleBike
         const review = this.props.review
         const id = this.props.match.params.id
-        if (this.props.singleBike.length === 0 || review === undefined) {
+        console.log('render')
+        console.log('single', this.props.singleBike)
+        if (!this.props.singleBike || review === undefined) {
             return (
                 <Grid container>
                     Loading..
@@ -50,7 +55,8 @@ class SingleBike extends Component {
         }
 
 
-        return review.length ? (
+
+        return (
             <Grid container>
                 <Grid item sm={2} key={this.props.singleBike.id}>         
                     <Paper style={style.Paper}>
@@ -64,6 +70,7 @@ class SingleBike extends Component {
                     {price}
                     <label> Inventory: </label>
                     {inventory}
+
                     <Button onClick={(e) => this.handleClickAddToCart(id)}size="small" color="primary">
                         Add to cart
                     </Button>
@@ -72,43 +79,28 @@ class SingleBike extends Component {
                         <Button> Add Review </Button>
                     </Link>
                     </Paper>
-                        {review.map(elem => {
-                            return(
-                                <Paper key={elem.id} style={style.Paper}>
-                                    <label> Rating: </label>
-                                        {elem.rating}
-                                    <label> Comments: </label>
-                                        {elem.comments}
-                                </Paper>
-                            )
-                        })}             
-                </Grid>
-            </Grid>
-        ) : (
-            <div>
-            <Grid container>
-                <Grid item sm={2} key={this.props.singleBike.id}>         
-                    <Paper style={style.Paper}>
+
+                    {review.map(elem => {
+                        return(
+                            <Paper key={elem.id} style={style.Paper}>
+                                <label> Rating: </label>
+                                    {elem.rating}
+                                <label> Comments: </label>
+                                    {elem.comments}
+                            </Paper>
+                        )
+                    })}
+                    {review.length === 0 && (
+                        <Paper>
+                            <Typography variant="display1" align="center">
+                                No past reviews
+                            </Typography>
+                        </Paper> 
+                    )}
                                     
-                    <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
-                    {name}
-                    <Button onClick={(e) => this.handleClickAddToCart(id)}size="small" color="primary">
-                        Add to cart
-                    </Button>
-
-                    <Link to={`/bikes/${id}/reviewform`}>
-                        <Button> Add Review </Button>
-                    </Link>
-                    </Paper>
                 </Grid>
             </Grid>
-
-            <Paper>
-                <Typography variant="display1" align="center">
-                    No past reviews
-                </Typography>
-            </Paper>
-            </div>
+            
         )
     }
 }
