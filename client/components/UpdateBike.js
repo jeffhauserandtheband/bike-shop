@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {fetchBikes} from '../store'
+import { updateBike, fetchBike } from '../store'
 
 class UpdateBike extends React.Component {
   state = {
@@ -13,17 +13,12 @@ class UpdateBike extends React.Component {
       availability: '',
       imageUrl: '',
       selectedBikeId: null,
-      images: [],
-      bikes: [],
-      bikeAddedMsg: '', // TODO: Add message based on api response
-      imgAddedMsg: '', // TODO: Add message based on api response
+      bikeAddedMsg: '',
   }
 
   async componentDidMount() {
-    await this.props.fetchBikes()
-    await this.setState({
-      bikes: this.props.bikes
-    })
+    await this.props.fetchBike(this.props.match.params.id)
+    this.setState(this.props.bike) // is this bad practice to just throw everything into state?
   }
 
   handleChange = event => {
@@ -32,59 +27,42 @@ class UpdateBike extends React.Component {
     })
   }
 
-  addImageToState = event => {
-    // this function will be used to push uploaded images to state
-    // so that they can be pushed to some sort of filesystem or something
-  }
-
   // Submit bike handler
-  bikeSubmit = async event => {
+  handleSubmit = async event => {
     event.preventDefault()
     try {
-      const res = await axios.post('/api/bikes', {
-        name: this.state.name,
-        description: this.state.description,
-        price: this.state.price,
-        inventory: this.state.inventory,
-        availability: this.state.availability,
+      // const res = await this.props.updateBike(this.props.match.params.id, {
+      //   name: this.state.name,
+      //   description: this.state.description,
+      //   price: this.state.price,
+      //   inventory: this.state.inventory,
+      //   availability: this.state.availability,
+      // })
+      const res = await axios({
+        method: 'put',
+        url: `/api/bikes/${this.props.match.params.id}`,
+        data: {
+          name: this.state.name,
+          description: this.state.description,
+          price: this.state.price,
+          inventory: this.state.inventory,
+          availability: this.state.availability,
+        }
       })
-      // dispatch(fetchBikes())
+      console.log(res);
       if (res.status === 201) {
         this.setState({
-          bikeAddedMsg: 'Bike successfully added!'
+          bikeAddedMsg: 'Bike successfully updated!'
         })
       } else { // TODO: is it redundant to have this here AND in a catch block?
         this.setState({
-          bikeAddedMsg: 'Error adding the bike!' + res.status
+          bikeAddedMsg: 'Error updating the bike!' + res.status
         })
       }
     }
     catch (err) {
       this.setState({
-        bikeAddedMsg: 'Error adding the bike: ' + err
-      })
-    }
-  }
-
-  imageSubmit = async event => {
-    event.preventDefault()
-    try {
-      const res = await axios.post(`/api/bikes/${this.state.selectedBikeId}/image`, {
-        imageUrl: this.state.imageUrl,
-        bikeId: this.state.bikeId,
-      })
-      if (res.status === 201) {
-        this.setState({
-          imgAddedMsg: 'Image successfully added!'
-        })
-      } else { // TODO: is it redundant to have this here AND in a catch block?
-        this.setState({
-          imgAddedMsg: 'Error adding the image!' + res.status
-        })
-      }
-    } catch (err) {
-      this.setState({
-        imgAddedMsg: 'Error adding the image: ' + err
+        bikeAddedMsg: 'Error updating the bike: ' + err
       })
     }
   }
@@ -93,7 +71,7 @@ class UpdateBike extends React.Component {
     return (
       <div>
         <h1>Add a bike</h1>
-        <form onSubmit={this.bikeSubmit}>
+        <form onSubmit={this.handleSubmit}>
 
             {
               this.state.bikeAddedMsg.length > 0 &&
@@ -128,52 +106,18 @@ class UpdateBike extends React.Component {
             <button type='submit'>Submit</button>
           </div>
         </form>
-
-        <form onSubmit={this.imageSubmit}>
-
-          {
-            this.state.imgAddedMsg.length > 0 &&
-            <label htmlFor="imgAddedMsg">{this.state.imgAddedMsg}</label>
-          }
-
-          <div className="input-wrapper">
-            <label htmlFor='imageUrl' >ImageUrl:</label>
-            <input type='text' name='imageUrl' value={this.state.imageUrl} onChange={this.handleChange} />
-          </div>
-
-            {/* The below two lines are for eventual image upload capabilies */}
-            {/* <input type="file" name="imageUpload" value="imageUpload" id="imageUpload" multiple onChange={this.addImageToState} />
-            <label htmlFor="imageUpload">Select an image to upload</label> */}
-
-            <div className="input-wrapper">
-              <label htmlFor='selectedBikeId' >Select a bike</label>
-
-              <select onChange={this.handleChange} name="selectedBikeId">
-                <option value="">--</option>
-                {
-                  this.state.bikes.length > 0 &&
-                  this.state.bikes.map(bike => {
-                  return (
-                    <option value="available" name="available" key={bike.id} value={bike.id}>{bike.name} -- {bike.id}</option>
-                  )
-                })}
-              </select>
-            </div>
-            <div className="add-form-button-wrapper">
-              <button type='submit'>Submit</button>
-            </div>
-        </form>
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  bikes: state.bikes.bikes
+  bike: state.bikes.singleBike
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchBikes: () => dispatch(fetchBikes()),
+  updateBike: (bikeId, bikeData) => dispatch(updateBike(bikeId, bikeData)),
+  fetchBike: bikeId => dispatch(fetchBike(bikeId))
 })
 
 
