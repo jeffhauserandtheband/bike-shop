@@ -37,6 +37,12 @@ const styles = theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   }
 })
 
@@ -48,10 +54,8 @@ class OrderHistory extends Component {
   render() {
     const {classes} = this.props
 
-    console.log('hello', this.props.orders)
-
     return this.props.orders.length ? (
-      <div>
+      <div className={classes.container}  >
         {this.props.orders.map(order => {
           return (
             <Paper className={classes.root} key={order.id}>
@@ -102,7 +106,12 @@ class OrderHistory extends Component {
                           <div>Quantity {bike.orderEntries.quantity}</div>
                         </TableCell>
                         <TableCell>
-                          <Button>Write a review</Button>
+                          <Button
+                            component={Link}
+                            to={`/bikes/${bike.id}/reviewform`}
+                          >
+                            Write a review
+                          </Button>
                         </TableCell>
                       </TableRow>
                     )
