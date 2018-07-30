@@ -150,12 +150,15 @@ router.post('/:cartId/createorder', async (req, res, next) => {
 router.post('/:cartId/:bikeId', async (req, res, next) => {
   let cart
   try {
+    let newCart={}
     if (+req.params.cartId===0) {
       //get cookie or userid to link to cart
-      let newCart={}
       cart = await Cart.create(newCart)
     } else {
       cart = await Cart.findById(+req.params.cartId);
+      if (!cart) { //stale cart id from lso
+        cart = await Cart.create(newCart)
+      }
     }
   } catch (err) {
     next(err)
@@ -444,7 +447,7 @@ router.post('/', async (req, res, next) => {
 //GET /api/carts/:cartId - get a single cart by id joined with its entries
 router.get('/:cartId', async (req,res,next) => {
   try {
-    const cart = await _generateFrontEndCart(req.params.id)
+    const cart = await _generateFrontEndCart(req.params.cartId)
     res.json(cart)
   } catch (err) {
     next(err)
@@ -475,13 +478,27 @@ async function _generateFrontEndCart(cartId,msg)  {
     return feCart;
   }
 
-  const cart = await Cart.findById(cartId,
-    {include: [{model:CartEntry}],
-    order: [
-      [ CartEntry, 'bikeId' ]
-      ]
-    }
-  );
+  let cart;
+  try {
+    cart = await Cart.findById(cartId,
+      {include: [{model:CartEntry}],
+      order: [
+        [ CartEntry, 'bikeId' ]
+        ]
+      }
+    );
+  } catch (err) {
+    feCart.cartId = 0
+    console.log('err getting cart')
+    return feCart;
+  }
+
+  //stale lso
+  if (!cart) {
+    feCart.cartId = 0
+    console.log('null cart on dip - returning cartId=0')
+    return feCart;
+  }
 
   for (let cartEntry of cart.cartentries) {
     let bike
