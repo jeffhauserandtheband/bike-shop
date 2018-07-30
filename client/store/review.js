@@ -34,9 +34,7 @@ export const postReview = (revInput) => async dispatch => {
 export const fetchReview = (id) => async dispatch => {   
     let res
     try {
-        console.log('id',id)
-        res = await axios.get(`/api/bikes/${id}/review`)
-        console.log('res',res.data)
+        res = await axios.get(`/api/review/${id}`)
         dispatch(getReview(res.data))
     } catch(err) {
         return dispatch(getReview({error: err.message}))

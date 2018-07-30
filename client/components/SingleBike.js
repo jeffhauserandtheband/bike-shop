@@ -1,7 +1,12 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import {fetchOneBike, fetchReview} from '../store'
-import { Grid, Paper, Button } from '@material-ui/core'
+import { 
+    Grid, 
+    Paper, 
+    Button,
+    Typography 
+} from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 const style = {
@@ -21,9 +26,10 @@ class SingleBike extends Component {
 
     render() {
         const {name} = this.props.singleBike
+        const review = this.props.review
+        console.log(review)
         const id = this.props.match.params.id
-
-        if (this.props.singleBike.length === 0) {
+        if (this.props.singleBike.length === 0 || review === undefined) {
             return (
                 <Grid container>
                     Loading..
@@ -31,7 +37,7 @@ class SingleBike extends Component {
             )
         }
 
-        return(
+        return review.length ? (
             <Grid container>
                 <Grid item sm={2} key={this.props.singleBike.id}>         
                     <Paper style={style.Paper}>
@@ -40,20 +46,53 @@ class SingleBike extends Component {
                     {name}
                     <Button>Add to cart</Button>
 
-                    <Link to='/reviewform'>
+                    <Link to={`/bikes/${id}/reviewform`}>
                         <Button> Add Review </Button>
                     </Link>
-
-                    </Paper>            
+                    </Paper>
+                        {review.map(elem => {
+                            return(
+                                <Paper key={elem.id} style={style.Paper}>
+                                    <label> Rating: </label>
+                                        {elem.rating}
+                                    <label> Comments: </label>
+                                        {elem.comments}
+                                </Paper>
+                            )
+                        })}             
                 </Grid>
             </Grid>
+        ) : (
+            <div>
+            <Grid container>
+                <Grid item sm={2} key={this.props.singleBike.id}>         
+                    <Paper style={style.Paper}>
+                                    
+                    <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
+                    {name}
+                    <Button>Add to cart</Button>
+
+                    <Link to={`/bikes/${id}/reviewform`}>
+                        <Button> Add Review </Button>
+                    </Link>
+                    </Paper>
+                </Grid>
+            </Grid>
+
+            <Paper>
+                <Typography variant="display1" align="center">
+                    No past reviews
+                </Typography>
+            </Paper>
+            </div>
         )
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-            singleBike: state.bikes.singleBike
+            singleBike: state.bikes.singleBike,
+            review: state.review.greview
     }
 }
 
@@ -63,7 +102,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchOneBike(id)) 
         },
         fetchReview: (id) => {
-            console.log('poo')
             dispatch(fetchReview(id))
         } 
     }
