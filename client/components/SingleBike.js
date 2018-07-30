@@ -55,6 +55,7 @@ class SingleBike extends Component {
         }
 
 
+
         return (
             <Grid container>
                 <Grid item sm={2} key={this.props.singleBike.id}>         
@@ -69,6 +70,7 @@ class SingleBike extends Component {
                     {price}
                     <label> Inventory: </label>
                     {inventory}
+
                     <Button onClick={(e) => this.handleClickAddToCart(id)}size="small" color="primary">
                         Add to cart
                     </Button>

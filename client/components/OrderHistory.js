@@ -60,7 +60,7 @@ class OrderHistory extends Component {
                   <TableRow>
                     <TableCell>
                       <Typography variant="body2">Order Placed</Typography>{' '}
-                      <Typography variant="body1">${order.date}</Typography>
+                      <Typography variant="body1">${order.createdAt}</Typography>
                     </TableCell>
 
                     <TableCell className={classes.header}>
