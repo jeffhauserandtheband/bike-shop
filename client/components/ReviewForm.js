@@ -50,7 +50,7 @@ const mapDispatchToProps = (dispatch) => {
         handleSubmit: (evt, bikeId) => {
             const comments = evt.target.comments.value
             const rating = evt.target.rating.value
-            dispatch(postReview({comments,rating,bikeId}))
+            dispatch(postReview({comments,rating,bikeId}, bikeId))
         }
     }
 }

@@ -9,10 +9,7 @@ import {
     Grid, 
     Paper, 
     Button,
-    Typography,
-    Card,
-    CardActions,
-    CardMedia 
+    Typography
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
@@ -25,10 +22,12 @@ const style = {
 }
 
 class SingleBike extends Component {
+
     componentDidMount() {
         const id = this.props.match.params.id
         this.props.fetchOneBike(id);
-        this.props.fetchReview(id)
+        this.props.fetchReview(id);
+        
     }
 
     handleClickAddToCart(bikeId) {
@@ -40,13 +39,15 @@ class SingleBike extends Component {
     
       }
 
+    
+
     render() {
         const {name, description, price, inventory} = this.props.singleBike
         const review = this.props.review
         const id = this.props.match.params.id
-        console.log('render')
-        console.log('single', this.props.singleBike)
-        if (!this.props.singleBike || review === undefined) {
+        let avgRating=0
+        console.log('avg',avgRating)
+        if (!this.props.singleBike.id || review === undefined) {
             return (
                 <Grid container>
                     Loading..
@@ -54,22 +55,56 @@ class SingleBike extends Component {
             )
         }
 
+        
+        if (review.length>0) {
+        
+        review.map(elem => {
+            avgRating += elem.rating
+        })
+        avgRating = avgRating / review.length
+        }
 
         return (
-            <Grid container>
-                <Grid item sm={2} key={this.props.singleBike.id}>         
-                    <Paper style={style.Paper}>
-                                    
+            <Grid container spacing={24}>
+                <Grid item md key={this.props.singleBike.id}>         
+                    <Paper style={style.Paper}>          
                     <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
-                    <label> Bike Name: </label>
-                    {name}
-                    <label> Description: </label>
-                    {description}
-                    <label> Price: </label>
-                    {price}
-                    <label> Inventory: </label>
-                    {inventory}
-                    <Button onClick={(e) => this.handleClickAddToCart(id)}size="small" color="primary">
+                    <Typography 
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"> 
+                        Bike Name: {name}
+                    </Typography>
+
+                    <Typography 
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"> 
+                        Description: {description}
+                    </Typography>
+
+                    <Typography 
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"> 
+                        Price: {price}
+                    </Typography>
+
+                    <Typography 
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"> 
+                        Inventory: {inventory}
+                    </Typography>
+
+                    <Typography 
+                        gutterBottom
+                        variant="subheading"
+                        component="h3"> 
+                        Average Rating: {avgRating.toFixed(1)}
+                    </Typography>
+
+                    <Button onClick={() => this.handleClickAddToCart(id)}size="small" color="primary">
                         Add to cart
                     </Button>
 
