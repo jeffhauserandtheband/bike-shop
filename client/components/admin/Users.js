@@ -1,12 +1,7 @@
-
 import React, {Component, Fragment} from 'react'
-
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {logout} from '../../store'
 import {withStyles} from '@material-ui/core/styles'
-
 import {
   Paper,
   Typography,
@@ -22,9 +17,7 @@ const styles = theme => ({
   root: {
     width: 800,
     marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-    
-    
+    overflowX: 'auto'
   },
   table: {
     minWidth: 700
@@ -61,7 +54,9 @@ class Users extends Component {
                     <TableCell>{user.userType}</TableCell>
                     <TableCell>Last seen</TableCell>
                     <TableCell>
-                      <Button onClick={() => deleteUser(user.id)}>Delete</Button>
+                      <Button onClick={() => deleteUser(user.id)}>
+                        Delete
+                      </Button>
                     </TableCell>
                   </TableRow>
                 )
@@ -74,19 +69,8 @@ class Users extends Component {
   }
 }
 
-/**
- * CONTAINER
- */
+export default withStyles(styles)(Users)
 
-const mapState = state => {}
-
-const mapDispatch = dispatch => {}
-
-export default connect(mapState, mapDispatch)(withStyles(styles)(Users))
-
-/**
- * PROP TYPES
- */
 Users.propTypes = {
   classes: PropTypes.object.isRequired
 }
