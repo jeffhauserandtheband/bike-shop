@@ -81,6 +81,7 @@ class SingleBike extends Component {
         const review = this.props.review
         const id = this.props.match.params.id
         const { classes } = this.props;
+        console.log('reviewarr',review)
         let avgRating=0
         if (!this.props.singleBike.id || review === undefined) {
             return (
@@ -172,25 +173,24 @@ class SingleBike extends Component {
                 
                 <div className={classes.root}>
                     <FormControl component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">Rating</FormLabel>
-                    <RadioGroup
-                        row
-                        aria-label="Gender"
-                        name="rating"
-                        className={classes.group}
-                        value={this.state.value}
-                        onChange={this.handleChange}
-                    >
-                        <FormControlLabel value="1" control={<Radio />} label="1" />
-                        <FormControlLabel value="2" control={<Radio />} label="2" />
-                        <FormControlLabel value="3" control={<Radio />} label="3" />
-                        <FormControlLabel value="4" control={<Radio />} label="4" />
-                        <FormControlLabel value="5" control={<Radio />} label="5" />
-                        <Button type='submit'> Submit </Button> 
-                    </RadioGroup>
+                        <FormLabel component="legend">Rating</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-label="Gender"
+                                name="rating"
+                                className={classes.group}
+                                value={this.state.value}
+                                onChange={this.handleChange}
+                            >
+                                <FormControlLabel value="1" control={<Radio />} label="1" />
+                                <FormControlLabel value="2" control={<Radio />} label="2" />
+                                <FormControlLabel value="3" control={<Radio />} label="3" />
+                                <FormControlLabel value="4" control={<Radio />} label="4" />
+                                <FormControlLabel value="5" control={<Radio />} label="5" />
+                            </RadioGroup>
                     </FormControl>
                 </div>
-                
+                <Button type='submit'> Submit </Button> 
                 </form>
                 </div>
             <Grid container spacing={24}>
@@ -224,6 +224,7 @@ const mapStateToProps = (state) => {
     return {
             singleBike: state.bikes.singleBike,
             review: state.review.greview,
+            newreview: state.review.review,
             cart: state.cart
     }
 }

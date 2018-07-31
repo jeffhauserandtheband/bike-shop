@@ -17,6 +17,7 @@ export {default as AddBike} from './AddBike'
 export {default as UpdateBike} from './UpdateBike'
 export {default as OrderHistory} from './OrderHistory'
 export {default as AdminPanel} from './admin/AdminPanel'
+export {default as AddCategory} from './admin/AddCategories'
 
 export {Login, Signup} from './auth-form'
 export {default as SearchFilter} from './SearchFilter'

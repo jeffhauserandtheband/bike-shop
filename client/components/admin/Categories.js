@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow
 } from '@material-ui/core'
+
 //import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 
 const styles = {
@@ -23,29 +24,44 @@ const styles = {
   
 }
 
-const Categories = ({categories, classes}) => (
-  categories.map(category=> (
-    <Paper className={classes.root} key={category.id}>
-    <Table className={classes.table}>
-      <TableHead>
-        <TableRow>
-          <TableCell>{category.name}</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {category.categoryvalues.map(value => {
-          return (
-            <TableRow key={value.id}>
-              <TableCell>{value.name}</TableCell>
+class Categories extends Component { 
+  render() {
+    const {categories, classes} = this.props
+    return (
+      <div>
+      {categories.map(category=> (
+        <Paper className={classes.root} key={category.id}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>{category.name}</TableCell>
             </TableRow>
-          )
-        })}
-      </TableBody>
-    </Table>
-  </Paper>
-  ))
+          </TableHead>
+          <TableBody>
+            {category.categoryvalues.map(value => {
+              return (
+                <TableRow key={value.id}>
+                  <TableCell>{value.name}</TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+      ))}
+
+      <Link>
+        <button type='submit'> Add Category </button>
+      </Link>
+      </div>
+    )
+  }
   
-)
+
+  
+
+
+}
 
 /**
  * CONTAINER
@@ -53,7 +69,13 @@ const Categories = ({categories, classes}) => (
 
 const mapState = state => {}
 
-const mapDispatch = dispatch => {}
+const mapDispatch = dispatch => {
+  return {
+    // postCategoryKey: () => {
+    //   dispatch(postCategoryKey())
+    // }
+  }
+}
 
 export default connect(mapState, mapDispatch)(withStyles(styles)(Categories))
 
