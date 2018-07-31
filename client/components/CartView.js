@@ -14,7 +14,7 @@ import {
   IconButton
 } from '@material-ui/core'
 import {connect} from 'react-redux'
-import {incrementCart,decrementCart,deleteCartEntry,saveOrder} from '../store'
+import {incrementCart,decrementCart,deleteCartEntry,fetchCart} from '../store'
 import {Link} from 'react-router-dom'
 import {Add, Remove} from '@material-ui/icons/'
 
@@ -51,7 +51,7 @@ class CartView extends Component {
   }
 
   componentDidMount() {
-
+    this.props.fetchCart()
   }
 
   handleClickIncrementCart(bikeId) {
@@ -72,7 +72,7 @@ class CartView extends Component {
 
   handleClickCheckout() {
     const cartId=this.props.cart.cartId
-    this.props.saveOrder(cartId)
+    this.props.checkout(cartId)
   }
 
   render() {
@@ -134,7 +134,8 @@ class CartView extends Component {
           <TableCell/>
           <TableCell>
             <Typography>Subtotal ${cart.subtotal}</Typography>
-            <Button  onClick={this.handleClickCheckout}>Checkout</Button>
+            <Link to={`/checkout/${cart.cartId}`}>Checkout</Link>
+            {/* <Button  onClick={this.handleClickCheckout}>Checkout</Button> */}
           </TableCell>
         </TableFooter>
         </Table>
@@ -154,16 +155,14 @@ CartView.propTypes = {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchCart: (cartId) => {
+      dispatch(fetchCart(cartId))},
     incrementCart: (cartId,bikeId) => {
       dispatch(incrementCart(cartId,bikeId))},
     decrementCart: (cartId,bikeId) => {
       dispatch(decrementCart(cartId,bikeId))},
     deleteCartEntry: (cartId,bikeId) => {
       dispatch(deleteCartEntry(cartId,bikeId))},
-    //saveOrder is temporary hookup to checkout
-    //this will be a transition to checkout page
-    saveOrder: (cartId) => {
-      dispatch(saveOrder(cartId))}
     }
   }
 

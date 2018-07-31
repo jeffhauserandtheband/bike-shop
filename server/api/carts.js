@@ -45,10 +45,15 @@ router.post('/:cartId/createorder', async (req, res, next) => {
 
   //TODO - wrap order creation in a transaction
   //TODO - create enum to correspond to order state in sequelize model
-  console.log(req.body)
 
   const newOrder = {}
   newOrder.state='created'
+
+  //link to user if available (otherwise must be a guest)
+  if (req.user) {
+    newOrder.userId = req.user.dataValues.id
+  }
+
   newOrder.shippingEmail = req.body.shippingEmail
 
   if (req.body.shippingName) {
@@ -148,6 +153,7 @@ router.post('/:cartId/createorder', async (req, res, next) => {
 //
 //output: {id, subtotal, cartentries:[{bikeid,name,price,quantity,image}]}
 router.post('/:cartId/:bikeId', async (req, res, next) => {
+
   let cart
   try {
     let newCart={}
