@@ -224,7 +224,6 @@ const mapStateToProps = (state) => {
     return {
             singleBike: state.bikes.singleBike,
             review: state.review.greview,
-            newreview: state.review.review,
             cart: state.cart
     }
 }
