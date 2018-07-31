@@ -9,6 +9,7 @@ import {
   AllBikes,
   SingleBike,
   CartView,
+  CheckoutForm,
   ReviewForm,
   AddBike,
   UpdateBike,
@@ -38,6 +39,7 @@ class Routes extends Component {
         <Route exact path="/bikes" component={AllBikes} />
         <Route exact path="/bikes/:id" component={SingleBike} />
         <Route path="/cart" component={CartView} />
+        <Route path="/checkout/:id" component={CheckoutForm} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
