@@ -74,11 +74,11 @@ class AllBikes extends Component {
   }
 
   render() {
-    const {classes, bikes} = this.props
+    const {classes, bikes, filteredBikes} = this.props
 
     console.log('inside render - props', this.props.filteredBikes);
 
-    if (this.props.bikes.length === 0) {
+    if (this.props.filteredBikes.length === 0) {
       return <Grid container>Loading..</Grid>
     }
 
@@ -86,7 +86,7 @@ class AllBikes extends Component {
       <div className={classes.root}>
         <SearchFilter />
         <Grid container spacing={24}>
-        {bikes.map(elem => (
+        {filteredBikes.map(elem => (
           <Grid key={elem.id} item md>
             <Card className={classes.card}>
               <CardContent>
