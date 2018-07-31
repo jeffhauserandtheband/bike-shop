@@ -39,6 +39,17 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+//POST /api/bikes/categorykey -- create a new category key
+router.post('/categorykey',async (req,res,next) => {
+  try {
+    console.log('req',req.body)
+    const newCategoryKey = await CategoryKey.create(req.body);
+    res.status(201).json(newCategoryKey)
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.post('/:id', async (req, res, next) => {
   try {
     const bike = await Bike.findById(req.params.id,
@@ -74,15 +85,7 @@ router.post('/',async (req,res,next) => {
   }
 })
 
-//POST /api/bikes/categorykey -- create a new category key
-router.post('/categorykey',async (req,res,next) => {
-  try {
-    const newCategoryKey = await CategoryKey.create(req.body);
-    res.status(201).json(newCategoryKey)
-  } catch (err) {
-    next(err)
-  }
-})
+
 
 //POST /api/bikes/:id/image -- create a new image and associate with a bike
 //NOTE - no PUT method for bikes<->images, only create or delete of images/associations

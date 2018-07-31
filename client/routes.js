@@ -16,6 +16,7 @@ import {
   SearchFilter,
   OrderHistory,
   AdminPanel,
+  AddCategory
 } from './components'
 
 import {me} from './store'
@@ -52,6 +53,7 @@ class Routes extends Component {
             <Route path="/myaccount/order-history" component={OrderHistory} />
             {/*just to make sure components are there need to make sure only admin can see*/}
             <Route exact path="/admin" component={AdminPanel} />
+            <Route exact path="/admin/addcategory" component={AddCategory} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
