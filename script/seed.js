@@ -30,16 +30,16 @@ const bikeBrands = [
   'Merida'
 ]
 // some colors
-const bikeColors = ['red', 'blue', 'green', 'turquoise', 'black', 'white']
+const bikeColors = ['Red', 'Blue', 'Green', 'Turquoise', 'Black', 'White']
 // Some use cases
 const useCaseList = [
-  'road',
-  'mountain',
-  'off road',
-  'cycle cross',
-  'racing',
-  'touring',
-  'commuter'
+  'Road',
+  'Mountain',
+  'Off road',
+  'Cycle cross',
+  'Racing',
+  'Touring',
+  'Commuter'
 ]
 
 const imageUrls = [
@@ -68,12 +68,6 @@ async function seed() {
     await db.sync({force: true})
     console.log('db synced!')
 
-    // const users = await Promise.all([
-    //   // make some users
-    //   User.create({email: 'cody@email.com', password: '123'}),
-    //   User.create({email: 'murphy@email.com', password: '123'}),
-    //   User.create({email: 'matt@gmail.com', password: 'test', userType: 'admin'})
-    // ])
 
     // create some users
     await Promise.all(users.map(user => {
@@ -114,10 +108,6 @@ async function seed() {
       })
       useCases.push(dataValues)
     }
-
-    // console.log('magic methods for brand: ', Object.keys(brand.__proto__))
-    // console.log('magic methods for color: ',Object.keys( color.__proto__))
-    // console.log('magic methods for useCase: ', Object.keys( useCase.__proto__))
 
     // add some bikes
     for (let i = 0; i < 51; i++) {
@@ -172,7 +162,7 @@ async function seed() {
       orderEntries.map(orderEntry => {
         // console.log('word',orderEntry)
         return OrderEntries.update(
-          {price: 99, quantity: 5},
+          {price: Math.ceil(Math.random() * 99), quantity: Math.ceil(Math.random() * 99)},
           {where: {bikeId: orderEntry.bikeId, orderId:orderEntry.orderId}}
         )
       })
