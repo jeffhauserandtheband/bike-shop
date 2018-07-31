@@ -1,14 +1,14 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
 import {
-    fetchOneBike, 
+    fetchOneBike,
     fetchReview,
     incrementCart,
     postReview
 } from '../store'
-import { 
-    Grid, 
-    Paper, 
+import {
+    Grid,
+    Paper,
     Button,
     Typography,
     TextField,
@@ -55,7 +55,7 @@ class SingleBike extends Component {
         const id = this.props.match.params.id
         this.props.fetchOneBike(id);
         this.props.fetchReview(id);
-        
+
     }
 
     handleClickAddToCart(bikeId) {
@@ -64,7 +64,7 @@ class SingleBike extends Component {
           cartId=this.props.cart.cartId
         }
         this.props.incrementCart(cartId,bikeId)
-    
+
       }
 
     handleChange = (evt) => {
@@ -74,7 +74,7 @@ class SingleBike extends Component {
         this.setState({ value:evt.target.value })
     }
 
-    
+
 
     render() {
         const {name, description, price, inventory} = this.props.singleBike
@@ -90,9 +90,9 @@ class SingleBike extends Component {
             )
         }
 
-        
+
         if (review.length>0) {
-        
+
         review.map(elem => {
             avgRating += elem.rating
         })
@@ -103,42 +103,42 @@ class SingleBike extends Component {
         return (
             <div>
             <Grid container spacing={24}>
-                <Grid item md key={this.props.singleBike.id}>         
-                    <Paper style={style.Paper}>          
+                <Grid item md key={this.props.singleBike.id}>
+                    <Paper style={style.Paper}>
                     <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
 
-                    <Typography 
+                    <Typography
                         gutterBottom
                         variant="subheading"
-                        component="h3"> 
+                        component="h3">
                         Bike Name: {name}
                     </Typography>
 
-                    <Typography 
+                    <Typography
                         gutterBottom
                         variant="subheading"
-                        component="h3"> 
+                        component="h3">
                         Description: {description}
                     </Typography>
 
-                    <Typography 
+                    <Typography
                         gutterBottom
                         variant="subheading"
-                        component="h3"> 
+                        component="h3">
                         Price: {price}
                     </Typography>
 
-                    <Typography 
+                    <Typography
                         gutterBottom
                         variant="subheading"
-                        component="h3"> 
+                        component="h3">
                         Inventory: {inventory}
                     </Typography>
 
-                    <Typography 
+                    <Typography
                         gutterBottom
                         variant="subheading"
-                        component="h3"> 
+                        component="h3">
                         Average Rating: {avgRating.toFixed(1)}
                     </Typography>
 
@@ -155,21 +155,21 @@ class SingleBike extends Component {
                     this.setState({comments:'', value: ''})
                     this.props.handleSubmit(evt,id)
                 }}>
-                <Typography 
+                <Typography
                     gutterBottom
                     variant="subheading"
-                    component="h3"> 
+                    component="h3">
                     LEAVE A REVIEW:
                 </Typography>
-                <TextField 
-                name='comments' 
-                value={this.state.comments} 
-                onChange={this.handleChange} 
-                onSubmit={this.props.handleSubmit} 
+                <TextField
+                name='comments'
+                value={this.state.comments}
+                onChange={this.handleChange}
+                onSubmit={this.props.handleSubmit}
                 multiline={true}
                 rows={5}
                 />
-                
+
                 <div className={classes.root}>
                     <FormControl component="fieldset" className={classes.formControl}>
                     <FormLabel component="legend">Rating</FormLabel>
@@ -186,11 +186,11 @@ class SingleBike extends Component {
                         <FormControlLabel value="3" control={<Radio />} label="3" />
                         <FormControlLabel value="4" control={<Radio />} label="4" />
                         <FormControlLabel value="5" control={<Radio />} label="5" />
-                        <Button type='submit'> Submit </Button> 
+                        <Button type='submit'> Submit </Button>
                     </RadioGroup>
                     </FormControl>
                 </div>
-                
+
                 </form>
                 </div>
             <Grid container spacing={24}>
@@ -210,9 +210,9 @@ class SingleBike extends Component {
                             <Typography variant="display1" align="center">
                                 No past reviews
                             </Typography>
-                        </Paper> 
+                        </Paper>
                     )}
-                                    
+
                 </Grid>
             </Grid>
         </div>
@@ -231,7 +231,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchOneBike: (id) => {
-            dispatch(fetchOneBike(id)) 
+            dispatch(fetchOneBike(id))
         },
         fetchReview: (id) => {
             dispatch(fetchReview(id))
@@ -244,7 +244,6 @@ const mapDispatchToProps = (dispatch) => {
             const rating = evt.target.rating.value
             dispatch(postReview({comments,rating,bikeId}, bikeId))
         }
-
     }
 }
 
