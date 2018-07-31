@@ -25,7 +25,10 @@ const styles = theme => ({
   center: {
     display: 'flex',
     justifyContent: 'center'
-  }
+  },
+  darkColor: {
+    color: theme.palette.secondary.dark 
+  } 
 })
 
 class Users extends Component {
@@ -40,7 +43,7 @@ class Users extends Component {
               <TableRow>
                 <TableCell>Email</TableCell>
                 <TableCell>User Type</TableCell>
-                <TableCell>Last Seen</TableCell>
+                
                 <TableCell>Delete User</TableCell>
               </TableRow>
             </TableHead>
@@ -48,13 +51,13 @@ class Users extends Component {
               {users.map(user => {
                 return (
                   <TableRow key={user.id}>
-                    <TableCell component="th" scope="row">
+                    <TableCell>
                       {user.email}
                     </TableCell>
                     <TableCell>{user.userType}</TableCell>
-                    <TableCell>Last seen</TableCell>
+          
                     <TableCell>
-                      <Button onClick={() => deleteUser(user.id)}>
+                      <Button className={classes.darkColor} variant="contained" onClick={() => deleteUser(user.id)}>
                         Delete
                       </Button>
                     </TableCell>

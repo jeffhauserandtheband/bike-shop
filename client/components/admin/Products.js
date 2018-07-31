@@ -44,10 +44,10 @@ const styles = theme => ({
 //Buttons need links to add/edit page
 const Products = ({bikes, classes}) => (
   <Fragment>
-    <Button variant="contained" color="secondary">
+    <Button component={Link} to='/admin/bikes/add' variant="contained" color="secondary">
       Add Product
     </Button>
-
+    
     <div className={classes.root}>
       <Grid container spacing={24}>
         {bikes.map(elem => (
@@ -94,7 +94,7 @@ const Products = ({bikes, classes}) => (
                 </div>
               </CardContent>
               <CardActions className={classes.action}>
-                <Button size="small" color="secondary">
+                <Button component={Link} to={`/admin/bikes/update/${elem.id}`} size="small" color="secondary">
                   Edit
                 </Button>
               </CardActions>
