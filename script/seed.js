@@ -157,8 +157,8 @@ async function seed() {
       for (let j = 0; j < getRandomInt(7); j++) {
         await BikeImage.create({
           bikeId: bike.id,
-          imageUrl:
-            'http://learndotresources.s3.amazonaws.com/workshop/55e5c92fe859dc0300619bc8/sloth.jpg'
+          imageUrl: 'http://learndotresources.s3.amazonaws.com/workshop/55e5c92fe859dc0300619bc8/sloth.jpg'
+            
         })
       }
     }

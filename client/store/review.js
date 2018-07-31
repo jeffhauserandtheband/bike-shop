@@ -20,12 +20,12 @@ const getReview = greview => ({type: GET_REVIEW, greview})
 
 //THUNK CREATOR 
 
-export const postReview = (revInput) => async dispatch => {
+export const postReview = (revInput, bikeId) => async dispatch => {
     let res
     try {
         res = await axios.post('/api/review/', revInput)
         dispatch(createReview(res.data))
-        // history.push('/review')
+        history.push(`/bikes/${bikeId}`)
     } catch (err) {
         return dispatch(createReview({error: err.message}))
     }
@@ -35,6 +35,7 @@ export const fetchReview = (id) => async dispatch => {
     let res
     try {
         res = await axios.get(`/api/review/${id}`)
+        
         dispatch(getReview(res.data))
     } catch(err) {
         return dispatch(getReview({error: err.message}))
