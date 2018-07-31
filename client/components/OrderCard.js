@@ -32,8 +32,9 @@ const styles = theme => ({
 const OrderCard = ({items, classes}) =>
   items.map(item => {
     console.log(item)
+    const price = item.orderEntries.price/100.0
     return (
-      
+
       <TableRow key={item.id}>
         <TableCell
           component="th"
@@ -51,7 +52,7 @@ const OrderCard = ({items, classes}) =>
         <TableCell>
           <Link to={`/bikes/${item.id}`}>{item.name}</Link>
           <div><Typography variant="body2" gutterBottom>
-          ${item.orderEntries.price}
+          ${price}
         </Typography></div>
           <div><Typography variant="body2" gutterBottom>
           Quantity {item.orderEntries.quantity}

@@ -58,7 +58,7 @@ class Orders extends Component {
               <div className={classes.summary}>
                 <div>Order Id: {order.id}</div>
                 <div>Status: {order.state}</div>
-                <div>Total Cost: {order.orderCost}</div>
+                <div>Total Cost: {order.orderCost/100.00}</div>
               </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
