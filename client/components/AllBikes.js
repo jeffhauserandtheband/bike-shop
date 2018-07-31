@@ -174,13 +174,14 @@ class AllBikes extends Component {
                         </Typography>
                       </div>
                       <div className={classes.action}>
-                        <Typography
+                        {/* Rating not currently availble */}
+                        {/* <Typography
                           gutterBottom
                           variant="subheading"
                           component="h3"
                         >
                           Rating
-                        </Typography>
+                        </Typography> */}
                       </div>
                     </div>
                   </div>
