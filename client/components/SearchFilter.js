@@ -1,13 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
+import {withStyles} from '@material-ui/core/styles'
+
 import { fetchCategories } from '../store/filter'
 import { filter } from '../store'
 
+const styles = theme => ({
+  root: {
+    // height: '85vh'
+  },
+  title: {
+    fontSize: '20px',
+    color: 'lightgrey'
+  }
+})
+
 
 class SearchFilter extends React.Component {
-
-
   state = {
     categories: [],
     expanded: false,
@@ -25,12 +36,13 @@ class SearchFilter extends React.Component {
   }
 
   render() {
+    const {classes} = this.props
 
       let categories = this.state.categories
 
         return (
-          <div>
-            <h1>Filter Your Search</h1>
+          <div className={classes.root}>
+            <h1 className={classes.title}>Filter Your Search</h1>
                 { // add categories
                   categories.map(category => {
                     return (
@@ -51,8 +63,6 @@ class SearchFilter extends React.Component {
                                   }
                                 </form>
                               </div>
-
-
                       </div>
                     )}
                 )}
@@ -61,7 +71,9 @@ class SearchFilter extends React.Component {
   }
 }
 
-
+SearchFilter.propTypes = {
+  classes: PropTypes.object.isRequired
+}
 
 const mapStateToProps = state => ({
   categories: state.categories,
@@ -72,4 +84,4 @@ const mapDispatchToProps = dispatch => ({
   filter: categoryVal => dispatch(filter(categoryVal))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter)
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SearchFilter))
