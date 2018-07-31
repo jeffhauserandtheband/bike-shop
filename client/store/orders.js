@@ -26,16 +26,17 @@ const getUserOrders = orders => ({type: GET_ORDERS, orders})
 /**
  * THUNK CREATORS
  */
-export const saveOrder = cartId => {
+export const saveOrder = (cartId,shippingInfo) => {
   return async dispatch => {
     try {
-      const {order} = await axios.post('/api/carts/'+cartId+'/createorder',{shippingEmail:'emailaddy@email.com'})
+      console.log(shippingInfo)
+      const {order} = await axios.post('/api/carts/'+cartId+'/createorder',shippingInfo)
       //need to go somewhere
 
       //successful order means clear lso cartid
       dispatch(deleteCart())
     } catch (err) {
-      console.log('Error creating order:',error)
+      console.log('Error creating order:',err)
     }
   }
 

@@ -9,6 +9,7 @@ export {default as AllBikes} from './AllBikes'
 export {default as SingleBike} from './SingleBike'
 export {default as ReviewForm} from './ReviewForm'
 export {default as CartView} from './CartView'
+export {default as CheckoutForm} from './CheckoutForm'
 export {default as OrderCard} from './OrderCard'
 export {default as BikeCard} from './BikeCard'
 
