@@ -147,7 +147,12 @@ router.post('/:cartId/createorder', async (req, res, next) => {
 //
 //output: {id, subtotal, cartentries:[{bikeid,name,price,quantity,image}]}
 router.post('/:cartId/:bikeId', async (req, res, next) => {
-  console.log(req)
+  if (req.user) {
+    console.log(req.user.dataValues.id)
+    console.log(req.user.dataValues.email)
+} else {
+  console.log('no user object')
+}
   let cart
   try {
     let newCart={}
