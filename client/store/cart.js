@@ -160,6 +160,7 @@ export default function(state = initialState, action) {
         localStorage.bikeShopCartId = JSON.stringify({cartId: action.cart.cartId})
         return action.cart
     case DELETE_CART:
+    console.log('are we here yet?')
         delete localStorage.bikeShopCartId
         return initialState;
     default:
