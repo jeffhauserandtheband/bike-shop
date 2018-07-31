@@ -40,6 +40,38 @@ const styles = theme => ({
     group: {
       margin: `${theme.spacing.unit}px 0`,
     },
+    productOuter: {
+      minHeight: '80vh'
+    },
+    productWrapper: {
+      margin: 'auto' ,
+      padding: 'auto 0',
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    productImg: {
+      height: '50vh',
+      width: 'auto',
+    },
+    productInfo: {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '30px',
+    },
+    productName: {
+      color: 'black',
+      fontSize: '18px'
+    },
+    productDescription: {
+      color: 'grey',
+    },
+    addBtn: {
+      margin: 'auto 0 0 auto',
+    },
+    subInfo: {
+      display: 'flex',
+      flexDirection: 'row',
+    }
   });
 
 class SingleBike extends Component {
@@ -102,97 +134,71 @@ class SingleBike extends Component {
 
         return (
             <div>
-            <Grid container spacing={24}>
-                <Grid item md key={this.props.singleBike.id}>
-                    <Paper style={style.Paper}>
-                    <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
+              {/* Begin bike information */}
+            <Grid container spacing={24} className={classes.productOuter}>
+                <Grid item md key={this.props.singleBike.id} className={classes.productWrapper} >
+                    {/* <Paper style={style.Paper}> */}
+                    <img
+                      src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}
+                      className={classes.productImg}
+                    />
 
-                    <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3">
-                        Bike Name: {name}
-                    </Typography>
+                    <div className={classes.productInfo}>
+                      <Typography
+                          gutterBottom
+                          variant="subheading"
+                          component="h1"
+                          className={classes.productName}>
+                          {name}
+                      </Typography>
 
-                    <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3">
-                        Description: {description}
-                    </Typography>
+                      <Typography
+                          gutterBottom
+                          variant="subheading"
+                          component="h3"
+                          className={classes.productDescription}>
+                          {description}
+                      </Typography>
 
-                    <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3">
-                        Price: {price}
-                    </Typography>
+                      <div className={classes.subInfo}>
 
-                    <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3">
-                        Inventory: {inventory}
-                    </Typography>
+                        <div>
+                          <Typography
+                            gutterBottom
+                            variant="subheading"
+                            component="h3">
+                            ${price}
+                          </Typography>
 
-                    <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3">
-                        Average Rating: {avgRating.toFixed(1)}
-                    </Typography>
+                          <Typography
+                            gutterBottom
+                            variant="subheading"
+                            component="h3">
+                            {inventory} in stock
+                          </Typography>
 
-                    <Button onClick={() => this.handleClickAddToCart(id)}size="small" color="primary">
-                        Add to cart
-                    </Button>
-                    </Paper>
+                          <Typography
+                            gutterBottom
+                            variant="subheading"
+                            component="h3">
+                            Average Rating: {avgRating.toFixed(1)}
+                          </Typography>
+                        </div>
+
+                        <Button
+                          onClick={() => this.handleClickAddToCart(id)}size="small"
+                          color="primary"
+                          className={classes.addBtn}>
+                          Add to cart
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {/* </Paper> */}
                 </Grid>
             </Grid>
-
-                <div>
-                <form onSubmit={(evt) => {
-                    evt.preventDefault()
-                    this.setState({comments:'', value: ''})
-                    this.props.handleSubmit(evt,id)
-                }}>
-                <Typography
-                    gutterBottom
-                    variant="subheading"
-                    component="h3">
-                    LEAVE A REVIEW:
-                </Typography>
-                <TextField
-                name='comments'
-                value={this.state.comments}
-                onChange={this.handleChange}
-                onSubmit={this.props.handleSubmit}
-                multiline={true}
-                rows={5}
-                />
-
-                <div className={classes.root}>
-                    <FormControl component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">Rating</FormLabel>
-                    <RadioGroup
-                        row
-                        aria-label="Gender"
-                        name="rating"
-                        className={classes.group}
-                        value={this.state.value}
-                        onChange={this.handleChange}
-                    >
-                        <FormControlLabel value="1" control={<Radio />} label="1" />
-                        <FormControlLabel value="2" control={<Radio />} label="2" />
-                        <FormControlLabel value="3" control={<Radio />} label="3" />
-                        <FormControlLabel value="4" control={<Radio />} label="4" />
-                        <FormControlLabel value="5" control={<Radio />} label="5" />
-                        <Button type='submit'> Submit </Button>
-                    </RadioGroup>
-                    </FormControl>
-                </div>
-
-                </form>
-                </div>
+            {/* End Bike Information */}
+            {/* Begin review list */}
             <Grid container spacing={24}>
                 <Grid item md key={this.props.singleBike.id}>
                     {review.map(elem => {
@@ -215,6 +221,53 @@ class SingleBike extends Component {
 
                 </Grid>
             </Grid>
+            {/* End review list */}
+            {/* begin review form */}
+            <div>
+            <form onSubmit={(evt) => {
+                evt.preventDefault()
+                this.setState({comments:'', value: ''})
+                this.props.handleSubmit(evt,id)
+            }}>
+            <Typography
+                gutterBottom
+                variant="subheading"
+                component="h3">
+                LEAVE A REVIEW:
+            </Typography>
+            <TextField
+            name='comments'
+            value={this.state.comments}
+            onChange={this.handleChange}
+            onSubmit={this.props.handleSubmit}
+            multiline={true}
+            rows={5}
+            />
+
+            <div className={classes.root}>
+                <FormControl component="fieldset" className={classes.formControl}>
+                <FormLabel component="legend">Rating</FormLabel>
+                <RadioGroup
+                    row
+                    aria-label="Gender"
+                    name="rating"
+                    className={classes.group}
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                >
+                    <FormControlLabel value="1" control={<Radio />} label="1" />
+                    <FormControlLabel value="2" control={<Radio />} label="2" />
+                    <FormControlLabel value="3" control={<Radio />} label="3" />
+                    <FormControlLabel value="4" control={<Radio />} label="4" />
+                    <FormControlLabel value="5" control={<Radio />} label="5" />
+                    <Button type='submit'> Submit </Button>
+                </RadioGroup>
+                </FormControl>
+            </div>
+
+            </form>
+            </div>
+            {/* End review form */}
         </div>
         )
     }
