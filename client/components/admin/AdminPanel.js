@@ -57,7 +57,8 @@ class AdminPage extends Component {
       bikes,
       categories,
       deleteUser,
-      updateOrder
+      updateOrder,
+      promoteUser
     } = this.props
     const {value} = this.state
     return (

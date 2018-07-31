@@ -31,7 +31,7 @@ const styles = theme => ({
 
 const OrderCard = ({items, classes}) =>
   items.map(item => {
-    console.log(item)
+
     const price = item.orderEntries.price/100.0
     return (
 
@@ -45,7 +45,7 @@ const OrderCard = ({items, classes}) =>
           <Link to={`/bikes/${item.id}`}>
             <img
               className={classes.picCell}
-              src={item.bikeimages[0]}
+              src={item.bikeimages.length && item.bikeimages[0].imageUrl}
             />
           </Link>
         </TableCell>

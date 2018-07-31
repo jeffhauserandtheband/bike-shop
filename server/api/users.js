@@ -21,12 +21,24 @@ router.delete('/:userid', async (req, res, next) => {
   try {
     await User.destroy({
       where: {
-        id:  req.params.userid
-      },
-    });
-    res.sendStatus(202);
+        id: req.params.userid
+      }
+    })
+    res.sendStatus(202)
   } catch (error) {
-    console.error('Didnt delete user', error);
-    next(error);
+    console.error('Didnt delete user', error)
+    next(error)
   }
-});
+})
+
+//change user type needs middleware
+
+router.get('/:userId', async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userId)
+    await user.update({userType: req.body.userType})
+    res.json(user)
+  } catch (err) {
+    next(err)
+  }
+})
