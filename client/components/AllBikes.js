@@ -60,8 +60,6 @@ class AllBikes extends Component {
     await this.setState({
       filteredBikes: this.props.filteredBikes
     })
-    console.log('component did mount props, ', this.props)
-    console.log('component did mount state, ', this.state)
   }
 
   handleClickAddToCart(bikeId) {
@@ -76,8 +74,6 @@ class AllBikes extends Component {
   render() {
     const {classes, bikes, filteredBikes} = this.props
 
-    console.log('inside render - props', this.props.filteredBikes);
-
     if (this.props.filteredBikes.length === 0) {
       return <Grid container>Loading..</Grid>
     }
@@ -86,14 +82,21 @@ class AllBikes extends Component {
       <div className={classes.root}>
         <SearchFilter />
         <Grid container spacing={24}>
-        {filteredBikes.map(elem => (
+        {filteredBikes.map(elem => {
+          // get image url or use default image imageUrl
+          let imageUrl = ''
+          if (elem.bikeimages.length > 0) imageUrl = elem.bikeimages[0].imageUrl
+          else imageUrl = 'bike.jpeg'
+          return (
           <Grid key={elem.id} item md>
             <Card className={classes.card}>
               <CardContent>
                 <div className={classes.container}>
                   <div>
                     <Link to={`/bikes/${elem.id}`}>
-                      <img className={classes.pic} src="bike.jpeg" />
+                      <img
+                        className={classes.pic}
+                        src={imageUrl} />
                     </Link>
                   </div>
                   <div className={classes.action}>
@@ -136,7 +139,7 @@ class AllBikes extends Component {
               </CardActions>
             </Card>
           </Grid>
-        ))}
+        )})}
       </Grid>
       </div>
     )
