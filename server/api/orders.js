@@ -28,3 +28,18 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+//Admin change order status
+router.put('/:orderId', async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.orderId)
+    await order.update({
+      state: req.body.status
+    })
+    const updatedOrder = await Order.findById(req.params.orderId,{include: [{all: true}]})
+    res.json(updatedOrder)
+  } catch (error) {
+    console.error('Didnt update order', error)
+    next(error)
+  }
+})

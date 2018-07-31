@@ -8,6 +8,7 @@ const ADMIN_GET_USERS = 'ADMIN_GET_USERS'
 const ADMIN_GET_ORDERS = 'ADMIN_GET_ORDERS'
 const ADMIN_GET_CATEGORIES = 'ADMIN_GET_CATEGORIES'
 const ADMIN_DELETE_USER = 'ADMIN_DELETE_USER'
+const ADMIN_CHANGE_ORDER_STATUS = 'ADMIN_CHANGE_ORDER_STATUS '
 /**
  * INITIAL STATE
  */
@@ -24,6 +25,7 @@ const getUsers = users => ({type: ADMIN_GET_USERS, users})
 const getOrders = orders => ({type: ADMIN_GET_ORDERS, orders})
 const getCategories = categories => ({type: ADMIN_GET_CATEGORIES, categories})
 const deleteUser = userId => ({type: ADMIN_DELETE_USER, userId})
+const updateOrder = order => ({type: ADMIN_CHANGE_ORDER_STATUS, order})
 
 /**
  * THUNK CREATORS
@@ -64,6 +66,19 @@ export const fetchOrders = () => {
   }
 }
 
+export const changeOrderStatus = (status, order) => {
+  return async dispatch => {
+    try {
+      console.log('hell from thunk')
+      const {data} = await axios.put(`/api/orders/${order.id}`, {status})
+
+      dispatch(updateOrder(data))
+    } catch (error) {
+      console.log('There was an error updating order', error)
+    }
+  }
+}
+
 //Categories
 export const fetchCategories = () => {
   return async dispatch => {
@@ -91,6 +106,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         users: state.users.filter(user => user.id !== action.userId)
+      }
+    case ADMIN_CHANGE_ORDER_STATUS:
+      return {
+        ...state,
+        orders: state.orders.map(
+          order => (order.id === action.order.id ? action.order : order)
+        )
       }
     default:
       return state

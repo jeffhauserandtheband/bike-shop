@@ -7,8 +7,14 @@ import Users from './Users'
 import Orders from './Orders'
 import Categories from './Categories'
 import Products from './Products'
-import {fetchUsers, fetchOrders, fetchBikes, fetchCategories, removeUser} from '../../store'
-
+import {
+  fetchUsers,
+  fetchOrders,
+  fetchBikes,
+  fetchCategories,
+  removeUser,
+  changeOrderStatus
+} from '../../store'
 
 import {Typography, AppBar, Tabs, Tab, Paper} from '@material-ui/core'
 function TabContainer(props) {
@@ -44,14 +50,20 @@ class AdminPage extends Component {
   }
 
   render() {
-
-    const {classes, users, orders, bikes, categories, deleteUser} = this.props
+    const {
+      classes,
+      users,
+      orders,
+      bikes,
+      categories,
+      deleteUser,
+      updateOrder
+    } = this.props
     const {value} = this.state
     return (
       <Fragment>
         <AppBar position="static" className={classes.root}>
           <Tabs value={value} onChange={this.handleChange}>
-
             <Tab label="Products" />
             <Tab label="Categories" />
             <Tab label="Users" />
@@ -60,7 +72,6 @@ class AdminPage extends Component {
         </AppBar>
         {value === 0 && (
           <TabContainer>
-
             <Products bikes={bikes} />
           </TabContainer>
         )}
@@ -71,13 +82,12 @@ class AdminPage extends Component {
         )}
         {value === 2 && (
           <TabContainer>
-
             <Users users={users} deleteUser={deleteUser} />
           </TabContainer>
         )}
         {value === 3 && (
           <TabContainer>
-            <Orders orders={orders}  />
+            <Orders orders={orders} updateOrder={updateOrder} />
           </TabContainer>
         )}
       </Fragment>
@@ -100,15 +110,18 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getAdminData() {
+    getAdminData: () => {
       dispatch(fetchUsers())
       dispatch(fetchOrders())
       dispatch(fetchBikes())
       dispatch(fetchCategories())
     },
     deleteUser: userId => dispatch(removeUser(userId)),
+    updateOrder: (event, status, order) => {
+      event.preventDefault()
+      dispatch(changeOrderStatus(status, order))
+    }
   }
 }
 
 export default connect(mapState, mapDispatch)(withStyles(styles)(AdminPage))
-
