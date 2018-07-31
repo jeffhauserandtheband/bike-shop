@@ -3,15 +3,24 @@ import { connect } from 'react-redux';
 import {
     fetchOneBike, 
     fetchReview,
-    incrementCart
+    incrementCart,
+    postReview
 } from '../store'
 import { 
     Grid, 
     Paper, 
     Button,
-    Typography
+    Typography,
+    TextField,
+    FormControlLabel,
+    RadioGroup,
+    FormLabel,
+    FormControl,
+    Radio,
 } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 const style = {
     Paper: {
@@ -21,7 +30,26 @@ const style = {
     }
 }
 
+const styles = theme => ({
+    root: {
+      display: 'flex',
+    },
+    formControl: {
+      margin: theme.spacing.unit * 3,
+    },
+    group: {
+      margin: `${theme.spacing.unit}px 0`,
+    },
+  });
+
 class SingleBike extends Component {
+    constructor() {
+        super();
+        this.state = {
+            comments: '',
+            value:''
+        }
+    }
 
     componentDidMount() {
         const id = this.props.match.params.id
@@ -39,14 +67,21 @@ class SingleBike extends Component {
     
       }
 
+    handleChange = (evt) => {
+        this.setState({
+            [evt.target.name]: evt.target.value
+        })
+        this.setState({ value:evt.target.value })
+    }
+
     
 
     render() {
         const {name, description, price, inventory} = this.props.singleBike
         const review = this.props.review
         const id = this.props.match.params.id
+        const { classes } = this.props;
         let avgRating=0
-        console.log('avg',avgRating)
         if (!this.props.singleBike.id || review === undefined) {
             return (
                 <Grid container>
@@ -66,6 +101,7 @@ class SingleBike extends Component {
 
 
         return (
+            <div>
             <Grid container spacing={24}>
                 <Grid item md key={this.props.singleBike.id}>         
                     <Paper style={style.Paper}>          
@@ -109,12 +145,56 @@ class SingleBike extends Component {
                     <Button onClick={() => this.handleClickAddToCart(id)}size="small" color="primary">
                         Add to cart
                     </Button>
-
-                    <Link to={`/bikes/${id}/reviewform`}>
-                        <Button> Add Review </Button>
-                    </Link>
                     </Paper>
+                </Grid>
+            </Grid>
 
+                <div>
+                <form onSubmit={(evt) => {
+                    evt.preventDefault()
+                    this.setState({comments:'', value: ''})
+                    this.props.handleSubmit(evt,id)
+                }}>
+                <Typography 
+                    gutterBottom
+                    variant="subheading"
+                    component="h3"> 
+                    LEAVE A REVIEW:
+                </Typography>
+                <TextField 
+                name='comments' 
+                value={this.state.comments} 
+                onChange={this.handleChange} 
+                onSubmit={this.props.handleSubmit} 
+                multiline={true}
+                rows={5}
+                />
+                
+                <div className={classes.root}>
+                    <FormControl component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend">Rating</FormLabel>
+                    <RadioGroup
+                        row
+                        aria-label="Gender"
+                        name="rating"
+                        className={classes.group}
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                    >
+                        <FormControlLabel value="1" control={<Radio />} label="1" />
+                        <FormControlLabel value="2" control={<Radio />} label="2" />
+                        <FormControlLabel value="3" control={<Radio />} label="3" />
+                        <FormControlLabel value="4" control={<Radio />} label="4" />
+                        <FormControlLabel value="5" control={<Radio />} label="5" />
+                        <Button type='submit'> Submit </Button> 
+                    </RadioGroup>
+                    </FormControl>
+                </div>
+                
+                </form>
+                </div>
+            <Grid container spacing={24}>
+                <Grid item md key={this.props.singleBike.id}>
                     {review.map(elem => {
                         return(
                             <Paper key={elem.id} style={style.Paper}>
@@ -135,7 +215,7 @@ class SingleBike extends Component {
                                     
                 </Grid>
             </Grid>
-            
+        </div>
         )
     }
 }
@@ -157,9 +237,19 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchReview(id))
         },
         incrementCart: (cartId,bikeId) => {
-            dispatch(incrementCart(cartId,bikeId))}
+            dispatch(incrementCart(cartId,bikeId))
+        },
+        handleSubmit: (evt, bikeId) => {
+            const comments = evt.target.comments.value
+            const rating = evt.target.rating.value
+            dispatch(postReview({comments,rating,bikeId}, bikeId))
+        }
 
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SingleBike)
+SingleBike.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SingleBike))
