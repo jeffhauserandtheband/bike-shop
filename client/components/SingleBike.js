@@ -81,7 +81,6 @@ class SingleBike extends Component {
         const review = this.props.review
         const id = this.props.match.params.id
         const { classes } = this.props;
-        console.log('reviewarr',review)
         let avgRating=0
         if (!this.props.singleBike.id || review === undefined) {
             return (
