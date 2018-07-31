@@ -11,7 +11,8 @@ import {
   Typography,
   Button,
   Table,
-  TableBody
+  TableBody,
+  Select
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import OrderCard from '../OrderCard'
@@ -42,13 +43,13 @@ const styles = theme => ({
 
 class Orders extends Component {
   state = {
-    status: ''
+    state: ''
   }
   handleChange = event => {
-    this.setState({[event.target.name]: event.target.value})
+    this.setState({state: event.target.value})
   }
   render() {
-    const {orders, classes} = this.props
+    const {orders, classes, updateOrder} = this.props
     return (
       <div className={classes.root}>
         {orders.map(order => (
@@ -74,30 +75,30 @@ class Orders extends Component {
                     } ${order.shippingZip}`}
                   </div>
                 </div>
-                <form>
-                  <label htmlFor="status">
-                    <Typography variant="body2">
-                      Change order status:{' '}
-                    </Typography>
-                  </label>
-                  <select
-                    value={this.state.status}
-                    onChange={this.handleChange}
-                  >
+                <div>
+                  <Typography variant="body2">Change order status:</Typography>
+                  <Select value={this.state.state} onChange={this.handleChange}>
                     <option value="created">Created</option>
                     <option value="processing">In Progress</option>
                     <option value="completed">Completed</option>
                     <option value="cancelled">Cancelled</option>
-                  </select>
-                  <Button>
-                    {/* needs to be connected */}
+                  </Select>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    onClick={event =>
+                      updateOrder(event, this.state.state, order)
+                    }
+                  >
                     Submit
                   </Button>
-                </form>
+                </div>
               </div>
-              <div className={classNames( classes.column, classes.overFlow)}>
-                <Table >
-                  <TableBody >
+              <div className={classNames(classes.column, classes.overFlow)}>
+                <Table>
+                  <TableBody>
                     <OrderCard items={order.bikes} />
                   </TableBody>
                 </Table>
@@ -110,19 +111,8 @@ class Orders extends Component {
   }
 }
 
-/**
- * CONTAINER
- */
+export default withStyles(styles)(Orders)
 
-const mapState = state => {}
-
-const mapDispatch = dispatch => {}
-
-export default connect(mapState, mapDispatch)(withStyles(styles)(Orders))
-
-/**
- * PROP TYPES
- */
 Orders.propTypes = {
   classes: PropTypes.object.isRequired
 }
