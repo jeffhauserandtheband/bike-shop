@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import {withStyles} from '@material-ui/core/styles'
-import {TableCell, TableRow} from '@material-ui/core'
+import {TableCell, TableRow, Button, Typography} from '@material-ui/core'
 
 const styles = theme => ({
   root: {
@@ -14,8 +14,8 @@ const styles = theme => ({
     paddingBottom: 10
   },
   picCell: {
-    width: 90,
-    height: 90
+    width: 120,
+    height: 120
   },
   flexContainer: {
     flexDirection: 'row'
@@ -31,17 +31,31 @@ const styles = theme => ({
 
 const OrderCard = ({items, classes}) =>
   items.map(item => {
+    console.log(item)
     return (
+      
       <TableRow key={item.id}>
-        <TableCell component="th" scope="row" className={classes.picCell}>
+        <TableCell
+          component="th"
+          scope="row"
+          className={classes.picCell}
+          key={item.id}
+        >
           <Link to={`/bikes/${item.id}`}>
-            <img className={classes.picCell} src="/bicycle-1296859_1280.png" />
+            <img
+              className={classes.picCell}
+              src={item.bikeimages[0]}
+            />
           </Link>
         </TableCell>
         <TableCell>
           <Link to={`/bikes/${item.id}`}>{item.name}</Link>
-          <div>${item.orderEntries.price}</div>
-          <div>Quantity {item.orderEntries.quantity}</div>
+          <div><Typography variant="body2" gutterBottom>
+          ${item.orderEntries.price}
+        </Typography></div>
+          <div><Typography variant="body2" gutterBottom>
+          Quantity {item.orderEntries.quantity}
+        </Typography></div>
         </TableCell>
       </TableRow>
     )

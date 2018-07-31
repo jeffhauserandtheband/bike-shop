@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Order, OrderEntries, Bike} = require('../db/models')
+const {Order, OrderEntries, BikeImage, CategoryValue} = require('../db/models')
 module.exports = router
 
 //NOTE - ORDER POST IS DONE IN carts FILE
@@ -11,7 +11,7 @@ router.get('/:userId', async (req, res, next) => {
       where: {
         userId: req.params.userId
       },
-      include: [{all: true}]
+      include: [{all: true, nested: true}]
     })
     res.json(order)
   } catch (err) {
@@ -22,7 +22,7 @@ router.get('/:userId', async (req, res, next) => {
 //Admin get orders  needs middleware
 router.get('/', async (req, res, next) => {
   try {
-    const order = await Order.findAll({include: [{all: true}]})
+    const order = await Order.findAll({include: [{all: true, nested: true}]})
     res.json(order)
   } catch (err) {
     next(err)
@@ -36,7 +36,9 @@ router.put('/:orderId', async (req, res, next) => {
     await order.update({
       state: req.body.status
     })
-    const updatedOrder = await Order.findById(req.params.orderId,{include: [{all: true}]})
+    const updatedOrder = await Order.findById(req.params.orderId, {
+      include: [{all: true}]
+    })
     res.json(updatedOrder)
   } catch (error) {
     console.error('Didnt update order', error)
