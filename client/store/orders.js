@@ -31,10 +31,10 @@ export const saveOrder = (cartId,shippingInfo) => {
     try {
       console.log(shippingInfo)
       const {order} = await axios.post('/api/carts/'+cartId+'/createorder',shippingInfo)
-      //need to go somewhere
-
       //successful order means clear lso cartid
       dispatch(deleteCart())
+      alert('Thank you for placing your order!');
+      history.push('/')
     } catch (err) {
       console.log('Error creating order:',err)
     }

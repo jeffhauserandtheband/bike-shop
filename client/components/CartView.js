@@ -14,7 +14,7 @@ import {
   IconButton
 } from '@material-ui/core'
 import {connect} from 'react-redux'
-import {incrementCart,decrementCart,deleteCartEntry} from '../store'
+import {incrementCart,decrementCart,deleteCartEntry,fetchCart} from '../store'
 import {Link} from 'react-router-dom'
 import {Add, Remove} from '@material-ui/icons/'
 
@@ -51,7 +51,7 @@ class CartView extends Component {
   }
 
   componentDidMount() {
-
+    this.props.fetchCart()
   }
 
   handleClickIncrementCart(bikeId) {
@@ -155,6 +155,8 @@ CartView.propTypes = {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchCart: (cartId) => {
+      dispatch(fetchCart(cartId))},
     incrementCart: (cartId,bikeId) => {
       dispatch(incrementCart(cartId,bikeId))},
     decrementCart: (cartId,bikeId) => {
