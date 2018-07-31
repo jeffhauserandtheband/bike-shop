@@ -11,22 +11,19 @@ import {
   Typography
 } from '@material-ui/core'
 import {connect} from 'react-redux'
-import {fetchBikes,incrementCart} from '../store'
+import {fetchBikes, incrementCart} from '../store'
 import {Link} from 'react-router-dom'
 
-import {SearchFilter} from './index'
+import {SearchFilter, SearchFilterStyled} from './index'
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
+   
     display: 'flex',
-    paddingTop: 10
+    paddingTop: 10,
+    flexDirection: 'row'
   },
-  card: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column'
-  },
+ 
   pic: {
     width: 300,
     height: 200
@@ -52,7 +49,7 @@ class AllBikes extends Component {
   }
 
   state = {
-    filteredBikes: [],
+    filteredBikes: []
   }
 
   async componentDidMount() {
@@ -65,18 +62,17 @@ class AllBikes extends Component {
   }
 
   handleClickAddToCart(bikeId) {
-    let cartId=0;
+    let cartId = 0
     if (this.props.cart.cartId) {
-      cartId=this.props.cart.cartId
+      cartId = this.props.cart.cartId
     }
-    this.props.incrementCart(cartId,bikeId)
-
+    this.props.incrementCart(cartId, bikeId)
   }
 
   render() {
     const {classes, bikes} = this.props
 
-    console.log('inside render - props', this.props.filteredBikes);
+    console.log('inside render - props', this.props.filteredBikes)
 
     if (this.props.bikes.length === 0) {
       return <Grid container>Loading..</Grid>
@@ -86,58 +82,63 @@ class AllBikes extends Component {
       <div className={classes.root}>
         <SearchFilter />
         <Grid container spacing={24}>
-        {bikes.map(elem => (
-          <Grid key={elem.id} item md>
-            <Card className={classes.card}>
-              <CardContent>
-                <div className={classes.container}>
-                  <div>
-                    <Link to={`/bikes/${elem.id}`}>
-                      <img className={classes.pic} src="bike.jpeg" />
-                    </Link>
-                  </div>
-                  <div className={classes.action}>
+          {bikes.map(elem => (
+            <Grid key={elem.id} item md>
+              <Card className={classes.card}>
+                <CardContent>
+                  <div className={classes.container}>
                     <div>
-                      <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3"
-                      >
-                        <Link to={`/bikes/${elem.id}`}>
-                          {elem.name.substring()}
-                        </Link>
-                      </Typography>
+                      <Link to={`/bikes/${elem.id}`}>
+                        <img className={classes.pic} src="bike.jpeg" />
+                      </Link>
                     </div>
                     <div className={classes.action}>
-                      <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3"
-                      >
-                        {`Price $${elem.price}`}
-                      </Typography>
-                    </div>
-                    <div className={classes.action}>
-                      <Typography
-                        gutterBottom
-                        variant="subheading"
-                        component="h3"
-                      >
-                        Rating
-                      </Typography>
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant="subheading"
+                          component="h3"
+                        >
+                          <Link to={`/bikes/${elem.id}`}>
+                            {elem.name.substring()}
+                          </Link>
+                        </Typography>
+                      </div>
+                      <div className={classes.action}>
+                        <Typography
+                          gutterBottom
+                          variant="subheading"
+                          component="h3"
+                        >
+                          {`Price $${elem.price}`}
+                        </Typography>
+                      </div>
+                      <div className={classes.action}>
+                        <Typography
+                          gutterBottom
+                          variant="subheading"
+                          component="h3"
+                        >
+                          Rating
+                        </Typography>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-              <CardActions className={classes.action}>
-                <Button size="small" variant="contained" color="primary" onClick={(e) => this.handleClickAddToCart(elem.id)}>
-                  ADD TO CART
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                </CardContent>
+                <CardActions className={classes.action}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    onClick={e => this.handleClickAddToCart(elem.id)}
+                  >
+                    ADD TO CART
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </div>
     )
   }
@@ -151,9 +152,11 @@ AllBikes.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     fetchBikes: () => {
-      dispatch(fetchBikes())},
-    incrementCart: (cartId,bikeId) => {
-      dispatch(incrementCart(cartId,bikeId))}
+      dispatch(fetchBikes())
+    },
+    incrementCart: (cartId, bikeId) => {
+      dispatch(incrementCart(cartId, bikeId))
+    }
   }
 }
 

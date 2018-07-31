@@ -15,22 +15,22 @@ import {
 import {Link} from 'react-router-dom'
 
 const styles = theme => ({
-    root: {
-      flexGrow: 1,
-      maxWidth: 600,
-      padding: theme.spacing.unit * 2,
-    },
-    image: {
-      width: 128,
-      height: 128,
-    },
-    img: {
-      margin: 'auto',
-      display: 'block',
-      maxWidth: '100%',
-      maxHeight: '100%',
-    },
-  });
+  root: {
+    flexGrow: 1,
+    maxWidth: 600,
+    padding: theme.spacing.unit * 2
+  },
+  image: {
+    width: 128,
+    height: 128
+  },
+  img: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%'
+  }
+})
 
 class SingleBike extends Component {
   componentDidMount() {
@@ -48,8 +48,7 @@ class SingleBike extends Component {
   }
 
   render() {
-    const {name, description, price, inventory, } = this.props.singleBike
-    const {classes} = this.props
+    const {name, description, price, inventory} = this.props.singleBike
     const review = this.props.review
     const id = this.props.match.params.id
     console.log('render')
@@ -59,39 +58,59 @@ class SingleBike extends Component {
     }
 
     return (
-       <Paper className={classes.root}>
-        <Grid container spacing={16}>
-          <Grid item>
-            <ButtonBase className={classes.image}>
-              <img className={classes.img} alt="complex" src="/bike.jpeg" />
-            </ButtonBase>
-          </Grid>
-          <Grid item xs={12} xl container>
-            <Grid item xs container direction="column" spacing={16}>
-              <Grid item xs>
-                <Typography gutterBottom variant="subheading">
-                  Standard license
-                </Typography>
-                <Typography gutterBottom>Full resolution 1920x1080 • JPEG</Typography>
-                <Typography color="textSecondary">ID: 1030114</Typography>
-              </Grid>
-              <Grid item>
-                <Typography style={{ cursor: 'pointer' }}>Remove</Typography>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Typography variant="subheading">$19.00</Typography>
-            </Grid>
-          </Grid>
+      <Grid container>
+        <Grid item sm={2} key={this.props.singleBike.id}>
+          <Paper style={style.Paper}>
+            <img
+              src={
+                this.props.singleBike.bikeimages[0] &&
+                this.props.singleBike.bikeimages[0].imageUrl
+              }
+            />
+            <label> Bike Name: </label>
+            {name}
+            <label> Description: </label>
+            {description}
+            <label> Price: </label>
+            {price}
+            <label> Inventory: </label>
+            {inventory}
+
+            <Button
+              onClick={e => this.handleClickAddToCart(id)}
+              size="small"
+              color="primary"
+            >
+              Add to cart
+            </Button>
+
+            <Link to={`/bikes/${id}/reviewform`}>
+              <Button> Add Review </Button>
+            </Link>
+          </Paper>
+
+          {review.map(elem => {
+            return (
+              <Paper key={elem.id} style={style.Paper}>
+                <label> Rating: </label>
+                {elem.rating}
+                <label> Comments: </label>
+                {elem.comments}
+              </Paper>
+            )
+          })}
+          {review.length === 0 && (
+            <Paper>
+              <Typography variant="display1" align="center">
+                No past reviews
+              </Typography>
+            </Paper>
+          )}
         </Grid>
-      </Paper>
-
-
-       
+      </Grid>
     )
   }
 }
-
 const mapState = state => {
   return {
     singleBike: state.bikes.singleBike,

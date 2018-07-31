@@ -1,16 +1,42 @@
 import React from 'react'
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux'
-import { fetchCategories } from '../store/filter'
-import { filter } from '../store'
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import {fetchCategories} from '../store/filter'
+import {filter} from '../store'
+import {withStyles} from '@material-ui/core/styles'
+import {
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  Typography,
+  Button,
+  Table,
+  TableBody
+} from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
+const styles = theme => ({
+ 
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular
+  },
+  container: {
+   width: 200,
+  },
+  details: {
+    height: 250,
+    overflowX: 'auto'
+  },
+  checkbox: {
+    display:'flex',
+    alignItems: 'space-around'
+  }
+})
 
 class SearchFilter extends React.Component {
-
-
   state = {
     categories: [],
-    expanded: false,
   }
 
   async componentDidMount() {
@@ -25,51 +51,58 @@ class SearchFilter extends React.Component {
   }
 
   render() {
-
-      let categories = this.state.categories
-
-        return (
-          <div>
-            <h1>Filter Your Search</h1>
-                { // add categories
-                  categories.map(category => {
-                    return (
-                      <div key={category.id}>
-
-                              <div key={category.id}>
-                                <form onChange={this.handleCheck}>
-                                  {
-                                    // add category values
-                                    category.categoryvalues.map(val => {
-                                      return (
-                                        <div key={val.id}>
-                                          <input type="checkbox" name={val.id} value={val.name} />
-                                          <label htmlFor={val.name}>{val.name}</label>
-                                        </div>
-                                      )
-                                    })
-                                  }
-                                </form>
-                              </div>
-
-
-                      </div>
-                    )}
-                )}
-          </div>
-        )
+    let categories = this.state.categories
+    const {classes} = this.props
+    return (
+      <div className={classes.container}>
+        <Typography variant="title" gutterBottom>
+          Filter Your Search
+        </Typography>
+        {// add categories
+        categories.map(category => {
+          return (
+            <div key={category.id}>
+              <ExpansionPanel>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography className={classes.heading}>
+                    {category.name}
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.details}>
+                  <div key={category.id}>
+                    <form onChange={this.handleCheck}>
+                      {// add category values
+                      category.categoryvalues.map(val => {
+                        return (
+                          <div key={val.id} className={classes.checkbox} >
+                            <input
+                              type="checkbox"
+                              name={val.id}
+                              value={val.name}
+                            />
+                            <label htmlFor={val.name}>{val.name}</label>
+                          </div>
+                        )
+                      })}
+                    </form>
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </div>
+          )
+        })}
+      </div>
+    )
   }
 }
 
-
-
-const mapStateToProps = state => ({
-  categories: state.categories,
+const mapState = state => ({
+  categories: state.categories
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatch = dispatch => ({
   fetchCategories: () => dispatch(fetchCategories()),
   filter: categoryVal => dispatch(filter(categoryVal))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter)
+export default connect(mapState, mapDispatch)(withStyles(styles)(SearchFilter))
