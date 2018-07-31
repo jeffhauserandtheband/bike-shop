@@ -21,7 +21,7 @@ const styles = theme => ({
     flexGrow: 1,
     display: 'flex',
     paddingTop: 10,
-    margin: '30px 0 0 0',
+    margin: '30px auto 0 auto',
   },
   card: {
     display: 'flex',
@@ -47,12 +47,13 @@ const styles = theme => ({
   allProductsWrapper: {
     maxWidth: '80%',
     height: '85vh',
-    overflowY: 'scroll',
-    overflowX: 'visible',
+    margin: '0 auto'
+    // overflowY: 'scroll',
+    // overflowX: 'visible',
   },
   filterWrapper: {
-    position: 'fixed',
-    maxHeight: '85vh'
+    // position: 'fixed',
+    // maxHeight: '85vh'
   }
 })
 
@@ -79,7 +80,6 @@ class AllBikes extends Component {
       cartId=this.props.cart.cartId
     }
     this.props.incrementCart(cartId,bikeId)
-
   }
 
   render() {
@@ -97,7 +97,7 @@ class AllBikes extends Component {
 
         <div className={classes.root}>
 
-          <SearchFilter className={classes.filterWrapper}/ >
+          <SearchFilter / >
           <div className={classes.allProductsWrapper}>
           <Grid container spacing={24}>
           {filteredBikes.map(elem => {
