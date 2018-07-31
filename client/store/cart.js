@@ -30,6 +30,28 @@ export const deleteCart = () => ({type: DELETE_CART})
  * THUNK CREATORS
  */
 
+export const fetchCart = () => async dispatch => {
+    let res
+    let cartId = 0
+    const cartLso = JSON.parse(localStorage.bikeShopCartId || "{}")
+    if (cartLso.cartId) {
+        cartId = cartLso.cartId;
+    }
+    if (cartId===0) {
+      return dispatch(updateCart(initialState))
+    }
+    try {
+        res= await axios.get(`/api/carts/${cartId}`)
+    } catch (err) {
+        return dispatch(updateCart({error: err.message}))
+    }
+    try {
+        return dispatch(updateCart(res.data))
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 export const deleteCartEntry = (cartId,bikeId) => async dispatch => {
     let res
     try {
