@@ -34,7 +34,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
             {/* The navbar will show these links after you log in */}
             <Typography
               component={Link}
-              to="/home"
+              to="/bikes"
               variant="title"
               color="inherit"
               className={classes.flex}
@@ -54,7 +54,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
               to="/myaccount/order-history"
               color="inherit"
             >
-              My Account
+              My Orders
             </Button>
             <Button href="#" color="inherit" onClick={handleClick}>
               Logout
@@ -64,7 +64,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
           <Fragment>
             <Typography
               component={Link}
-              to="/home"
+              to="/bikes"
               variant="title"
               color="inherit"
               className={classes.flex}

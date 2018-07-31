@@ -14,6 +14,7 @@ import {
 import {Link} from 'react-router-dom'
 import {fetchUserOrders} from '../store'
 import {connect} from 'react-redux'
+import OrderCard from './OrderCard'
 
 const styles = theme => ({
   root: {
@@ -42,7 +43,10 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'column'
+  },
+  darkColor: {
+    color: theme.palette.primary.dark
   }
 })
 
@@ -55,8 +59,9 @@ class OrderHistory extends Component {
     const {classes} = this.props
 
     return this.props.orders.length ? (
-      <div className={classes.container}  >
+      <div className={classes.container}>
         {this.props.orders.map(order => {
+          const orderCost=order.orderCost/100.0
           return (
             <Paper className={classes.root} key={order.id}>
               <Table className={classes.table} key={order.id}>
@@ -64,14 +69,16 @@ class OrderHistory extends Component {
                   <TableRow>
                     <TableCell>
                       <Typography variant="body2">Order Placed</Typography>{' '}
-                      <Typography variant="body1">${order.createdAt}</Typography>
+                      <Typography variant="body1">
+                        ${order.createdAt}
+                      </Typography>
                     </TableCell>
 
                     <TableCell className={classes.header}>
                       <Typography variant="body2">Order Total</Typography>
                       <div>
                         <Typography variant="body1">
-                          ${order.orderCost}
+                          ${orderCost}
                         </Typography>
                       </div>
                     </TableCell>
@@ -79,13 +86,16 @@ class OrderHistory extends Component {
                     <TableCell className={classes.header}>
                       <Typography variant="body2">Order Status</Typography>
                       <div>
-                        <Typography variant="body1">{order.state}</Typography>
+                        <Typography variant="body1">
+                          {order.state[0].toUpperCase() + order.state.slice(1)}
+                        </Typography>
                       </div>
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {order.bikes.map(bike => {
+                    const price=bike.orderEntries.price/100.00
                     return (
                       <TableRow key={bike.id}>
                         <TableCell
@@ -96,17 +106,19 @@ class OrderHistory extends Component {
                           <Link to={`/bikes/${bike.id}`}>
                             <img
                               className={classes.picCell}
-                              src="/bicycle-1296859_1280.png"
+                              src={bike.bikeimages[0].imageUrl}
                             />
                           </Link>
                         </TableCell>
                         <TableCell>
                           <Link to={`/bikes/${bike.id}`}>{bike.name}</Link>
-                          <div>${bike.orderEntries.price}</div>
+                          <div>${price}</div>
                           <div>Quantity {bike.orderEntries.quantity}</div>
                         </TableCell>
                         <TableCell>
                           <Button
+                          className={classes.darkColor}
+                            variant="contained"
                             component={Link}
                             to={`/bikes/${bike.id}/reviewform`}
                           >

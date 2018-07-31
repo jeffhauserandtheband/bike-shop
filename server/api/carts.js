@@ -48,6 +48,12 @@ router.post('/:cartId/createorder', async (req, res, next) => {
 
   const newOrder = {}
   newOrder.state='created'
+
+  //link to user if available (otherwise must be a guest)
+  if (req.user) {
+    newOrder.userId = req.user.dataValues.id
+  }
+
   newOrder.shippingEmail = req.body.shippingEmail
 
   if (req.body.shippingName) {
@@ -147,7 +153,7 @@ router.post('/:cartId/createorder', async (req, res, next) => {
 //
 //output: {id, subtotal, cartentries:[{bikeid,name,price,quantity,image}]}
 router.post('/:cartId/:bikeId', async (req, res, next) => {
-  console.log(req)
+
   let cart
   try {
     let newCart={}

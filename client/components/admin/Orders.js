@@ -58,7 +58,7 @@ class Orders extends Component {
               <div className={classes.summary}>
                 <div>Order Id: {order.id}</div>
                 <div>Status: {order.state}</div>
-                <div>Total Cost: {order.orderCost}</div>
+                <div>Total Cost: {order.orderCost/100.00}</div>
               </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
@@ -77,12 +77,12 @@ class Orders extends Component {
                 </div>
                 <div>
                   <Typography variant="body2">Change order status:</Typography>
-                  <Select value={this.state.state} onChange={this.handleChange}>
+                  <select value={this.state.state} onChange={this.handleChange}>
                     <option value="created">Created</option>
                     <option value="processing">In Progress</option>
                     <option value="completed">Completed</option>
                     <option value="cancelled">Cancelled</option>
-                  </Select>
+                  </select>
                   <Button
                     size="small"
                     variant="contained"

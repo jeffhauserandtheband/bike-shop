@@ -93,6 +93,11 @@ class CheckoutForm extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -108,4 +113,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(CheckoutForm)
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutForm)
