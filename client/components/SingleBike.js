@@ -1,130 +1,117 @@
 import React, {Component} from 'react'
-import { connect } from 'react-redux';
+import {connect} from 'react-redux'
+import {fetchOneBike, fetchReview, incrementCart} from '../store'
+import {withStyles} from '@material-ui/core/styles'
 import {
-    fetchOneBike, 
-    fetchReview,
-    incrementCart
-} from '../store'
-import { 
-    Grid, 
-    Paper, 
-    Button,
-    Typography,
-    Card,
-    CardActions,
-    CardMedia 
+  Grid,
+  Paper,
+  Button,
+  Typography,
+  Card,
+  CardActions,
+  CardMedia,
+  ButtonBase
 } from '@material-ui/core'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
-const style = {
-    Paper: {
-        padding: 10,
-        marginTop:10,
-        marginBottom:10
-    }
-}
+const styles = theme => ({
+    root: {
+      flexGrow: 1,
+      maxWidth: 600,
+      padding: theme.spacing.unit * 2,
+    },
+    image: {
+      width: 128,
+      height: 128,
+    },
+    img: {
+      margin: 'auto',
+      display: 'block',
+      maxWidth: '100%',
+      maxHeight: '100%',
+    },
+  });
 
 class SingleBike extends Component {
-    componentDidMount() {
-        const id = this.props.match.params.id
-        this.props.fetchOneBike(id);
-        this.props.fetchReview(id)
+  componentDidMount() {
+    const id = this.props.match.params.id
+    this.props.fetchOneBike(id)
+    this.props.fetchReview(id)
+  }
+
+  handleClickAddToCart(bikeId) {
+    let cartId = 0
+    if (this.props.cart.cartId) {
+      cartId = this.props.cart.cartId
+    }
+    this.props.incrementCart(cartId, bikeId)
+  }
+
+  render() {
+    const {name, description, price, inventory, } = this.props.singleBike
+    const {classes} = this.props
+    const review = this.props.review
+    const id = this.props.match.params.id
+    console.log('render')
+    console.log('single', this.props.singleBike)
+    if (!this.props.singleBike || review === undefined) {
+      return <Grid container>Loading..</Grid>
     }
 
-    handleClickAddToCart(bikeId) {
-        let cartId=0;
-        if (this.props.cart.cartId) {
-          cartId=this.props.cart.cartId
-        }
-        this.props.incrementCart(cartId,bikeId)
-    
-      }
-
-    render() {
-        const {name, description, price, inventory} = this.props.singleBike
-        const review = this.props.review
-        const id = this.props.match.params.id
-        console.log('render')
-        console.log('single', this.props.singleBike)
-        if (!this.props.singleBike || review === undefined) {
-            return (
-                <Grid container>
-                    Loading..
-                </Grid>
-            )
-        }
-
-
-
-        return (
-            <Grid container>
-                <Grid item sm={2} key={this.props.singleBike.id}>         
-                    <Paper style={style.Paper}>
-                                    
-                    <img src={this.props.singleBike.bikeimages[0] && this.props.singleBike.bikeimages[0].imageUrl}/>
-                    <label> Bike Name: </label>
-                    {name}
-                    <label> Description: </label>
-                    {description}
-                    <label> Price: </label>
-                    {price}
-                    <label> Inventory: </label>
-                    {inventory}
-
-                    <Button onClick={(e) => this.handleClickAddToCart(id)}size="small" color="primary">
-                        Add to cart
-                    </Button>
-
-                    <Link to={`/bikes/${id}/reviewform`}>
-                        <Button> Add Review </Button>
-                    </Link>
-                    </Paper>
-
-                    {review.map(elem => {
-                        return(
-                            <Paper key={elem.id} style={style.Paper}>
-                                <label> Rating: </label>
-                                    {elem.rating}
-                                <label> Comments: </label>
-                                    {elem.comments}
-                            </Paper>
-                        )
-                    })}
-                    {review.length === 0 && (
-                        <Paper>
-                            <Typography variant="display1" align="center">
-                                No past reviews
-                            </Typography>
-                        </Paper> 
-                    )}
-                                    
-                </Grid>
+    return (
+       <Paper className={classes.root}>
+        <Grid container spacing={16}>
+          <Grid item>
+            <ButtonBase className={classes.image}>
+              <img className={classes.img} alt="complex" src="/bike.jpeg" />
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={12} xl container>
+            <Grid item xs container direction="column" spacing={16}>
+              <Grid item xs>
+                <Typography gutterBottom variant="subheading">
+                  Standard license
+                </Typography>
+                <Typography gutterBottom>Full resolution 1920x1080 • JPEG</Typography>
+                <Typography color="textSecondary">ID: 1030114</Typography>
+              </Grid>
+              <Grid item>
+                <Typography style={{ cursor: 'pointer' }}>Remove</Typography>
+              </Grid>
             </Grid>
-            
-        )
-    }
+            <Grid item>
+              <Typography variant="subheading">$19.00</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Paper>
+
+
+       
+    )
+  }
 }
 
-const mapStateToProps = (state) => {
-    return {
-            singleBike: state.bikes.singleBike,
-            review: state.review.greview,
-            cart: state.cart
-    }
+const mapState = state => {
+  return {
+    singleBike: state.bikes.singleBike,
+    review: state.review.review,
+    cart: state.cart
+  }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchOneBike: (id) => {
-            dispatch(fetchOneBike(id)) 
-        },
-        fetchReview: (id) => {
-            dispatch(fetchReview(id))
-        },
-        incrementCart: (cartId,bikeId) => {
-            dispatch(incrementCart(cartId,bikeId))}
-
+const mapDispatch = dispatch => {
+  return {
+    fetchOneBike: id => {
+      dispatch(fetchOneBike(id))
+    },
+    fetchReview: id => {
+      dispatch(fetchReview(id))
+    },
+    incrementCart: (cartId, bikeId) => {
+      dispatch(incrementCart(cartId, bikeId))
     }
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SingleBike)
+export default connect(mapState, mapDispatch)(withStyles(styles)(SingleBike))

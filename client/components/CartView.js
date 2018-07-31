@@ -2,41 +2,48 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableFooter,
   Paper,
   Typography,
   Button,
-  IconButton
+  IconButton,
+  Grid,
+  ButtonBase
 } from '@material-ui/core'
 import {connect} from 'react-redux'
-import {incrementCart,decrementCart,deleteCartEntry,saveOrder} from '../store'
+import {
+  incrementCart,
+  decrementCart,
+  deleteCartEntry,
+  saveOrder
+} from '../store'
 import {Link} from 'react-router-dom'
 import {Add, Remove} from '@material-ui/icons/'
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto'
+    display: 'flex',
+    alignContent: 'center',
+    flexDirection: 'column',
+    paddingTop: 20,
   },
-  table: {
-    minWidth: 700
+  root2: {
+    flexGrow: 1,
+    maxWidth: 600,
+    padding: theme.spacing.unit * 2
   },
-  picCell: {
-    width:100,
+  image: {
+    width: 128,
+    height: 128
   },
-  flexContainer: {
-    flexDirection: 'row'
+  img: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%'
   },
-  subtotal: {
-    display: 'flex'
-  },
-
+  button: {
+    margin: theme.spacing.unit
+  }
 })
 
 class CartView extends Component {
@@ -47,31 +54,29 @@ class CartView extends Component {
     this.handleClickDeleteCartEntry = this.handleClickDeleteCartEntry.bind(this)
     this.handleClickCheckout = this.handleClickCheckout.bind(this)
 
-    this.mounted=false
+    this.mounted = false
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   handleClickIncrementCart(bikeId) {
-    const cartId=this.props.cart.cartId
-    this.props.incrementCart(cartId,bikeId)
+    const cartId = this.props.cart.cartId
+    this.props.incrementCart(cartId, bikeId)
   }
 
   handleClickDecrementCart(bikeId) {
-    const cartId=this.props.cart.cartId
-    this.props.decrementCart(cartId,bikeId)
+    const cartId = this.props.cart.cartId
+    this.props.decrementCart(cartId, bikeId)
   }
 
   handleClickDeleteCartEntry(bikeId) {
     //delete an entire cart entry
-    const cartId=this.props.cart.cartId
-    this.props.deleteCartEntry(cartId,bikeId)
+    const cartId = this.props.cart.cartId
+    this.props.deleteCartEntry(cartId, bikeId)
   }
 
   handleClickCheckout() {
-    const cartId=this.props.cart.cartId
+    const cartId = this.props.cart.cartId
     this.props.saveOrder(cartId)
   }
 
@@ -80,70 +85,88 @@ class CartView extends Component {
 
     // if (this.props.cart.cartId ===0) {return (<div>cart id is 0 -- error</div>)}
 
-    const {classes,cart} = this.props
+    const {classes, cart} = this.props
 
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Product</TableCell>
-              <TableCell/>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Price</TableCell>
+      <div className={classes.root}>
+      <Typography>Shopping Cart</Typography>
+        {cart.cartEntries.map(cartEntry => {
+          return (
+            <Paper className={classes.root2} key={cartEntry.id}>
+              <Grid container spacing={16}>
+                <Grid item>
+                  <ButtonBase className={classes.image}>
+                    <img
+                      className={classes.img}
+                      alt="complex"
+                      src="/bike.jpeg"
+                    />
+                  </ButtonBase>
+                </Grid>
+                <Grid item xs={12} sm container>
+                  <Grid item xs container direction="column" spacing={16}>
+                    <Grid item xs>
+                      <Typography gutterBottom variant="subheading">
+                        <Link to={`/bikes/${cartEntry.bikeId}`}>
+                          {cartEntry.name}
+                        </Link>
+                      </Typography>
 
-
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {cart.cartEntries.map(cartEntry => {
-              return (
-                <TableRow key={cartEntry.bikeId}>
-                  <TableCell component="th" scope="row" className={classes.picCell}>
-                    {/* <img src="/bicycle-1296859_1280.png" /> */}
-                    <img src={cartEntry.image} />
-                  </TableCell>
-                  <TableCell >
-                 <Link to={`/bikes/${cartEntry.bikeId}`} >{cartEntry.name}</Link>
-                 <Button onClick={(e) => this.handleClickDeleteCartEntry(cartEntry.bikeId)}>Delete</Button>
-                  </TableCell>
-                  <TableCell>{cartEntry.quantity}
-                  <IconButton onClick={(e) => this.handleClickIncrementCart(cartEntry.bikeId)}
-                  color="inherit"
-                  className={classes.button}
-
-                >
-                  <Add/>
-                </IconButton>
-                <IconButton onClick={(e) => this.handleClickDecrementCart(cartEntry.bikeId)}
-                  color="inherit"
-                  className={classes.button}
-
-                >
-                  <Remove />
-                </IconButton>
-                  </TableCell>
-                  <TableCell>${cartEntry.price}</TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-          <TableFooter>
-          <TableCell/>
-          <TableCell/>
-          <TableCell/>
-          <TableCell>
-            <Typography>Subtotal ${cart.subtotal}</Typography>
-            <Button  onClick={this.handleClickCheckout}>Checkout</Button>
-          </TableCell>
-        </TableFooter>
-        </Table>
+                      <Button
+                        onClick={e =>
+                          this.handleClickIncrementCart(cartEntry.bikeId)
+                        }
+                        color="inherit"
+                        className={classes.button}
+                      >
+                        +
+                      </Button>
+                      <Typography gutterBottom>
+                       {cartEntry.quantity}
+                      </Typography>
+                      <Button
+                        onClick={e =>
+                          this.handleClickDecrementCart(cartEntry.bikeId)
+                        }
+                        size="small"
+                        className={classes.button}
+                      >
+                        -
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="medium"
+                        onClick={e =>
+                          this.handleClickDeleteCartEntry(cartEntry.bikeId)
+                        }
+                      >
+                        Remove
+                      </Button>
+                    </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subheading">
+                      ${cartEntry.price}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Paper>
+          )
+        })}
+        <div>
+          <Typography>Subtotal ${cart.subtotal}</Typography>
+          <Button onClick={this.handleClickCheckout}>Checkout</Button>
+        </div>
         {!this.state && (
           <Typography variant="display1" align="center">
             {cart.quantity} items in your cart
           </Typography>
         )}
-      </Paper>
+      </div>
     )
   }
 }
@@ -154,18 +177,22 @@ CartView.propTypes = {
 
 const mapDispatchToProps = dispatch => {
   return {
-    incrementCart: (cartId,bikeId) => {
-      dispatch(incrementCart(cartId,bikeId))},
-    decrementCart: (cartId,bikeId) => {
-      dispatch(decrementCart(cartId,bikeId))},
-    deleteCartEntry: (cartId,bikeId) => {
-      dispatch(deleteCartEntry(cartId,bikeId))},
+    incrementCart: (cartId, bikeId) => {
+      dispatch(incrementCart(cartId, bikeId))
+    },
+    decrementCart: (cartId, bikeId) => {
+      dispatch(decrementCart(cartId, bikeId))
+    },
+    deleteCartEntry: (cartId, bikeId) => {
+      dispatch(deleteCartEntry(cartId, bikeId))
+    },
     //saveOrder is temporary hookup to checkout
     //this will be a transition to checkout page
-    saveOrder: (cartId) => {
-      dispatch(saveOrder(cartId))}
+    saveOrder: cartId => {
+      dispatch(saveOrder(cartId))
     }
   }
+}
 
 const mapStateToProps = state => {
   return {
@@ -173,4 +200,6 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CartView))
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(CartView)
+)
