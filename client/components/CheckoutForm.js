@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {saveOrder} from '../store'
 import PropTypes from 'prop-types'
-import{ TextField } from '@material-ui/core'
+import{ TextField,Button } from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles'
 const styles = theme => ({
     root: {
@@ -122,7 +122,7 @@ class CheckoutForm extends Component {
                     rows={1}
                     />
                     <br />
-                    <button type='submit'>Place Order</button>
+                    <Button color="primary" variant="contained" type='submit'>Place Order</Button>
                     </form>
             </div>
         )

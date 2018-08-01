@@ -37,7 +37,7 @@ router.put('/:orderId', async (req, res, next) => {
       state: req.body.status
     })
     const updatedOrder = await Order.findById(req.params.orderId, {
-      include: [{all: true}]
+      include: [{all: true, nested: true}]
     })
     res.json(updatedOrder)
   } catch (error) {
