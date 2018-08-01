@@ -1,6 +1,5 @@
 import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {withStyles} from '@material-ui/core/styles'
 import {
@@ -11,7 +10,6 @@ import {
   CardContent,
   Button
 } from '@material-ui/core'
-import BikeCard from '../BikeCard'
 
 const styles = theme => ({
   root: {
@@ -44,20 +42,28 @@ const styles = theme => ({
 //Buttons need links to add/edit page
 const Products = ({bikes, classes}) => (
   <Fragment>
-    <Button component={Link} to='/admin/bikes/add' variant="contained" color="secondary">
+    <Button
+      component={Link}
+      to="/admin/bikes/add"
+      variant="contained"
+      color="secondary"
+    >
       Add Product
     </Button>
-    
+
     <div className={classes.root}>
       <Grid container spacing={24}>
-        {bikes.map(elem => (
+        {bikes.map(elem => {
+          console.log(elem)
+        return  (
+         
           <Grid key={elem.id} item md>
             <Card className={classes.card}>
               <CardContent>
                 <div className={classes.container}>
                   <div>
                     <Link to={`/bikes/${elem.id}`}>
-                      <img className={classes.pic} src="bike.jpeg" />
+                      <img className={classes.pic} src={elem.bikeimages.length && elem.bikeimages[0].imageUrl} />
                     </Link>
                   </div>
                   <div className={classes.action}>
@@ -94,29 +100,25 @@ const Products = ({bikes, classes}) => (
                 </div>
               </CardContent>
               <CardActions className={classes.action}>
-                <Button component={Link} to={`/admin/bikes/update/${elem.id}`} size="small" color="secondary">
+                <Button
+                  component={Link}
+                  to={`/admin/bikes/update/${elem.id}`}
+                  size="small"
+                  color="secondary"
+                >
                   Edit
                 </Button>
               </CardActions>
             </Card>
           </Grid>
-        ))}
+        )})}
       </Grid>
     </div>
   </Fragment>
 )
 
-/**
- * CONTAINER
- */
-
-
-
 export default withStyles(styles)(Products)
 
-/**
- * PROP TYPES
- */
 Products.propTypes = {
   classes: PropTypes.object.isRequired
 }

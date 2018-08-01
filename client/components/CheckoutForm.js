@@ -1,7 +1,42 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {saveOrder} from '../store'
-import{ TextField } from '@material-ui/core'
+import PropTypes from 'prop-types'
+import{ TextField,Button } from '@material-ui/core'
+import {withStyles} from '@material-ui/core/styles'
+const styles = theme => ({
+    root: {
+      width: 890,
+      marginTop: theme.spacing.unit * 3,
+      overflowX: 'auto'
+    },
+    table: {
+      paddingBottom: 10
+    },
+    picCell: {
+      width: 90,
+      height: 90
+    },
+    flexContainer: {
+      flexDirection: 'row'
+    },
+    header: {
+      width: 150
+    },
+    head: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white
+    },
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column'
+    },
+    darkColor: {
+      color: theme.palette.primary.dark
+    }
+  })
 
 class CheckoutForm extends Component {
     constructor() {
@@ -24,8 +59,9 @@ class CheckoutForm extends Component {
 
     render() {
         const cartId = this.props.match.params.id
+        const {classes} = this.props
         return(
-            <div>
+            <div className={classes.container}>
                     <h2> Shipping Information: </h2>
                     <form onSubmit={(evt) => {
                         evt.preventDefault()
@@ -86,12 +122,16 @@ class CheckoutForm extends Component {
                     rows={1}
                     />
                     <br />
-                    <button type='submit'>Place Order</button>
+                    <Button color="primary" variant="contained" type='submit'>Place Order</Button>
                     </form>
             </div>
         )
     }
 }
+
+CheckoutForm.propTypes = {
+    classes: PropTypes.object.isRequired
+  }
 
 const mapStateToProps = state => {
     return {
@@ -113,4 +153,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CheckoutForm)
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CheckoutForm))

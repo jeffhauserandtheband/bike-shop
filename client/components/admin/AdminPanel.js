@@ -13,7 +13,8 @@ import {
   fetchBikes,
   fetchCategories,
   removeUser,
-  changeOrderStatus
+  changeOrderStatus,
+  promoteUser
 } from '../../store'
 
 import {Typography, AppBar, Tabs, Tab, Paper} from '@material-ui/core'
@@ -57,7 +58,9 @@ class AdminPage extends Component {
       bikes,
       categories,
       deleteUser,
-      updateOrder
+      updateOrder,
+      toggleUser
+  
     } = this.props
     const {value} = this.state
     return (
@@ -82,7 +85,7 @@ class AdminPage extends Component {
         )}
         {value === 2 && (
           <TabContainer>
-            <Users users={users} deleteUser={deleteUser} />
+            <Users users={users} deleteUser={deleteUser} toggleUser={toggleUser} />
           </TabContainer>
         )}
         {value === 3 && (
@@ -120,7 +123,11 @@ const mapDispatch = dispatch => {
     updateOrder: (event, status, order) => {
       event.preventDefault()
       dispatch(changeOrderStatus(status, order))
-    }
+    },
+    toggleUser:  (event, status, id) => {
+      event.preventDefault()
+      dispatch(promoteUser(status, id))
+    },
   }
 }
 

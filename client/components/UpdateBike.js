@@ -1,19 +1,29 @@
 import React from 'react'
 import axios from 'axios'
-import { NavLink } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { updateBike, fetchBike } from '../store'
+import {connect} from 'react-redux'
+import {updateBike, fetchBike} from '../store'
+import {withStyles} from '@material-ui/core/styles'
+import {TextField, Button, Typography} from '@material-ui/core'
 
+const styles = {
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    paddingTop: 20
+  }
+}
 class UpdateBike extends React.Component {
   state = {
-      name: '',
-      description: '',
-      price: '',
-      inventory: '',
-      availability: '',
-      imageUrl: '',
-      selectedBikeId: null,
-      bikeAddedMsg: '',
+    name: '',
+    description: '',
+    price: '',
+    inventory: '',
+    availability: '',
+    imageUrl: '',
+    selectedBikeId: null,
+    bikeAddedMsg: ''
   }
 
   async componentDidMount() {
@@ -46,21 +56,21 @@ class UpdateBike extends React.Component {
           description: this.state.description,
           price: this.state.price,
           inventory: this.state.inventory,
-          availability: this.state.availability,
+          availability: this.state.availability
         }
       })
-      console.log(res);
+      console.log(res)
       if (res.status === 201) {
         this.setState({
           bikeAddedMsg: 'Bike successfully updated!'
         })
-      } else { // TODO: is it redundant to have this here AND in a catch block?
+      } else {
+        // TODO: is it redundant to have this here AND in a catch block?
         this.setState({
           bikeAddedMsg: 'Error updating the bike!' + res.status
         })
       }
-    }
-    catch (err) {
+    } catch (err) {
       this.setState({
         bikeAddedMsg: 'Error updating the bike: ' + err
       })
@@ -68,43 +78,67 @@ class UpdateBike extends React.Component {
   }
 
   render() {
+    const {classes} = this.props
     return (
-      <div>
-        <h1>Add a bike</h1>
+      <div className={classes.root}>
+        <Typography variant="display1">Edit bike</Typography>
         <form onSubmit={this.handleSubmit}>
+          {this.state.bikeAddedMsg.length > 0 && (
+            <label htmlFor="bikeAddedMsg">{this.state.bikeAddedMsg}</label>
+          )}
 
-            {
-              this.state.bikeAddedMsg.length > 0 &&
-              <label htmlFor="bikeAddedMsg">{this.state.bikeAddedMsg}</label>
-            }
+          <TextField
+            label="Name"
+            type="text"
+            name="name"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
+          <br />
+          <TextField
+            label="Description"
+            type="text"
+            name="description"
+            value={this.state.description}
+            onChange={this.handleChange}
+            multiline={true}
+          />
+          <br />
+          <TextField
+            label="Price"
+            type="text"
+            name="price"
+            value={this.state.price}
+            onChange={this.handleChange}
+          />
+          <br />
+          <TextField
+            label="Inventory"
+            type="text"
+            name="inventory"
+            value={this.state.inventory}
+            onChange={this.handleChange}
+          />
 
-          <div className="input-wrapper">
-            <label htmlFor='name' >Name:</label>
-            <input type='text' name='name' value={this.state.name} onChange={this.handleChange} />
-          </div>
-          <div className="input-wrapper">
-            <label htmlFor='description' >Description:</label>
-            <input type='text' name='description' value={this.state.description} onChange={this.handleChange} />
-          </div>
-          <div className="input-wrapper">
-            <label htmlFor='price' >Price:</label>
-            <input type='text' name='price' value={this.state.price} onChange={this.handleChange} />
-          </div>
-          <div className="input-wrapper">
-            <label htmlFor='inventory' >Inventory</label>
-            <input type='text' name='inventory' value={this.state.inventory} onChange={this.handleChange} />
-          </div>
-          <div className="input-wrapper">
-            <label htmlFor='availability' >Availability</label>
-            <select onChange={this.handleChange} name="availability">
-              <option value="">--</option>
-              <option value="available" name="available">available</option>
-              <option value="discontinued" name="discontinued">discontinued</option>
-            </select>
-          </div>
-          <div className="add-form-button-wrapper">
-            <button type='submit'>Submit</button>
-          </div>
+          <label htmlFor="availability">Availability</label>
+          <select onChange={this.handleChange} name="availability">
+            <option value="">--</option>
+            <option value="available" name="available">
+              available
+            </option>
+            <option value="discontinued" name="discontinued">
+              discontinued
+            </option>
+          </select>
+
+          <Button
+            color="primary"
+            size="small"
+            variant="contained"
+            type="submit"
+          >
+            Submit
+          </Button>
         </form>
       </div>
     )
@@ -120,5 +154,6 @@ const mapDispatchToProps = dispatch => ({
   fetchBike: bikeId => dispatch(fetchBike(bikeId))
 })
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateBike)
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(UpdateBike)
+)

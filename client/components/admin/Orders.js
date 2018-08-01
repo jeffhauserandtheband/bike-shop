@@ -79,7 +79,7 @@ class Orders extends Component {
                   <Typography variant="body2">Change order status:</Typography>
                   <select value={this.state.state} onChange={this.handleChange}>
                     <option value="created">Created</option>
-                    <option value="processing">In Progress</option>
+                    <option value="processing">Processing</option>
                     <option value="completed">Completed</option>
                     <option value="cancelled">Cancelled</option>
                   </select>

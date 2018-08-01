@@ -62,6 +62,7 @@ class OrderHistory extends Component {
       <div className={classes.container}>
         {this.props.orders.map(order => {
           const orderCost=order.orderCost/100.0
+          const orderDate = new Date(order.createdAt);
           return (
             <Paper className={classes.root} key={order.id}>
               <Table className={classes.table} key={order.id}>
@@ -70,7 +71,7 @@ class OrderHistory extends Component {
                     <TableCell>
                       <Typography variant="body2">Order Placed</Typography>{' '}
                       <Typography variant="body1">
-                        ${order.createdAt}
+                        {orderDate.toDateString()}
                       </Typography>
                     </TableCell>
 
