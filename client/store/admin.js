@@ -53,10 +53,15 @@ export const removeUser = userId => {
     }
   }
 }
-export const promoteUser = user => {
+export const promoteUser =  (status, id) => {
   return async dispatch => {
+  let userStatus = {userType: 'admin'} 
+  if (status === 'admin'){
+    userStatus.userType = 'user'
+  }
+   
     try {
-      const {data} = await axios.put(`/api/users/${user.id}`, user)
+      const {data} = await axios.put(`/api/users/${id}`, userStatus)
 
       dispatch(updateUser(data))
     } catch (error) {

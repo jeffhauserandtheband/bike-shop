@@ -33,7 +33,7 @@ router.delete('/:userid', async (req, res, next) => {
 
 //change user type needs middleware
 
-router.get('/:userId', async (req, res, next) => {
+router.put('/:userId', async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId)
     await user.update({userType: req.body.userType})
