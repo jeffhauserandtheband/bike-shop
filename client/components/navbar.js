@@ -51,7 +51,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
             </Button>
             <Button
               component={Link}
-              to="/myaccount/order-history"
+              to="/myorders/order-history"
               color="inherit"
             >
               My Orders
