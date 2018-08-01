@@ -45,7 +45,7 @@ const OrderCard = ({items, classes}) =>
           <Link to={`/bikes/${item.id}`}>
             <img
               className={classes.picCell}
-              src={item.bikeimages.length && item.bikeimages[0].imageUrl}
+              src={item.bikeimages && item.bikeimages.length && item.bikeimages[0].imageUrl}
             />
           </Link>
         </TableCell>
