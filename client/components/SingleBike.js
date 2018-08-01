@@ -71,6 +71,54 @@ const styles = theme => ({
     subInfo: {
       display: 'flex',
       flexDirection: 'row',
+    },
+    reviewWrapper: {
+      width: '50vw',
+      margin: '0 auto',
+    },
+    reviewTextWrapper: {
+      textAlign: 'center'
+    },
+    reviewRating: {
+      // borderBottom: '1px lightgrey'
+    },
+    reviewUnderline: {
+      borderBottom: '1px lightgrey'
+    },
+    reviewCommentTitle: {
+      fontSize: '18px',
+      color: 'black'
+    },
+    reviewComments: {
+      fontSize: '14px',
+      color: 'grey',
+    },
+    reviewInputWrapper: {
+      margin: '0 auto',
+      width: '80vw',
+      maxWidth: '1300px',
+    },
+    reviewInput: {
+      margin: 'auto 0',
+      // border: '1px solid grey',
+      width: '75vw',
+      maxWidth: '1200px',
+    },
+    ratingBtns: {
+      margin: 'auto 0',
+    },
+    reviewTitle: {
+      color: 'black',
+      fontSize: '20px',
+    },
+    submitBtnWrapper: {
+
+    },
+    formWrapper: {
+      textAlign: 'center',
+      margin: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
     }
   });
 
@@ -193,21 +241,27 @@ class SingleBike extends Component {
                         </Button>
                       </div>
                     </div>
-                    
+
                     {/* </Paper> */}
                 </Grid>
             </Grid>
             {/* End Bike Information */}
             {/* Begin review list */}
-            <Grid container spacing={24}>
+            <Grid
+              container spacing={24}
+              className={classes.reviewWrapper}>
                 <Grid item md key={this.props.singleBike.id}>
                     {review.map(elem => {
                         return(
-                            <Paper key={elem.id} style={style.Paper}>
-                                <label> Rating: </label>
-                                    {elem.rating}
-                                <label> Comments: </label>
-                                    {elem.comments}
+                            <Paper
+                              key={elem.id}
+                              style={style.Paper}
+                              className={classes.reviewTextWrapper}>
+                              <div className={classes.reviewUnderline}>
+                                <label className={classes.reviewRating}> Rating | {elem.rating} stars</label>
+                              </div>
+                                <label className={classes.reviewCommentTitle}> Comments </label><br />
+                                <h4 className={classes.reviewComments}>{elem.comments}</h4>
                             </Paper>
                         )
                     })}
@@ -222,51 +276,59 @@ class SingleBike extends Component {
                 </Grid>
             </Grid>
             {/* End review list */}
+
             {/* begin review form */}
-            <div>
-            <form onSubmit={(evt) => {
-                evt.preventDefault()
-                this.setState({comments:'', value: ''})
-                this.props.handleSubmit(evt,id)
-            }}>
-            <Typography
-                gutterBottom
-                variant="subheading"
-                component="h3">
-                LEAVE A REVIEW:
-            </Typography>
-            <TextField
-            name='comments'
-            value={this.state.comments}
-            onChange={this.handleChange}
-            onSubmit={this.props.handleSubmit}
-            multiline={true}
-            rows={5}
-            />
-
-            <div className={classes.root}>
-                <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">Rating</FormLabel>
-                <RadioGroup
-                    row
-                    aria-label="Gender"
-                    name="rating"
-                    className={classes.group}
-                    value={this.state.value}
+            <Paper className={classes.reviewInputWrapper}>
+              <form
+                className={classes.formWrapper}
+                onSubmit={(evt) => {
+                  evt.preventDefault()
+                  this.setState({comments:'', value: ''})
+                  this.props.handleSubmit(evt,id)
+              }}>
+                <Typography
+                  gutterBottom
+                  variant="subheading"
+                  component="h3"
+                  className={classes.reviewTitle}>
+                  LEAVE A REVIEW:
+                </Typography>
+                <div>
+                  <TextField
+                    name='comments'
+                    value={this.state.comments}
                     onChange={this.handleChange}
-                >
-                    <FormControlLabel value="1" control={<Radio />} label="1" />
-                    <FormControlLabel value="2" control={<Radio />} label="2" />
-                    <FormControlLabel value="3" control={<Radio />} label="3" />
-                    <FormControlLabel value="4" control={<Radio />} label="4" />
-                    <FormControlLabel value="5" control={<Radio />} label="5" />
-                    <Button type='submit'> Submit </Button>
-                </RadioGroup>
-                </FormControl>
-            </div>
+                    onSubmit={this.props.handleSubmit}
+                    multiline={true}
+                    rows={5}
+                    className={classes.reviewInput}
+                  />
+                </div>
 
-            </form>
-            </div>
+                <div className={classes.ratingBtns}>
+                    <FormControl component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend"></FormLabel>
+                    <RadioGroup
+                        row
+                        aria-label="Gender"
+                        name="rating"
+                        className={classes.group}
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                    >
+                        <FormControlLabel value="1" control={<Radio />} label="1" />
+                        <FormControlLabel value="2" control={<Radio />} label="2" />
+                        <FormControlLabel value="3" control={<Radio />} label="3" />
+                        <FormControlLabel value="4" control={<Radio />} label="4" />
+                        <FormControlLabel value="5" control={<Radio />} label="5" />
+                    </RadioGroup>
+                    </FormControl>
+                </div>
+                <div className={classes.submitBtnWrapper}>
+                  <Button type='submit'> Submit </Button>
+                </div>
+              </form>
+            </Paper>
             {/* End review form */}
         </div>
         )
