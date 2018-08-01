@@ -26,9 +26,6 @@ const styles = {
 
 const Categories = ({categories, classes}) => (
   <Fragment>
-    <Button component={Link} to="/admin/addcategory" type="submit" color="secondary" variant="contained">
-      Add Category
-    </Button>
     <div className={classes.container}>
       {categories.map(category => (
         <Paper className={classes.root} key={category.id}>
