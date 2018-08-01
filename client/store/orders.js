@@ -34,7 +34,7 @@ export const saveOrder = (cartId,shippingInfo) => {
       //successful order means clear lso cartid
       dispatch(deleteCart())
       alert('Thank you for placing your order!');
-      history.push('/')
+      history.push('/bikes')
     } catch (err) {
       console.log('Error creating order:',err)
     }

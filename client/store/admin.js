@@ -6,6 +6,8 @@ import axios from 'axios'
 const ADMIN_GET_USERS = 'ADMIN_GET_USERS'
 const ADMIN_GET_ORDERS = 'ADMIN_GET_ORDERS'
 const ADMIN_GET_CATEGORIES = 'ADMIN_GET_CATEGORIES'
+const ADMIN_POST_CATEGORYKEY = 'ADMIN_POST_CATEGORYKEY'
+const ADMIN_POST_CATEGORYVALUE = 'ADMIN_POST_CATEGORYVALUE'
 const ADMIN_DELETE_USER = 'ADMIN_DELETE_USER'
 const ADMIN_CHANGE_ORDER_STATUS = 'ADMIN_CHANGE_ORDER_STATUS'
 const ADMIN_CHANGE_USER_STATUS = 'ADMIN_CHANGE_USER_STATUS'
@@ -15,7 +17,8 @@ const ADMIN_CHANGE_USER_STATUS = 'ADMIN_CHANGE_USER_STATUS'
 const initialState = {
   users: [],
   orders: [],
-  categories: []
+  categories: [],
+  newcategories: []
 }
 
 /**
@@ -27,6 +30,8 @@ const getCategories = categories => ({type: ADMIN_GET_CATEGORIES, categories})
 const deleteUser = userId => ({type: ADMIN_DELETE_USER, userId})
 const updateOrder = order => ({type: ADMIN_CHANGE_ORDER_STATUS, order})
 const updateUser = user => ({type: ADMIN_CHANGE_USER_STATUS, user})
+const putCategoryKey = cat => ({type: ADMIN_POST_CATEGORYKEY, cat})
+const putCategoryValue = cat => ({type: ADMIN_POST_CATEGORYVALUE, cat})
 /**
  * THUNK CREATORS
  */
@@ -106,6 +111,27 @@ export const fetchCategories = () => {
   }
 }
 
+export const postCategoryKey = (category) => {
+  return async dispatch => {
+    try {
+      console.log('woot',category)
+      const res = await axios.post('/api/bikes/categorykey',category)
+      console.log('data',res.data)
+      dispatch(putCategoryKey(res.data))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
+
+// export const postCategoryValue = () => {
+//   reutrn async dispatch => {
+//     try {
+//       const {data} = axios.post()
+//     }
+//   }
+// }
+
 /**
  * REDUCER
  */
@@ -136,6 +162,8 @@ export default function(state = initialState, action) {
           user => (user.id === action.user.id ? action.user : user)
         )
       }
+    case ADMIN_POST_CATEGORYKEY:
+      return {...state, newcategories: action.cat}
     default:
       return state
   }

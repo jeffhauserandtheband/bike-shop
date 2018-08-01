@@ -28,7 +28,7 @@ const styles = theme => ({
     minWidth: 700
   },
   picCell: {
-    width:100,
+    width:150,
   },
   flexContainer: {
     flexDirection: 'row'
@@ -101,27 +101,26 @@ class CartView extends Component {
                 <TableRow key={cartEntry.bikeId}>
                   <TableCell component="th" scope="row" className={classes.picCell}>
                     {/* <img src="/bicycle-1296859_1280.png" /> */}
-                    <img src={cartEntry.image} />
+                    <img src={cartEntry.image} className={classes.picCell}/>
                   </TableCell>
                   <TableCell >
                  <Link to={`/bikes/${cartEntry.bikeId}`} >{cartEntry.name}</Link>
-                 <Button onClick={(e) => this.handleClickDeleteCartEntry(cartEntry.bikeId)}>Delete</Button>
-                  </TableCell>
-                  <TableCell>{cartEntry.quantity}
-                  <IconButton onClick={(e) => this.handleClickIncrementCart(cartEntry.bikeId)}
+                 </TableCell>
+                  <TableCell>
+                  <Button onClick={(e) => this.handleClickIncrementCart(cartEntry.bikeId)}
                   color="inherit"
                   className={classes.button}
-
                 >
-                  <Add/>
-                </IconButton>
-                <IconButton onClick={(e) => this.handleClickDecrementCart(cartEntry.bikeId)}
+                <Typography  variant="title" >+</Typography>
+                </Button>
+                {cartEntry.quantity}
+                <Button onClick={(e) => this.handleClickDecrementCart(cartEntry.bikeId)}
                   color="inherit"
                   className={classes.button}
+                ><Typography  variant="title" >-</Typography>
+                </Button>
+                <Button onClick={(e) => this.handleClickDeleteCartEntry(cartEntry.bikeId)} color="secondary" variant="contained" >Delete</Button>
 
-                >
-                  <Remove />
-                </IconButton>
                   </TableCell>
                   <TableCell>${cartEntry.price}</TableCell>
                 </TableRow>
@@ -134,7 +133,9 @@ class CartView extends Component {
           <TableCell/>
           <TableCell>
             <Typography>Subtotal ${cart.subtotal}</Typography>
-            <Link to={`/checkout/${cart.cartId}`}>Checkout</Link>
+            <Button component={Link} to={`/checkout/${cart.cartId}`} color="primary" variant="contained">
+            Checkout
+            </Button>
             {/* <Button  onClick={this.handleClickCheckout}>Checkout</Button> */}
           </TableCell>
         </TableFooter>
